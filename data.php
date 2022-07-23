@@ -1,7 +1,10 @@
-<!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
-SPDX-License-Identifier: GPL-3.0-or-later-->
+
 
 <?php
+
+//Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+//SPDX-License-Identifier: GPL-3.0-or-later
+
 header('Content-Type: application/json');
 
 $dir = 'sqlite:portfolio.sqlite';
