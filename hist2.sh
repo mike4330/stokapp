@@ -2,13 +2,9 @@
 
 # updates historical cumulative position values
 
-
-
-
 cd /var/www/html/portfolio
 CMD="/usr/bin/sqlite3 portfolio.sqlite"
 su='0';
-
 
 tfile=$(mktemp /tmp/foo.XXXXXXXXX)
 echo "a file: $tfile"
@@ -18,8 +14,6 @@ cp $tfile XAG.csv
 
 
  for f in ANGL ASML BEN BRK.B BSJN C DBB EMB EWJ FPE  GILD GSL JPIB KMB KHC LKOR LNG MLN MPW PDBC REM SGOL XAG SOXX UFPI VMC ;
-
-
 
 do
    
