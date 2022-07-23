@@ -9,13 +9,9 @@
 <script type="text/javascript" src="/js/luxon.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
 <script src="/js/node_modules/chartjs-plugin-annotation/dist/chartjs-plugin-annotation.min.js"></script>
-
-
-
 </head>
 
 <body>
-
 
 <?php
 include ("nav.php"); 
@@ -161,7 +157,6 @@ echo "<th>id</th><th>acct.</th>
 <th>units</th>
 <th>cost</th>
 ";
-
 
 
 // main tabular transaction list output
