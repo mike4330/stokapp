@@ -1,3 +1,6 @@
+# Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 #!/bin/bash
 
 # updates historical cumulative position values
