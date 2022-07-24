@@ -18,17 +18,42 @@ table {
 table.alloc_breakdown {
    position:absolute; 
    top:10vh; 
-   right:1vw; 
+   right:2vw; 
    z-index:1;
+}
+
+table.alloc_modeltrade {
+    position:absolute; 
+    top:12vh; 
+    left:37vw; 
+    z-index:1;  
 }
 
 div.alloc_tickerpct {
     position:absolute; 
     top:10vh; 
-    left:1vw; 
+    left:2vw; 
     z-index:1; 
     height: 40vh;
-    width: 29vw;    
+    width: 32.6vw;    
+}
+
+div.alloc_cat_timeseries {
+position:absolute; 
+bottom:3vh; 
+left:33vw; 
+z-index:1; 
+height: 48vh;
+width: 46vw;
+}
+
+div.alloc_cat_pie {
+position:absolute; 
+top:22vw; 
+left:1vw; 
+z-index:1; 
+height: 30vh;
+width: 20vw;"    
 }
 
 table.chart {   
@@ -139,7 +164,7 @@ td {
 }
 
 td.alloc {
-	font-size: 130%;
+	font-size: 2.5vh;
 	padding-right: 20px;
 }
 

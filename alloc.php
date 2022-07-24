@@ -91,7 +91,6 @@ foreach ($dbh->query($query) as $row) {
     
     }
 
-
 echo '<table class="alloc_breakdown" >';
 echo '<th>category</th><th>value</th><th>Pct</th><th>cat tgt</th><th>diff</th>';
 $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL";
@@ -171,7 +170,7 @@ echo "</table>";
 // model trade table
 $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL order by asset_class";
 
-echo "<table style=\"position:absolute; top:12vh; left:34vw; z-index:1;\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
+echo "<table class=\"alloc_modeltrade\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
 
 foreach ($dbh->query($query) as $rowb) { 
     $ac=$rowb[asset_class];
@@ -197,16 +196,14 @@ echo "</table>";
 
 <div class="alloc_tickerpct" ><canvas id="pie" ></canvas></div>
 
-<div class="chart-container" style="position:absolute; top:22vw; left:1vw; z-index:1; height: 40vh;width: 29vw;"><canvas id="class_pie" ></canvas></div>
+<div class="alloc_cat_pie" ><canvas id="class_pie" ></canvas></div>
 
 
-<div class="chart-container" style="position:absolute; top:20vw; left:31vw; z-index:1; height: 45vh;width: 38vw;"><canvas id="catpct" ></canvas></div>
+<div class="alloc_cat_timeseries" ><canvas id="catpct" ></canvas></div>
 
 <script>
 
-
 var class_stats = JSON.parse('<?php echo json_encode($class_stats); ?>');
-
 var asset_class = []; var class_pct = [];
 
 for(var i in class_stats){
