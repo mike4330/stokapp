@@ -1,18 +1,13 @@
-
 <!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
-
 <!DOCTYPE html>
+
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
 <title>Allocations</title>
-
-
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
-
-
 </head>
 <body> 
 <?php
@@ -40,6 +35,7 @@ function get_portfolio_value() {
     $dir = 'sqlite:portfolio.sqlite';
     $dbh  = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
+    
     foreach ($dbh->query($q) as $trow) {
         $tsym=$trow[symbol];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
@@ -58,7 +54,6 @@ function get_portfolio_value() {
     }
 return $ttotal;
 }
-
 
 $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
@@ -91,17 +86,13 @@ foreach ($dbh->query($query) as $row) {
     $subquery = "select asset_class from prices where symbol = '$sym'";
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $asset_class=$zrow['asset_class'];
     
-//     echo "<tr><td>$row[symbol]</td><td>$asset_class</td><td>$value</td></tr>";
-    
+  
     $class_total[$asset_class]=$class_total[$asset_class]+$value;
     
     }
 
-// // echo "</table>";
 
-// echo '<table style="position:absolute; top:150px; right:5vw; z-index:1;width: 25vw;height: 10vw;">';
-
-echo '<table style="position:absolute; top:150px; left:66vw; z-index:1;">';
+echo '<table class="alloc_breakdown" >';
 echo '<th>category</th><th>value</th><th>Pct</th><th>cat tgt</th><th>diff</th>';
 $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL";
 
@@ -129,8 +120,6 @@ foreach ($dbh->query($query) as $rowa) {
     
     echo "</tr>";
 }
-
-// echo "<tr><td  colspan=4 style=\"background: #393939\";> </td></tr>";
 
 $total_stock = $class_total['Domestic Stock'] + $class_total['Foreign Stock'];
 $total_stock_pct = round((($total_stock / $portvalue)*100),1);
@@ -181,7 +170,8 @@ echo "</table>";
 
 // model trade table
 $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL order by asset_class";
-echo "<table style=\"position:absolute; top:150px; left:33vw; z-index:1;\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
+
+echo "<table style=\"position:absolute; top:12vh; left:34vw; z-index:1;\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
 
 foreach ($dbh->query($query) as $rowb) { 
     $ac=$rowb[asset_class];
@@ -205,12 +195,12 @@ echo "</table>";
 
 ?>
 
-<div class="chart-container" style="position:absolute; top:5vw; left:1vw; z-index:1; height: 40vh;width: 22vw;"><canvas id="pie" ></canvas></div>
+<div class="alloc_tickerpct" ><canvas id="pie" ></canvas></div>
 
-<div class="chart-container" style="position:absolute; top:22vw; left:1vw; z-index:1; height: 40vh;width: 22vw;"><canvas id="class_pie" ></canvas></div>
+<div class="chart-container" style="position:absolute; top:22vw; left:1vw; z-index:1; height: 40vh;width: 29vw;"><canvas id="class_pie" ></canvas></div>
 
 
-<div class="chart-container" style="position:absolute; top:20vw; left:26vw; z-index:1; height: 45vh;width: 38vw;"><canvas id="catpct" ></canvas></div>
+<div class="chart-container" style="position:absolute; top:20vw; left:31vw; z-index:1; height: 45vh;width: 38vw;"><canvas id="catpct" ></canvas></div>
 
 <script>
 
@@ -264,10 +254,7 @@ var barGraph = new Chart(ctx, {
         }
 });
 
-
-
 // ---------------------------------
-
 $.ajax({
     url: 'data.php?q=portpct',
     type: 'GET',
@@ -291,16 +278,8 @@ $.ajax({
             spacing: 0,
             borderWidth: 0.5,
             backgroundColor: [
-                'rgb(0,0,128)',
-                'rgb(0,0,255)',
-                'rgb(128,128,255)',
-                'rgb(0,128,0)',
-                'rgb(0,255,0)',
-                'rgb(128,255,128)',
-                'rgb(128,0,0)',
-                'rgb(255,0,0)',
-                'rgb(255,128,128)',
-                'rgb(255,255,0)',
+                'rgba(0,0,255,.9)',
+                'rgba(255,255,0,.9)',
                 ],
             }]
         };
@@ -308,13 +287,21 @@ $.ajax({
         var ctx = $('#pie');
         
         var barGraph = new Chart(ctx, {
-            type:'pie',
+            type:'bar',
             data: chartdata,  
             options: {
+                scales: {
+                    x: {ticks:{color: 'rgb(255,255,255)'}},
+                    y: {
+                        grid: {color: 'rgb(90,90,90)'},
+                        ticks:{color: 'rgb(255,255,255)'}
+                    }
+                },
             maintainAspectRatio: false,
             responsive: true,
             plugins: {legend: {
                         position: 'bottom',
+                        display: false,
                         labels: {color: 'rgb(255,255,255)'}
                             }
                         }
@@ -335,7 +322,7 @@ $.ajax({
     success:function(data){
         
         Chart.defaults.datasets.line.fill = true;
-        Chart.overrides.line.tension = 0.1;
+        Chart.overrides.line.tension = 0.2;
         Chart.defaults.datasets.line.pointRadius = 0;
         Chart.defaults.plugins.title.color = 'rgb(0,255,0)';
         

@@ -15,6 +15,22 @@ table {
 	box-shadow: 4px 4px 5px #111111;
 }
 
+table.alloc_breakdown {
+   position:absolute; 
+   top:10vh; 
+   right:1vw; 
+   z-index:1;
+}
+
+div.alloc_tickerpct {
+    position:absolute; 
+    top:10vh; 
+    left:1vw; 
+    z-index:1; 
+    height: 40vh;
+    width: 29vw;    
+}
+
 table.chart {   
 	margin-bottom: 40px;
 	margin-left: auto;

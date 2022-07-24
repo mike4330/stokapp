@@ -13,12 +13,11 @@ if ($_GET[q] == "cumshares") {
     $isym = $_GET[symbol]; 
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
+//     
     $query= "select date_new,symbol,units,xtype 
     from transactions 
     where symbol = '$isym' AND (xtype = 'Buy' OR xtype = 'Sell')";
     
-    
-    #echo "date,symbol,shares\n";
     foreach ($dbh->query($query) as $row) {
         $xtype=$row[xtype];
         if ($xtype == 'Sell') {$cumshares = ($cumshares - $row[units]);}
