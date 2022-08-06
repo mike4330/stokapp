@@ -14,43 +14,43 @@ $dbh  = new PDO($dir) or die("cannot open the database");
 // echo "q $_GET[q]\n";
 
 
-if ($_GET[q] == "divs") { 
+if ($_GET['q'] == "divs") { 
 //     echo "ok\n";
 //     echo "ok2\n";
     $query = "select sum(price*units) as cost,substr(date_new,1,7) as p from transactions where xtype = 'Div' group by p ";
     }
 
-if ($_GET[q] == "valuetrend") {
+if ($_GET['q'] == "valuetrend") {
     $query= "select date,value,cost from historical where date > date('now','-180 days')";
     }
     
-if ($_GET[q] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-60 days')";
+if ($_GET['q'] == "averages") {
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-130 days')";
     }
     
-if ($_GET[q] == "quarterdivs") {
+if ($_GET['q'] == "quarterdivs") {
     $query= "select sum(units*price) as total,(strftime('%Y', date_new)) || 'Q' || ((strftime('%m', date_new) + 2) / 3) as q 
     from transactions where xtype = 'Div' group by q";
     }
     
 
-if ($_GET[q] == "portpct") {
+if ($_GET['q'] == "portpct") {
 
 $v=get_portfolio_value();
 // echo $v;
 $query = "SELECT DISTINCT symbol FROM transactions order by symbol";
 foreach ($dbh->query($query) as $row) {
-        $sym=$row[symbol];
+        $sym=$row['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         
         if ($netunits == 0) continue;
         
         $subquery = "select price from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $curprice = $zrow[price];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $curprice = $zrow['price'];
         
         $pos_value=($curprice * $netunits);
         
@@ -92,14 +92,14 @@ function get_portfolio_value() {
     $dbh  = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow[symbol];
+        $tsym=$trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow[price];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
         
         if ($netunits == 0) continue;
         

@@ -3,6 +3,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
 <title>Position Values over Time</title>
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
@@ -17,7 +18,7 @@ include ("nav.php");
 $dir = 'sqlite:portfolio.sqlite';
 $dbh  = new PDO($dir) or die("cannot open the database");
 
-$query = "select symbol,dividend_date from aux_attributes where dividend_date >=  date('now') order by dividend_date";
+$query = "select symbol,dividend_date,expected_amount from aux_attributes where dividend_date LIKE '%-%' and dividend_date >=  date('now') order by dividend_date";
 
 echo "<div class=statusmessage>Upcoming Dividends<br>";
 foreach ($dbh->query($query) as $row) {

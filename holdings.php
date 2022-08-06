@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,6 +7,7 @@
 
 
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
 <style>
 </style>
 
@@ -150,17 +151,17 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 
 //main tabular output
 foreach ($dbh->query($query) as $row) {
-    $sym=$row[symbol];
+    $sym=$row['symbol'];
     
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         
         $netunits = round(($buyunits-$sellunits),4);
         
         $subquery = "select price from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow[price],2);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],2);
         
         if ($netunits == 0) continue;
                 
@@ -173,16 +174,16 @@ foreach ($dbh->query($query) as $row) {
         $total = ($total + $value);
         
         $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow[buytotal],3);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow['buytotal'],3);
         
         $subquery="SELECT sum(units*price) AS selltotal FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow[selltotal],3);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow['selltotal'],3);
         
         $subquery="SELECT sum(gain) as rgain FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow['rgain'],2);
         
         $subquery="SELECT sum(units*price) as total_dividends FROM transactions WHERE xtype = 'Div' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $total_dividends = round($zrow[total_dividends],2);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $total_dividends = round($zrow['total_dividends'],2);
                 
 //         echo "gain for $sym is $gain<br>";
         
@@ -214,8 +215,8 @@ foreach ($dbh->query($query) as $row) {
         
         $portfolio_pct = round((($value / $ttotal)*100),2);
         $subquery = "select alloc_target,compidx2,class as sclass,mean50,mean200 from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow[alloc_target];$compidx=round($zrow[compidx2]);
-        $sclass=$zrow[sclass];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow['alloc_target'];$compidx=round($zrow['compidx2']);
+        $sclass=$zrow['sclass'];
         
         $target_value = ($ttotal * ($alloc_target/100));
         $target_diff = round(($value - $target_value),2);
@@ -231,13 +232,13 @@ foreach ($dbh->query($query) as $row) {
     <td class=\"cntr\">\$$cprice</td><td>";
     
     if ($cprice < $costbasis) {echo '<span class=icon>CB</span>';}
-    if ($cprice < $zrow[mean50]) {echo '<span class=icon style="color: #ff0000;">▼50</span>';}
-    if ($cprice < $zrow[mean200]) {echo '<span class=icon style="color: #ff0000;">▼200</span>';}
-    if ($cprice > $zrow[mean50] && $zrow[mean50] > 1 ) {echo '<span class=icon style="color: #08ac08;" >▲50</span>';}
-    if ($cprice > $zrow[mean200] && $zrow[mean200] > 1) {echo '<span class=icon style="color: #08ac08;">▲200</span>';}
+    if ($cprice < $zrow['mean50']) {echo '<span class=icon style="color: #ff0000;">▼50</span>';}
+    if ($cprice < $zrow['mean200']) {echo '<span class=icon style="color: #ff0000;">▼200</span>';}
+    if ($cprice > $zrow['mean50'] && $zrow['mean50'] > 1 ) {echo '<span class=icon style="color: #08ac08;" >▲50</span>';}
+    if ($cprice > $zrow['mean200'] && $zrow['mean200'] > 1) {echo '<span class=icon style="color: #08ac08;">▲200</span>';}
     
-            $subquery="SELECT close from security_values where symbol = '$sym' order by timestamp desc limit 1";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevclose = $zrow[close];
+    $subquery="SELECT close from security_values where symbol = '$sym' order by timestamp desc limit 1";
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevclose = $zrow['close'];
         
         $pos_price_change = round(($cprice - $prevclose),2);
         if ($sym == "ETHUSD" || $sym == "BTCUSD" || $sym == "XAG") {$pos_price_change=0;}
@@ -253,7 +254,7 @@ foreach ($dbh->query($query) as $row) {
     <td class=\"cntr\">$sclass</td>
     <td class=\"cntr\">\$$netcost</td>
     <td class=\"cntr\">$costbasis</td>
-    <td class=\"cntr\" style=\"background: $cellcolor;color: $unrealtcolor\">\$$dollarreturn</td>
+    <td class=\"cntr\" style=\"background: $cellcolor;color: $unrealtcolor\">$dollarreturn</td>
     <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnpct</td>
     <td>$gain</td>
     <td class=\"cntr\">$compidx</td>
@@ -272,7 +273,7 @@ echo "</table>";
 
 // bottom summary bar
 $subquery = "select value from historical order by date desc limit 1";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevvalue = $zrow[value];
+$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevvalue = $zrow['value'];
 
 $daychange = round(($ttotal - $prevvalue),2);
 
@@ -299,14 +300,14 @@ function get_portfolio_value() {
     $dbh  = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow[symbol];
+        $tsym=$trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow[price];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
         
         if ($netunits == 0) continue;
         

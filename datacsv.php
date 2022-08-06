@@ -9,7 +9,7 @@ $dir = 'sqlite:portfolio.sqlite';
 
 $dbh  = new PDO($dir) or die("cannot open the database");
 
-if ($_GET[q] == "cumshares") {
+if ($_GET['q'] == "cumshares") {
     $isym = $_GET[symbol]; 
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
@@ -30,8 +30,8 @@ if ($_GET[q] == "cumshares") {
     }
     
 
-if ($_GET[q] == "cumshares2") {
-    $isym = $_GET[symbol]; 
+if ($_GET['q'] == "cumshares2") {
+    $isym = $_GET['symbol']; 
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
     $query= "select timestamp,shares from security_values where symbol = '$isym' 
@@ -44,7 +44,7 @@ if ($_GET[q] == "cumshares2") {
  }   
  
     
-if ($_GET[q] == "cumvalue") {
+if ($_GET['q'] == "cumvalue") {
     $isym = $_GET[symbol]; 
     
     $query= "select date_new,symbol,units,xtype 
@@ -63,37 +63,40 @@ if ($_GET[q] == "cumvalue") {
     }    
 
     
-if ($_GET[q] == "posvalues") {
+if ($_GET['q'] == "posvalues") {
 //     echo $_GET[symbol];
     
-    $isym = $_GET[symbol];
+    $isym = $_GET['symbol'];
     if ($isym == "BRKB") {$isym ="BRK.B";}
     $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-365  days') order by timestamp";
 //     echo $query;
     foreach ($dbh->query($query) as $row) {
 //         echo "$row[pval]\n";
-        $array[] = array('posvalue'=> "$row[pval]", 'date'=> $row[timestamp]);
+        $array[] = array('posvalue'=> "$row[pval]", 'date'=> $row['timestamp']);
     }
 }
 
-if ($_GET[q] == "secprices") {
+if ($_GET['q'] == "secprices") {
 //     echo $_GET[symbol];
     
-    $isym = $_GET[symbol];
+    $isym = $_GET['symbol'];
     if ($isym == "BRKB") {$isym ="BRK.B";}
     $query = "select timestamp,close from security_values where symbol = '$isym' AND  timestamp > date('now','-365  days') order by timestamp";
 //     echo $query;
     foreach ($dbh->query($query) as $row) {
 //         echo "$row[pval]\n";
-        $array[] = array('posvalue'=> "$row[close]", 'date'=> $row[timestamp]);
+        $array[] = array('posvalue'=> "$row[close]", 'date'=> $row['timestamp']);
     }
 }
 
-if ($_GET[q] == "gl") {
 
-$query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+
+if ($_GET['q'] == "gl") {
+
+#$query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+$query = "SELECT DISTINCT symbol FROM prices where class IS NOT NULL order by symbol";
 foreach ($dbh->query($query) as $row) {
-    $sym=$row[symbol];
+    $sym=$row['symbol'];
     
     $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
@@ -117,7 +120,7 @@ foreach ($dbh->query($query) as $row) {
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow[rgain],3);
     
     $posvalue = round(($netunits * $cprice),3);
-    $netcost = round(($buytotal - $selltotal),3)+$gain;
+    $netcost = round(($buytotal - $selltotal),3);
     $dollarreturn=round(($posvalue - $netcost),3);
     
     $array[] = array('symbol'=> "$row[symbol]",'dollarreturn'=>"$dollarreturn" );
@@ -136,6 +139,40 @@ if (!empty($_GET['symquery'])) {
      $array[] = array('date'=> "$row[month]",'symbol'=> "$row[symbol]",'cost'=>"$row[cost]" );   
     }
 }
+
+if ( $_SERVER['QUERY_STRING'] == "sectorpct") {
+    $tf = 90;
+    $query = "
+    select timestamp,historical.value,
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Consumer Discretionary')) as CDisc,
+  
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Commodities')) as comd,
+  
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Consumer Staples')) as CStaples,
+  
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Energy')) as Energy,
+  
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Financials')) as Financials,
+  
+  sum(close*shares/historical.value*100) 
+	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Tech')) as Tech
+    from security_values,historical
+    where security_values.timestamp = historical.date
+    group by timestamp
+    order by timestamp desc
+    limit 3
+    ";
+    foreach ($dbh->query($query) as $row) {
+    $array[] = array('date'=> "$row[timestamp]", 'comd'=> "$row[comd]",
+                'Tech'=> "$row[Tech]",'Energy'=>"$row[Energy]" );
+    }
+}
+
 
 
 if ( $_SERVER['QUERY_STRING'] == "catpct") {
@@ -225,16 +262,7 @@ if (!empty($_GET['symreturn'])) {
     }
 }
 
-if ($_GET['q'] == "test") {
-$query = "SELECT symbol,timestamp,(((shares*close)-(cost_basis)+cum_divs)/cost_basis)*100 as rtn
-FROM security_values 
-WHERE timestamp > date('now','-395  days') ORDER BY timestamp "; 
- 
- foreach ($dbh->query($query) as $row) {
-        $array[] = array('date'=> "$row[timestamp]", 'symbol' => $row['symbol'], 'rtn' => $row['rtn']);   
-    }
- 
-}
+
 
 echo json_encode($array);   
 //  print_r($array);

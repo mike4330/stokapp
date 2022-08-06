@@ -4,6 +4,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
 <title>Dividends</title>
 
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->

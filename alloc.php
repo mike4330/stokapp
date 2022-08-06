@@ -5,6 +5,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
 <title>Allocations</title>
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
@@ -37,14 +38,14 @@ function get_portfolio_value() {
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow[symbol];
+        $tsym=$trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow[price];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
         
         if ($netunits == 0) continue;
         
@@ -72,12 +73,12 @@ foreach ($dbh->query($query) as $row) {
     $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
     $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
     
     $netunits = round(($buyunits-$sellunits),4);
     
     $subquery = "select price from prices where symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow[price],2);
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],2);
     
     if ($netunits == 0) continue;
             
@@ -173,7 +174,7 @@ $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL 
 echo "<table class=\"alloc_modeltrade\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
 
 foreach ($dbh->query($query) as $rowb) { 
-    $ac=$rowb[asset_class];
+    $ac=$rowb['asset_class'];
     
     $subquery = "select symbol 
     FROM prices 

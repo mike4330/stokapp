@@ -7,7 +7,7 @@
 <head>
 <title>portfolio</title>
 <link rel="stylesheet" type="text/css" href="main.css">
-
+<link rel="stylesheet" type="text/css" href="nav.css">
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
 <script type="text/javascript" src="/js/luxon.js"></script>
@@ -26,25 +26,58 @@ $c['Sell']="#dd3333";
 
 
 $sc['ANGL']="#1192e8";$tc['ANGL']="#000000";
+$sc['AMX']="#11f298";$tc['AMX']="#000000";
+$sc['AVGO']="#f192e8";$tc['AVGO']="#000000";
 $sc['ASML']="#002d9c";
-$sc['BEN']="#484848";
+$sc['BEN']="#484848";$tc['BEN']="#eedd48";
+$sc['BRT']="#0a380f";$tc['BRT']="#aeeee0";
+$sc['BG']="#fa380f";$tc['BG']="#aeeee0";
+$sc['BSIG']="#fa380f";$tc['BSIG']="#aeeee0";
 $sc['BSJN']="#005d5d";
 $sc['BRK.B']="#eeee99";
 $sc['BTCUSD']="#116e6e";$sc['C']="#eeee00";
+$sc['CARR']="#116e6e";$tc['CARR']="#eeee00";
+$sc['CNHI']="#116eff";$tc['CARR']="#eeee00";
 $sc['DBB']="#b28600";$sc['EMB']="#5818b3";
+$sc['D']="#b28600";$tc['D']="#5818b3";
+$sc['DGX']="#12a610";
+$sc['EVC']="#12a6fa";
 $sc['EWJ']="#aaaa00";$sc['ETHUSD']="#5818b3";
 $sc['FPE']="#6929c4";$sc['FNBGX']="#ffee11";
+$sc['FTS']="#69ffc4";$tc['FTS']="#000011";
+$sc['FAF']="#69ffc4";$tc['FAF']="#000011";
 $sc['GILD']="#012749";$tc['GILD']="#eeee11";
 $sc['GSL']="#9a2530";$tc['GSL']="#ffffff";
-$sc['KHC']="#3f2341";$tc['KHC']="#fefefe";
+$sc['INGR']="#0fcfcf";$tc['INGR']="#02041f";
+$sc['IPAR']="#3aff30";$tc['IPAR']="#02041f";
+$sc['IPI']="#01fff0";$tc['IPI']="#02041f";
+$sc['F']="#3f2341";$tc['F']="#fefefe";
+$sc['HUN']="#6f2300";$tc['HUN']="#fefefe";
+$sc['JBL']="#ff2341";$tc['JBL']="#fefefe";
 $sc['JPIB']="#ff2341";$tc['JPIB']="#fefefe";
 $sc['KMB']="#8a3800";$tc['KMB']="#eeeeee";
+$sc['KHC']="#0a3800";$tc['KHC']="#aeeeee";
 $sc['LKOR']="#772428"; $tc['LKOR']="#EEEEEC";
+$sc['LNG']="#a724f8"; $tc['LNG']="#AEEEEC";
+$sc['LYB']="#0f24ff"; $tc['LYB']="#AEEEEC";
 $sc['LNG']="#a56eff";$sc['MLN']="#fa4d56";
 $sc['MPW']="#ee3333";$tc['MPW']="#ffff00";
+$sc['NHC']="#11aa33";$tc['NHC']="#ffff00";
+$sc['NVS']="#ee55cc";$tc['NVS']="#ffff00";
+$sc['NXST']="#11339f";$tc['NXST']="#ffff00";
 $sc['PDBC']="#4c4c4c";$tc['PDBC']="#fefefe";
-$sc['REM']="#dd427a";$sc['SGOL']="#ee538b";
-$sc['SOXX']="#009d9a";$sc['UFPI']="#9f1853";$sc['VMC']="#167735"; $sc['XAG']="#e9e9e9";
+$sc['PBR']="#0a0a0a";$tc['PBR']="#fefe00";
+$sc['PLD']="#fc4cfc";$tc['PLD']="#fefefe";
+$sc['PNM']="#225522";$tc['PNM']="#ccfecc";
+$sc['REM']="#dd427a"; $sc['RL']="#cc428b";
+$sc['SAH']="#fc4c4c";$tc['SAH']="#0efefe";
+$sc['SNP']="#fc4c00";$tc['SNP']="#0efefe";
+$sc['SGOL']="#ee538b";
+$sc['SOXX']="#009d9a";
+$sc['TAIT']="#f9f9f9";$tc['TAIT']="#0000cc";
+$sc['VALE']="#09f9f9";$tc['VALE']="#f000cc";
+$sc['VCSH']="#1234ff";$tc['VCSH']="#cccc00";
+$sc['UFPI']="#9f1853";$sc['VMC']="#167735"; $sc['XAG']="#e9e9e9";
 
 $dir = 'sqlite:portfolio.sqlite';
 $dbh  = new PDO($dir) or die("cannot open the database");
@@ -165,13 +198,13 @@ echo "<th>id</th><th>acct.</th>
 
 // main tabular transaction list output
 foreach ($dbh->query($query) as $row) {
-    $x=$row[xtype];
+    $x=$row['xtype'];
     $g=$c[$x];
-    $sym=$row[symbol];
+    $sym=$row['symbol'];
     $symbolcolor=$sc[$sym];
     $textcolor=$tc[$sym];
-    $cost = round($row[ccost],4);
-    $units=(round($row[units],3));
+    $cost = round($row['ccost'],4);
+    $units=(round($row['units'],3));
     echo "<tr class=\"$x\">
     <td style=\"padding-right: 2vw;\">$row[id]</td><td>$row[acct]</td>
     <td>$row[date_new]</td>

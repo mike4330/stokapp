@@ -2,6 +2,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="nav.css">
 <title>Charts 3</title>
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
