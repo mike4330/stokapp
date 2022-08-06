@@ -16,8 +16,8 @@ echo "updating historial prices and risk indices" | logger -t "stockportfolio"
 
 $CMD "update prices set compidx2 = compidx where divyield IS NULL;" 
 
-# for sym in ANGL ASML BEN BRK.B BSJN  C DBB EMB EWJ  FPE GILD GSL KMB KHC JPIB LKOR LNG MLN MPW PDBC REM SGOL SOXX UFPI VMC;
-for sym in  FNBGX ;
+ for sym  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL"`;
+#for sym in  FNBGX ;
 
 #retreive csv files
 do

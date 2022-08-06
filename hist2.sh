@@ -15,7 +15,7 @@ cat XAG.csv |sort -r > $tfile
 cp $tfile XAG.csv
 
 
- for f in ANGL ASML BEN BRK.B BSJN C DBB EMB EWJ FPE  GILD GSL JPIB KMB KHC LKOR LNG MLN MPW PDBC REM SGOL XAG SOXX UFPI VMC ;
+ for f  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL"` 
 
 do
    
