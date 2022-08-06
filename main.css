@@ -15,6 +15,65 @@ table {
 	box-shadow: 4px 4px 5px #111111;
 }
 
+@font-face {
+  font-family: font1;
+  src: url(Hack-Regular.ttf);
+}
+
+
+table.lots {
+background: white;
+    font-size: 2vw;
+}
+
+td.lots {
+font-family: "font1";
+color: #0c0ccc;
+font-size: 1.6vw;
+padding-left: .7vw;
+padding-right: .7vw;   
+}
+
+table.mpt  {
+/*    width: 69vw;  */
+/*    text-align: center; */
+background: white;
+}
+
+table.mpt th  {
+    background: #e0e0e0;
+	font-size: .74vw;
+    text-align: left;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+table.mpt td  {
+    font-size: 1.3vh;
+    padding-left: .2vw;
+    padding-right: .2vw;
+    text-align: left;
+    vertical-align: middle;
+    color: #000088;
+    border-left: .01vw dotted #cccccc;
+}
+
+table.mpt2  {
+/*    width: .9vw;  */
+/*    text-align: center; */
+}
+
+table.mpt2 th  {
+    font-size: 1.04vw;
+    text-align: left;
+}
+
+table.mpt2 td  {
+    font-size: .94vw;
+    text-align: left;
+}
+
+
 table.alloc_breakdown {
    position:absolute; 
    top:10vh; 
@@ -137,6 +196,10 @@ span.icon {
 	vertical-align: bottom;
 }
 
+span.navicon {
+    
+}
+
 span.status2 {
 	background: #676767;
 	color: #ffffff;
@@ -151,7 +214,7 @@ span.toggle {
 td {
 	font-family: "Hack Regular",monospace;
 	vertical-align: bottom;
-	font-size: 1.8vh;
+	font-size: 1.5vh;
 	text-align: bottom;
 	padding-left: .1vw;
 	padding-right: .1vw;
@@ -208,8 +271,8 @@ td.summaryline {
 }
 
 th {	
-    font-family: "PixelPoint";
-    font-size: 1.1vh;    
+    font-family: "monospace";
+    font-size: 1.3vh;    
     text-align: center;
     padding-left: .2vw;
     padding-right: .2vw;
