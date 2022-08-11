@@ -74,7 +74,9 @@ $sc['SAH']="#fc4c4c";$tc['SAH']="#0efefe";
 $sc['SNP']="#fc4c00";$tc['SNP']="#0efefe";
 $sc['SGOL']="#ee538b";
 $sc['SOXX']="#009d9a";
+$sc['SSNC']="#c0c0c0";
 $sc['TAIT']="#f9f9f9";$tc['TAIT']="#0000cc";
+$sc['TGS']="#f909f9";$tc['TGS']="#0000cc";
 $sc['VALE']="#09f9f9";$tc['VALE']="#f000cc";
 $sc['VCSH']="#1234ff";$tc['VCSH']="#cccc00";
 $sc['UFPI']="#9f1853";$sc['VMC']="#167735"; $sc['XAG']="#e9e9e9";
@@ -92,24 +94,18 @@ if (!empty($_GET['symfilter'])):
         $query = "SELECT *,(price*units) as ccost from transactions where symbol = '$filterterm' order by id desc";
         echo '<a href="/portfolio" class="button1">🗑 reset filter</a><br>';
         echo '<div class="minichart" ><canvas id="chart" ></canvas></div>';
-        echo '<span class="smallnav">more symbols<br>
-        <a href="/portfolio/?symfilter=ANGL" class="buttonsmall">ANGL</a> 
-        <a href="/portfolio/?symfilter=ASML" class="buttonsmall">ASML</a> 
-        <a href="/portfolio/?symfilter=BRK.B" class="buttonsmall">BRK.B</a>
-        <a href="/portfolio/?symfilter=BSJN" class="buttonsmall">BSJN</a>
-        <a href="/portfolio/?symfilter=DBB" class="buttonsmall">DBB</a>
-        <a href="/portfolio/?symfilter=FPE" class="buttonsmall">FPE</a>
-        <a href="/portfolio/?symfilter=GILD" class="buttonsmall">GILD</a> 
-        <a href="/portfolio/?symfilter=GSL" class="buttonsmall" >GSL</a><br>
-        <a href="/portfolio/?symfilter=KMB" class="buttonsmall">KMB</a> 
-        <a href="/portfolio/?symfilter=LKOR" class="buttonsmall">LKOR</a>
-        <a href="/portfolio/?symfilter=MLN" class="buttonsmall">MLN</a> 
-        <a href="/portfolio/?symfilter=REM" class="buttonsmall">REM</a> 
-        <a href="/portfolio/?symfilter=SGOL" class="buttonsmall">SGOL</a>
-        <a href="/portfolio/?symfilter=SOXX" class="buttonsmall">SOXX</a> 
-        <a href="/portfolio/?symfilter=UFPI" class="buttonsmall">UFPI</a>
-        <a href="/portfolio/?symfilter=VMC" class="buttonsmall">VMC</a> 
-        </span>';
+        echo '<table class=smallnav>';
+        $subquery="select symbol from prices where class IS NOT NULL order by symbol";
+        echo "<tr>";
+        foreach ($dbh->query($subquery) as $row) {
+            $symbol=$row['symbol'];
+            $i++;
+         
+            echo  "<td><a href=\"/portfolio/?symfilter=$symbol\" class=\"buttonsmall\">$symbol</a></td>";
+            if ($i > 7) {echo "</tr>";$i=0;}
+        }
+        echo "</table";
+        
 //        echo "total holdings for $filterterm<br>";
         $tclass="moved";
 endif;
@@ -259,6 +255,7 @@ endif;
     var bgstring = 'rgba(' + rvalue + ',' + gvalue + ',' + bvalue + ',.5)';
     Chart.defaults.datasets.line.borderWidth = .2;
     Chart.defaults.animation.duration = 225;
+    Chart.overrides.line.tension = 0.1;
     
         var close = [];
         var date = [];
@@ -275,17 +272,13 @@ endif;
     }
     
         var std=getStandardDeviation (close);         
-                    
         var numsCnt = close.length;
-        
         var avg = (totalSum / numsCnt);
-        
         var std1= (avg + (std*1));
         var std2H = (avg + (std*2));
         var std1L= (avg - (std*1));
         var std2L= (avg - (std*2));
-        var std3L= (avg - (std*3));
-        
+        var std3L= (avg - (std*3));        
         
 //         console.log(avg,std,std1);
         
@@ -294,18 +287,16 @@ endif;
         datasets: [{
             label: 'Value',
             backgroundColor: bgstring,
-//             borderWidth: .2,
-            radius: 1.5 ,
+            borderWidth: 1.1,
+            borderColor: 'rgb(8, 8, 8)',
+            radius: 0 ,
             spanGaps: true,
             data:close,
             }]
         };
         
 //         var ctx = $('#VMC');
-
 // console.log(item, index);
-
-
         var ctx = $(chart);
         var dv = 0;
         var h2;
@@ -325,31 +316,30 @@ endif;
         console.log("above std2H",h2);
         }
         
-        
         var barGraph = new Chart(ctx, {
             type:'line',
             data: chartdata, 
-            
             options: {
-            
-            fill: true,
-            maintainAspectRatio: false,
-                plugins: {
-                annotation: {
-                    annotations: {
+                fill: true,
+                maintainAspectRatio: false,
+                    plugins: {
+                        annotation: {
+                            annotations: {
         
                         line2: {
                             type: 'line', 
-                            borderColor: 'rgb(16, 16, 16)',
-//                             borderWidth:  .5,
+                            borderColor: 'rgb(16, 16, 240)',
+                            borderWidth:  .75,
                             enabled: true,
                             scaleID: 'y',
                             value: avg,
                             label: {
-                                backgroundColor: 'rgba(0,0,255,.5)',
+                                backgroundColor: 'rgba(0,0,255,.9)',
+                                padding: 2,
                                 content: 'mean',
                                 position: 'start',
-                                enabled: true
+                                enabled: true,
+                                borderRadius: 2
                                 },
                             },
                         line3: {
@@ -362,8 +352,10 @@ endif;
                             label: {
                                 backgroundColor: 'rgba(255,0,0,.5)',
                                 content: '1x stdev',
+                                padding: 2,
                                 position: 'start',
-                                enabled: true
+                                enabled: true,
+                                borderRadius: 2
                                 },
                             },
                             line4: {
@@ -439,10 +431,6 @@ endif;
                         }        
             }
         });
-        
-
-        
-        
         
         } // end success func
 

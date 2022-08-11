@@ -176,7 +176,7 @@ if ( $_SERVER['QUERY_STRING'] == "sectorpct") {
 
 
 if ( $_SERVER['QUERY_STRING'] == "catpct") {
-    $tf=290;
+    $tf=365;
     $query = "select timestamp,(sum(shares*close)/value)*100 as pct
     from security_values,historical 
     where symbol IN 

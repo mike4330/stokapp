@@ -109,6 +109,12 @@ function sortTable(n) {
 <th>flag</th>
 <?php
 
+$hcolor[0]="#ffffff";
+$hcolor[1]="#009900";
+$hcolor[2]="#00cc00";
+$hcolor[3]="#00ff00";
+$hcolor[4]="#22ff22";
+
 $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 $dbh  = new PDO($dir) or die("cannot open the database");
@@ -131,11 +137,14 @@ foreach ($dbh->query($query) as $row) {
               $curval=round(($cprice*$units),2);
               $cost=$rowb['price']*$units;
               $profit=round(($curval - $cost),3);
+              
+              #discard trash
+              if ($profit < .03) {continue;}
+              if ($curval < 2) {continue;}
+              
               echo "<tr><td class=lots>$rowb[acct]</td><td class=lots>$symbol</td>
               <td class=lots>$rowb[date_new]</td>
               <td class=lots>$units</td>
-    
-             
               <td class=lots>$cprice</td>
               <td class=lots>$curval</td>
               <td class=lots><b>$profit</b></td>
@@ -144,8 +153,18 @@ foreach ($dbh->query($query) as $row) {
             $sum[$symbol]=$sum[$symbol]+$profit;
             }
         } 
-  if ($sum[$symbol]) {echo "<tr><td>profit for $symbol</td><td>\$$sum[$symbol]</td></tr>";}
+  if ($sum[$symbol]) {
+    if ($sum[$symbol] > 6.86) {$ci=4;}
+      elseif ($sum[$symbol] > 3.61) {$ci=3;}
+      elseif ($sum[$symbol] > 1.9) {$ci=2;} 
+      elseif ($sum[$symbol] > 1) {$ci=1;} 
+        else {$ci=0;}
+	echo "<tr><td style=\"color: #a0a0a0;\">profit for $symbol</td>
+	<td><b><span style=\"background: $hcolor[$ci];color:#000000;\">\$$sum[$symbol]</b></span></td></tr>";
+	$totalprofit=$totalprofit+$sum[$symbol];
+	}
 }
+echo "<tr><td colspan=3>total avail profit $totalprofit</td></tr>";
 ?>
 </table>
 </body>

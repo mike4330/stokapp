@@ -215,7 +215,8 @@ foreach ($dbh->query($query) as $row) {
         
         $portfolio_pct = round((($value / $ttotal)*100),2);
         $subquery = "select alloc_target,compidx2,class as sclass,mean50,mean200 from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow['alloc_target'];$compidx=round($zrow['compidx2']);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow['alloc_target'];
+        $compidx=round($zrow['compidx2'],2);
         $sclass=$zrow['sclass'];
         
         $target_value = ($ttotal * ($alloc_target/100));

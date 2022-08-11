@@ -196,10 +196,7 @@ echo "</table>";
 ?>
 
 <div class="alloc_tickerpct" ><canvas id="pie" ></canvas></div>
-
 <div class="alloc_cat_pie" ><canvas id="class_pie" ></canvas></div>
-
-
 <div class="alloc_cat_timeseries" ><canvas id="catpct" ></canvas></div>
 
 <script>
@@ -258,32 +255,47 @@ $.ajax({
     type: 'GET',
     dataType: 'json',
     success:function(data){
-        Chart.defaults.datasets.line.fill = true;
+        Chart.defaults.datasets.line.fill = false;
         var symbol = [];
         var pos_pct = [];
+        var model_rec = [];
         
         for(var i in data){
           symbol.push(data[i].symbol);
           pos_pct.push(data[i].pos_pct);
+          model_rec.push(data[i].model_rec);
 //           console.log(data[i].symbol);
             }
         // pos_pct.sort(function(a, b){return a - b});
         var chartdata = {
             labels: symbol,
-            datasets: [{
-//             label: 'symbol',
-            data: pos_pct,
-            spacing: 0,
-            borderWidth: 0.5,
-            backgroundColor: [
-                'rgba(0,0,255,.9)',
-                'rgba(255,255,0,.9)',
-                ],
-            }]
+                datasets: [{
+                type: 'bar',
+                data: pos_pct,
+                spacing: 0,
+                order: 5,
+                borderWidth: 0.5,
+                backgroundColor: [
+                    'rgba(0,0,255,.6)',
+                    'rgba(0,128,0,.6)',
+                    ],
+                },
+                    {
+                        type: 'line', 
+                        backgroundColor: 'rgb(255,255,255)',
+                        borderColor: 'rgb(255,255,255)',
+                        radius: 0,
+                        data: model_rec,
+                        borderWidth: 1,
+                        labels: symbol,
+                        stepped: 'middle',
+                        order: 4,
+                        label: "Model Rec"
+                    }  
+                ]
         };
         
         var ctx = $('#pie');
-        
         var barGraph = new Chart(ctx, {
             type:'bar',
             data: chartdata,  
@@ -295,11 +307,12 @@ $.ajax({
                         ticks:{color: 'rgb(255,255,255)'}
                     }
                 },
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {legend: {
+                maintainAspectRatio: false,
+                animation: false,
+                responsive: true,
+                plugins: {legend: {
                         position: 'bottom',
-                        display: false,
+                        display: true,
                         labels: {color: 'rgb(255,255,255)'}
                             }
                         }
@@ -388,9 +401,10 @@ $.ajax({
             
         },
         maintainAspectRatio: false,
+        animation: false,
         responsive: true,
         plugins: {legend: {
-                    position: 'bottom',
+                    position: 'right',
                     labels: {color: 'rgb(255,255,255)'}
                         }
                     }

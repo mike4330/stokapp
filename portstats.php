@@ -101,10 +101,10 @@ function get_porfolio_cost() {
             if ($netunits == 0) continue;
             
             $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = $zrow[buytotal];
+            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = $zrow['buytotal'];
             
             $subquery="SELECT sum(units*price) AS selltotal,sum(gain) as gain FROM transactions WHERE xtype = 'Sell' AND symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = $zrow[selltotal];$gain=$zrow[gain];
+            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = $zrow['selltotal'];$gain=$zrow['gain'];
             
             
             $netcost = round(($buytotal - $selltotal),3)+$gain;

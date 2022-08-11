@@ -25,7 +25,7 @@ if ($_GET['q'] == "valuetrend") {
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-130 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-140 days')";
     }
     
 if ($_GET['q'] == "quarterdivs") {
@@ -52,12 +52,17 @@ foreach ($dbh->query($query) as $row) {
         $subquery = "select price from prices where symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $curprice = $zrow['price'];
         
+        $subquery = "select target_alloc from MPT where symbol = '$sym'";
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
+	$model_rec = $zrow['target_alloc'];
+        
         $pos_value=($curprice * $netunits);
         
         $pos_pct=($pos_value / $v)*100;
+        $model_rec=($model_rec*100);
         
 //         echo "$sym $curprice $pos_value $pos_pct\n";
-        if ($pos_pct > 2) {$array[] = array('symbol'=> "$sym", 'pos_pct'=> "$pos_pct");}
+        if ($pos_pct > .7) {$array[] = array('symbol'=> "$sym", 'pos_pct'=> "$pos_pct", 'model_rec'=> "$model_rec");}
             else {$otherpct = $otherpct + $pos_pct;}
 //         $array[$sym] = $pos_pct;
        

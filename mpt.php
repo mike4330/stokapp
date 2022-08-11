@@ -114,8 +114,9 @@ echo "portfolio_value = $portfolio_value";
 $query = "SELECT DISTINCT symbol,target_alloc,sector,logo_file FROM MPT order by symbol";
 
 echo "<table class=\"mpt\" id=\"myTable2\">";
-echo "<th></th><th>Symbol</th><th>T.Wgt</th>
-<th>pos_val</th><th>Target Value</th><th onclick=\"numericsort(5)\">Target Diff</th><th onclick=\"numericsort(6)\">IDX</th><th>class</th><th onclick=\"sortTable(8)\">Sector</th>";
+echo "
+<tr><th>Symbol</th><th>T.Wgt</th>
+<th>pos_val</th><th>Target Value</th><th onclick=\"numericsort(4)\">Target Diff</th><th onclick=\"numericsort(6)\">IDX</th><th>class</th><th onclick=\"sortTable(7)\">Sector</th></tr>";
 
 foreach ($dbh->query($query) as $row) {
     $sym=$row['symbol'];
@@ -159,11 +160,14 @@ foreach ($dbh->query($query) as $row) {
     $class_total[$current_class]= $class_total[$current_class]+$pos_val;
     $class_proposed_total[$current_class]=$class_proposed_total[$current_class]+$tvalue;
     
+    $diffamt[$sym]=$tdiff;
+    
     echo "<tr class=\"main\">
-    <td style=\"text-align: center;background: white;\"><img src=\"$logo_file\" style=\"max-width:100px; max-height:90px;\"></td>
+    
     <td>$sym</td><td>$talloc_display %</td>
     <td>\$$pos_val</td><td>\$$tvalue</td>
-    <td style=\"background: $color2;color: $tcolor2\">$tdiff</td><td>$compidx2</td><td>$current_class</td><td>$sector</td></tr>";
+    <td style=\"background: $color2;color: $tcolor2\">$tdiff</td>
+    <td>$compidx2</td><td>$current_class</td><td>$sector</td></tr>";
 }
 
 $cmp=$class_proposed_total['Commodities'];
@@ -200,6 +204,77 @@ echo "<tr><td>Domestic Bonds</td><td>$dbc</td><td>$dbp</td><td>$dbpct_c</td><td>
 echo "<tr><td>Foreign Bonds</td><td>$fbc</td><td>$fbp</td><td>$fbpct_c</td><td>$fbpct_p</td></tr>";
 $totalbonds=($dbpct_p+$fbpct_p);
 echo "<tr><td>Total Bonds in Target</td><td>$totalbonds%</td></tr>";
+echo "</table>\n";
+
+
+// picker table
+echo "\n\n<table class=\"picker\">
+<tr><th colspan=4>Picker</th></tr>
+  <tr><th>symbol</th>
+  <th>Diff Amt</th>
+  <th>ζ val</th>
+  <th>price/l.cl.</th></tr>";
+
+$query ="select symbol,pe,range,beta,divyield,avgflag,sector,
+round((pe+range+beta)-divyield,2) as z from MPT where flag = 'U' and sector != 'Bonds' and avgflag != 'A50A200'
+order by z";
+
+foreach ($dbh->query($query) as $trow) {
+  $symbol = $trow['symbol'];
+  
+  $subquery="select MPT.symbol,prices.price-(select close from security_values where symbol = MPT.symbol order by timestamp desc limit 1) as pricediff from MPT,prices 
+where flag = 'U' and MPT.symbol = '$symbol'
+and MPT.symbol = prices.symbol";
+  $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
+  $pricediff = round($zrow['pricediff'],2);
+  
+  if ($pricediff < 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
+    else {$bgstring = "#000000"; $clrstring = "#1111cc";}
+  
+ echo "<tr><td style=\"background: $bgstring; color: $clrstring;\">$trow[symbol]</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$symbol]</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$trow[z]</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
+  </tr>\n"; 
+}
+
+echo "</table>\n";
+
+
+//overs sell table
+echo "<table class=\"overs\"><th>sym</th><th colspan=2>Over Amt.</th><th>pr.chg.</th>";
+$query = "select symbol from MPT where flag = 'O'";
+foreach ($dbh->query($query) as $trow) {
+  $sym = $trow['symbol'];
+ 
+      $subquery = "select price,
+      (select close from security_values where symbol = '$sym' order by timestamp desc limit 1) as pprice
+      from prices where symbol = '$sym'";
+      $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
+
+   if ($diffamt[$sym] < 10) {continue;}
+   
+  $pricediff = round(($zrow['price'] - $zrow['pprice']),2);
+  
+  if ($pricediff > 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
+    else {$bgstring = "#000000"; $clrstring = "#1111cc";}
+   
+	$barwidth = $diffamt[$sym]*.04 . "vw" ; 
+        $gradwidth = 0;
+  echo "<tr>
+    <td style=\"background: $bgstring;color: $clrstring;\">$sym</td>
+    <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$sym]</td>
+    <td><svg class=\"bars\" width=\"$barwidth\" height=\"1vw\">";
+
+    echo '  <linearGradient id="myGradient" >
+      <stop offset="1px"  stop-color="#004c00" />';
+      echo "<stop offset=\"95%\" stop-color=\"#22ff22\" />
+    </linearGradient>";
+
+    echo"<rect x=\"0\" y=\"0\" width=\"$barwidth\" height=\"1vw\" rx=\"4\" style=\"fill:url(\#myGradient);\"/>
+		</svg></td>
+    <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td></tr>";
+}
 echo "</table>";
 
 function get_portfolio_value() {

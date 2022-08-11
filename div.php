@@ -11,7 +11,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/js/chart.js"></script> 
 
-
 </head>
 <body>
 
@@ -19,7 +18,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 ?>
-
     <table class="chart">
     <tr class="chart">
     <td><canvas id="mychart" style="width:720px;height:384px"></canvas></td>
@@ -31,15 +29,11 @@ include ("nav.php");
     <td><canvas id="averageschart" style="width:720px;height:384px"></canvas></td>
     </tr></table>
 
-    
-
     <script>
-    
-    
+        
 $.ajax({
       url: 'data.php?q=divs',
       type: 'GET',
-      // this was what I needed to make it work.
       dataType: 'json',
       success:function(data){
 
@@ -64,7 +58,6 @@ $.ajax({
         };
 
         var ctx = $('#mychart');
-
         var barGraph = new Chart(ctx, {
             type:'bar',
             data: chartdata,  
@@ -77,7 +70,6 @@ $.ajax({
     
 
   $.ajax({
-  
     url: 'data.php?q=valuetrend',
     type: 'GET',
     // this was what I needed to make it work.
@@ -115,8 +107,6 @@ $.ajax({
             
             
         var ctx = $('#valuechart');
-        
-        
         var barGraph = new Chart(ctx, {
             type:'line',
             data: chartdata, 
@@ -139,19 +129,20 @@ $.ajax({
     
         var WMA8 = [];var date = [];
         var WMA24 = []; var WMA28 = []; var WMA36=[]; var WMA41=[]; 
-        var WMA48=[];var WMA55=[];var rtn=[]; var WMA64=[];
+        var WMA48=[];var rtn=[]; var WMA64=[];
          
          for(var i in data){
           date.push(data[i].date);
           WMA8.push(data[i].WMA8);WMA24.push(data[i].WMA24);
           WMA28.push(data[i].WMA28);WMA36.push(data[i].WMA36);
           WMA41.push(data[i].WMA41);WMA48.push(data[i].WMA48);
-          WMA55.push(data[i].WMA55);WMA64.push(data[i].WMA64);
+          WMA64.push(data[i].WMA64);
           rtn.push(data[i].rtn);
         }
-    
+
         var chartdata = {
-            labels: date,
+ 
+          labels: date,
             datasets: [
               {
                 label: '8WMA',
@@ -175,13 +166,7 @@ $.ajax({
                 borderWidth: 1.5,
                 data: rtn
               },
-              {
-                label: 'WMA55',
-                radius: 0,
-                borderColor: 'rgb(255,255,0)',
-                borderWidth: 2.5,
-                data: WMA55
-              },
+ 
                         {
                 label: 'WMA64',
                 radius: 0,
@@ -201,6 +186,7 @@ $.ajax({
             data: chartdata,  
             options: {
                 responsive: false,
+                
             }
         });
     }
