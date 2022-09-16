@@ -10,7 +10,7 @@ su='0';
 
 
 
- for f in FNBGX BRK.B; 
+ for f in FNBGX BRK.B FAGIX; 
 
 
 

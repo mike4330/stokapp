@@ -1,5 +1,3 @@
-
-
 <?php
 
 //Copyright (C) 2022 Mike Roetto <mike@roetto.org>
@@ -25,7 +23,7 @@ if ($_GET['q'] == "valuetrend") {
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-140 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-180 days')";
     }
     
 if ($_GET['q'] == "quarterdivs") {
@@ -62,7 +60,7 @@ foreach ($dbh->query($query) as $row) {
         $model_rec=($model_rec*100);
         
 //         echo "$sym $curprice $pos_value $pos_pct\n";
-        if ($pos_pct > .7) {$array[] = array('symbol'=> "$sym", 'pos_pct'=> "$pos_pct", 'model_rec'=> "$model_rec");}
+        if ($pos_pct > .8) {$array[] = array('symbol'=> "$sym", 'pos_pct'=> "$pos_pct", 'model_rec'=> "$model_rec");}
             else {$otherpct = $otherpct + $pos_pct;}
 //         $array[$sym] = $pos_pct;
        

@@ -20,25 +20,26 @@ $dbh  = new PDO($dir) or die("cannot open the database");
 
 $query = "select symbol,dividend_date,expected_amount from aux_attributes where dividend_date LIKE '%-%' and dividend_date >=  date('now') order by dividend_date";
 
-echo "<div class=statusmessage>Upcoming Dividends<br>";
+echo "<div class=statusmessage style=\"font-family: Monospace;\">Upcoming Dividends<br>";
 foreach ($dbh->query($query) as $row) {
-    echo "$row[dividend_date]  $row[symbol] <br>";
+    echo "<span style=\"display: inline-block;border: 2px solid #119911;padding: 2px;margin-bottom: 4px;margin-left:5px;\" >$row[dividend_date] $row[symbol] </span>"; $ix++;
+    if ($ix > 3) {echo "<br>";$ix=0;}
 }
 echo "</div><br>";
 ?>
 
 <table class=chart>
 <tr>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="ANGL""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="GSL""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="LKOR""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="MLN""></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="ANGL"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="GSL"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="LKOR"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="MLN"></canvas></div></td>
 </tr>
 <tr>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="REM""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="SOXX""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="VMC""></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="UFPI""></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="REM"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="SOXX"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="VMC"></canvas></div></td>
+    <td><div class="chart-container3" style="position: relative;  "><canvas id="FPE"></canvas></div></td>
 </tr>
 </table>
 
@@ -112,7 +113,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Div Amount',
-                backgroundColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(245, 89, 89)',
                 data:cost
                 
               }
@@ -267,13 +268,13 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?symquery=UFPI',
+      url: 'datacsv.php?symquery=FPE',
       type: 'GET',
       // this was what I needed to make it work.
       dataType: 'json',
       success:function(data){
 
-        item = 'UFPI';  
+        item = 'FPE';  
         var cost = [];
         var date = [];
 

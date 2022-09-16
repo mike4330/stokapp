@@ -47,11 +47,11 @@ function gpv() {
     $dbh  = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow[symbol];
+        $tsym=$trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];

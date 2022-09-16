@@ -22,39 +22,73 @@ $dbh  = new PDO($dir) or die("cannot open the database");
 
 <table class="chart">
 <tr>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="ANGL" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="ASML" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="BEN" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="BRKB" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="ANGL" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="ASML" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="AVGO" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="BEN" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="BRKB" ></canvas></div></td>
+    
+    
     
 </tr>
 <tr>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="C" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="DBB" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="EWJ" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="GILD" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="C" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="CARR" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="D" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="DBB" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="DGX" ></canvas></div></td>
+    
+
+    
+    
 </tr>
 <tr>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="GSL" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="KHC" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="KMB" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="LKOR" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="EMB" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="EWJ" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="F" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="FNBGX" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="FRG" ></canvas></div></td>
+  
+
+    
 
 </tr>
 <tr>
-    
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="LNG" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="MLN" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="REM" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="SGOL" ></canvas></div></td>
-    
+    <td><div class="chart-container" ><canvas id="GILD" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="GSL" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="HUN" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="IPAR" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="IPI" ></canvas></div></td>
  
 </tr>
 <tr>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="SOXX" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="UFPI" ></canvas></div></td>
-    <td><div class="chart-container" style="position: relative;  width:23vw;height:22vh;"><canvas id="VMC" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="JBL" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="JPIB" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="KMB" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="MLN" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="MPW" ></canvas></div></td>
+
+    
 </tr>
+<tr>
+    <td><div class="chart-container" ><canvas id="OTIS" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="REM" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="RL" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="SAH" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="SGOL" ></canvas></div></td>
+</tr>    
+    <tr>
+    <td><div class="chart-container" ><canvas id="SNP" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="SSNC" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="SOXX" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="TAIT" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="TGS" ></canvas></div></td>
+</tr>
+<tr>
+    <td><div class="chart-container" ><canvas id="VALE" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="VCSH" ></canvas></div></td>
+    <td><div class="chart-container" ><canvas id="VMC" ></canvas></div></td>
+    </tr>
 </table>
 
 <script>
@@ -63,11 +97,13 @@ Chart.defaults.interaction.mode = 'nearest';
 Chart.defaults.datasets.line.fill = true;
 Chart.defaults.datasets.line.borderWidth = 1;
 Chart.defaults.animation.duration = 225;
-Chart.defaults.datasets.line.pointRadius = 2;
+Chart.defaults.datasets.line.pointRadius = 0;
 
-const array = ["ASML", "ANGL", "BRKB", "BEN",
-"BSJN","C","DBB", "EWJ","GILD","GSL","KMB","KHC", "LKOR" , "LNG","MLN", 
-"REM","SGOL","SOXX","VMC","UFPI"];
+const array = ["ASML", "ANGL", "AVGO","BRKB", "BEN",
+"BSJN","C","CARR","D","DBB", "DGX","EMB","EWJ","F","FNBGX",
+"FRG","GILD","GSL","HUN","IPAR","IPI","JBL","JPIB","KMB" ,"MLN","MPW", "OTIS",
+"REM","RL","SAH","SGOL","SNP","SOXX","SSNC","TAIT",
+"TGS","VALE","VCSH","VMC"];
 
 array.forEach(function (item, index) {
 
@@ -113,7 +149,7 @@ var iname = '#' + item;
             data: chartdata,  
             options: {
             maintainAspectRatio: false,
-            pointRadius: 0.85 ,
+            pointRadius: 0,
             stepped: true,
                 plugins: {title: {text: item,display: true},
                 legend: {display: false}},

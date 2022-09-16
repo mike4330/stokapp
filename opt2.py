@@ -3,19 +3,23 @@ import pprint
 import pandas_datareader.data as web
 import datetime
 from functools import reduce
+from datetime import date
 
 import yfinance as yf
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from pypfopt import objective_functions
+from pypfopt import CLA, plotting
 
-tickers = ["ANGL","ASML","AVGO","AMX","BEN","BG","BRK-B",
-"BRT","BSIG","C","CARR","CNHI","D","DBB","DGX","EMB","EVC","EWJ",
-"F","FAF","TGS","FNBGX","FTS","GILD",
-"JBL","GSL","HUN","INGR","IPI","IPAR","JPIB","KMB","LKOR",
-"LYB","MLN","NHC","NXST","SSNC","PBR","PDBC","PLD","PNM","MPW","NVS","REM","RL","SAH",
-"SGOL","SNP","SOXX","TAIT","VALE","VCSH","VMC" ]
+tickers = ["ANGL","ASML","AVGO","AMX","BEN","BG","BRK-B","FRG",
+"BRT","BSIG","C","CARR","CNHI","D","DBB","DGX","EMB","EVC",
+"EWJ","F","FAF","FPE","TGS",
+"FNBGX","FAGIX",
+"FTS","GILD","GSL",
+"HUN","INGR","IPAR","JPIB","KMB","HTLD","LYB","MLN","NHC","NICE",
+"NXST","SSNC","PBR","PDBC","PLD","PNM","MPW","NVS","REM",
+"SAH","SCI","SGOL","OTIS","SNP","SOXX","TAIT","VALE","VCSH","VMC",  ]
 
 sector_mapper = {    
     "AMX": "Communication Services",
@@ -26,6 +30,7 @@ sector_mapper = {
     "BSIG": "Financials",
     "BG": "Consumer Staples",
     "BRK-B": "Financials",
+    "FBMS": "Financials",
     "BRT": "Real Estate",
     "C": "Financials",
     "CARR": "Industrials",
@@ -37,32 +42,33 @@ sector_mapper = {
     "EWJ": "Industrials",
     "F": "Consumer Discretionary",
     "FAF": "Financials",
+    "FPE": "Bonds",
     "TGS": "Energy",
     "FNBGX": "Bonds",
+    "FAGIX": "Bonds",
     "GILD": "Healthcare",
     "GIS": "Consumer Staples",
     "GSL": "Industrials",
     "HUN": "Materials",
-    "IPI": "Materials",
+    "HTLD": "Materials",
     "INGR": "Consumer Staples",
     "IPAR": "Consumer Staples",
-    "JBL": "Tech",
     "JPIB": "Bonds",
     "KMB": "Consumer Staples",
-    "LKOR": "Bonds",
     "LYB": "Materials",
     "MLN": "Bonds",
-    "MLI": "Industrials",
     "NHC": "Healthcare",
     "NVS": "Healthcare",
+    "NICE": "Tech",
     "NXST": "Communication Services",
     "MPW": "Real Estate",
+    "OTIS": "Industrials",
     "SSNC": "Tech",
     "PDBC": "Commodities",
     "PBR": "Energy",
     "PNM": "Utilities",
-    "RL": "Consumer Discretionary",
     "SAH": "Consumer Discretionary",
+    "SCI": "Consumer Discretionary",
     "SNP": "Energy",
     "SGOL": "Precious Metals",
     "VALE": "Materials",
@@ -75,45 +81,46 @@ sector_mapper = {
     "FTS": "Utilities",
     "D": "Utilities",
     "PNM": "Utilities",
+    "FRG": "Consumer Discretionary"
 }
 
 sector_lower = {
-    "Bonds": 0.38, # at least 5% to tech
-    "Commodities": 0.02,
-    "Communication Services": .01826,
-    "Consumer Discretionary": .07380,
-    "Consumer Staples": .03798,
-    "Energy": .02216,
-    "Financials": .04444,
-    "Healthcare": .07319,
-    "Industrials": .04405,
-    "Materials": .04446,
-    "Tech": 0.121 ,
-    "Real Estate": .03210,
-    "Precious Metals": .0509,
-    "Utilities": .03676
+    "Bonds": 0.365,     
+    "Commodities": 0.025,
+    "Communication Services": .00938,
+    "Consumer Discretionary": .06802,
+    "Consumer Staples": .03368,
+    "Energy": .03219,
+    "Financials": .04083,
+    "Healthcare": .06737,
+    "Industrials": .03733,
+    "Materials": .04210,
+    "Tech": 0.12090 ,
+    "Real Estate": .02152,
+    "Precious Metals": .05,
+    "Utilities": .03786
 }
 
 sector_upper = {
     "Bonds": .47,
     "Commodities": 0.061,
-    "Communication Services": .02232,
-    "Consumer Discretionary": .09020,
-    "Consumer Staples": .04642,
-    "Energy": .02709,
-    "Financials": .05432,
-    "Healthcare": .08946,
-    "Industrials": .05383,
-    "Materials": .05434,
-    "Precious Metals": .061,
-    "Real Estate": .03923,
-    "Tech": 0.17293,
-    "Utilities": .04493
+    "Communication Services": .01146,
+    "Consumer Discretionary": .08314,
+    "Consumer Staples": .04117,
+    "Energy": .03934,
+    "Financials": .0499,
+    "Healthcare": .08234,
+    "Industrials": .04563,
+    "Materials": .05146,
+    #"Precious Metals": .061,
+    "Real Estate": .02596,
+    "Tech": 0.14776,
+    "Utilities": .04627
 }
 
-#ohlc = yf.download(tickers, start="2012-08-12", end="2022-08-11")
-#prices = ohlc["Adj Close"].dropna(how="all")
-#prices.to_csv("pricedataset.csv", index=True)
+ohlc = yf.download(tickers, start="2012-09-15", end="2022-09-16")
+prices = ohlc["Adj Close"].dropna(how="all")
+prices.to_csv("pricedataset.csv", index=True)
 
 import sys
 gammainput = sys.argv[1]
@@ -149,6 +156,9 @@ S = CovarianceShrinkage(prices).ledoit_wolf()
 ef = EfficientFrontier(mu, S,weight_bounds=(lb,.06),verbose=False)
 
 
+#print(mu)
+
+
 ef.add_sector_constraints(sector_mapper, sector_lower, sector_upper)
 ef.add_objective(objective_functions.L2_reg, gamma=gammainput)
 
@@ -167,6 +177,15 @@ print("------------------------------")
 #es.portfolio_performance(verbose=True)
 ef.portfolio_performance(verbose=True)
 
+
+cla = CLA(mu, S)
+cla.max_sharpe()
+fig, ax = plt.subplots()
+plt.tight_layout()
+plt.grid()
+plotting.plot_efficient_frontier(cla, showfig=False,ax=ax,show_tickers="True",filename="ef.png")
+
+
 print("------------------------------")
 for sector in set(sector_mapper.values()):
     total_weight = 0
@@ -184,3 +203,11 @@ with open('semivariance.csv', 'w', newline='') as csvfile:
     writer.writeheader()
     for key in weights:
         writer.writerow({'symbol': key, 'weight': weights[key]})
+today = date.today()
+
+
+with open("weights.log", 'a') as f: 
+    for key, value in weights.items(): 
+        f.write("%s %s %s\n" % (today, key, value))
+
+

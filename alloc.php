@@ -333,18 +333,20 @@ $.ajax({
     success:function(data){
         
         Chart.defaults.datasets.line.fill = true;
-        Chart.overrides.line.tension = 0.2;
+        Chart.overrides.line.tension = 0.8;
         Chart.defaults.datasets.line.pointRadius = 0;
         Chart.defaults.plugins.title.color = 'rgb(0,255,0)';
         
 
-        var date = []; var pctcomms = []; var pctstock = []; var pctbonds = []; var pctpm = [];
+        var date = []; var pctcomms = []; var pctstock = []; 
+	var pctbonds = []; var pctpm = []; var pctre = [];
         for(var i in data){
             date.push(data[i].date);
             pctcomms.push(data[i].pctcomms);
             pctstock.push(data[i].pctstock);
             pctbonds.push(data[i].pctbonds);
             pctpm.push(data[i].pctpm);
+            pctre.push(data[i].pctRE);
             console.log("bonds: ",data[i].pctbonds);
             }
     var ctx = $('#catpct');
@@ -356,7 +358,7 @@ $.ajax({
                 label: 'PM Pct',
                 borderWidth: 0,
                 borderColor: 'rgba(255,255,255,255)',
-                backgroundColor: 'rgba(12,64,12,.6)',
+                backgroundColor: 'rgba(255,64,12,.6)',
                 data: pctpm    
             },
             {
@@ -365,6 +367,13 @@ $.ajax({
                 borderColor: 'rgba(255,255,255,255)',
                 backgroundColor: 'rgba(255,255,12,.6)',
                 data: pctcomms    
+            },
+            {
+                label: 'RE Pct',
+                borderWidth: 0,
+                borderColor: 'rgba(255,255,255,255)',
+                backgroundColor: 'rgba(255,255,240,.6)',
+                data: pctre    
             },
             {
                 label: 'Bonds Pct',

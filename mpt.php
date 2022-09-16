@@ -98,25 +98,61 @@ function sortTable(n) {
     }
   }
 }
+
+
+function startTime() {
+  const today = new Date();
+  let h = today.getHours();
+  let m = today.getMinutes();
+  let s = today.getSeconds();
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+  setTimeout(startTime, 1000);
+}
+
+function checkTime(i) {
+  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+  return i;
+}
+</script>
+
+
 </script>
 </head>
-<body> 
+<body onload="startTime()">
+<div id="txt" class="clock"></div>
 
 <?php
+
+$iconcolor['CD']="#9999ff";$icontc['CD']="#000000";$icon['CD']="💍";
+$iconcolor['CM']="#ee4400";$icontc['CM']="#000000";$icon['CM']="🌽";
+$iconcolor['CO']="#404040";$icontc['CO']="#c9c900";$icon['CO']="☎";
+$iconcolor['CS']="#ecec11";$icontc['CS']="#000000";$icon['CS']="🍞";
+$iconcolor['E']="#99ee99";$icontc['E']="#000000";$icon['E']="🛢️";
+$iconcolor['F']="#aaaaaa";$icontc['F']="#000000";$icon['F']="💵";
+$iconcolor['H']="#880088";$icontc['H']="#fefefe"; $icon['H']="🏥";
+$iconcolor['ID']="#fefefe";$icontc['ID']="#000000";$icon['ID']="🏭";
+$iconcolor['IT']="#338833";$icontc['IT']="#000000";$icon['IT']="💻";
+$iconcolor['M']="#333333";$icontc['M']="#ffcc11";$icon['M']="⛏";
+$iconcolor['RE']="#990101";$icontc['RE']="#fdfdfd";$icon['RE']="🏡";
+$iconcolor['U']="#785600";$icontc['U']="#ffffff";$icon['U']="⚡";
 
 $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 $dbh  = new PDO($dir) or die("cannot open the database");
+
+
 
 $portfolio_value=get_portfolio_value();
 
 echo "portfolio_value = $portfolio_value";
 $query = "SELECT DISTINCT symbol,target_alloc,sector,logo_file FROM MPT order by symbol";
 
-echo "<table class=\"mpt\" id=\"myTable2\">";
+echo "<table class=\"mpt\" id=\"myTable2\" >";
 echo "
-<tr><th>Symbol</th><th>T.Wgt</th>
-<th>pos_val</th><th>Target Value</th><th onclick=\"numericsort(4)\">Target Diff</th><th onclick=\"numericsort(6)\">IDX</th><th>class</th><th onclick=\"sortTable(7)\">Sector</th></tr>";
+<tr><th>Symbol</th><th>tWgt</th>
+<th>Val</th><th>tVal</th><th onclick=\"numericsort(4)\">tDiff</th><th>Dpct</th><th onclick=\"numericsort(6)\">IDX</th><th>class</th><th onclick=\"sortTable(8)\">Sector</th></tr>";
 
 foreach ($dbh->query($query) as $row) {
     $sym=$row['symbol'];
@@ -136,7 +172,7 @@ foreach ($dbh->query($query) as $row) {
     $talloc_display=round(($row['target_alloc']*100),2);
     $tvalue = round($talloc*$portfolio_value,2);
     
-    $tdiff= ($pos_val-$tvalue);
+    $tdiff= round(($pos_val-$tvalue),2);
     
     if ($tdiff < -1) {
 		$color2="#cc0000";$tcolor2="white";
@@ -162,13 +198,20 @@ foreach ($dbh->query($query) as $row) {
     
     $diffamt[$sym]=$tdiff;
     
+    $diffpct = round(100*($tdiff / $tvalue),2);  
+    
+    if ($diffpct > 100) {$pbg="#00ff00";} 
+      else {$pbg="#ffffff";}
+    
     echo "<tr class=\"main\">
     
     <td>$sym</td><td>$talloc_display %</td>
     <td>\$$pos_val</td><td>\$$tvalue</td>
-    <td style=\"background: $color2;color: $tcolor2\">$tdiff</td>
+    <td style=\"background: $color2;color: $tcolor2\">$tdiff</td><td style=\"background: $pbg;\">$diffpct %</td>
     <td>$compidx2</td><td>$current_class</td><td>$sector</td></tr>";
 }
+
+echo "</table>";
 
 $cmp=$class_proposed_total['Commodities'];
 $cmc=$class_total['Commodities'];
@@ -209,32 +252,44 @@ echo "</table>\n";
 
 // picker table
 echo "\n\n<table class=\"picker\">
-<tr><th colspan=4>Picker</th></tr>
-  <tr><th>symbol</th>
-  <th>Diff Amt</th>
+<tr><th colspan=6>Picker</th></tr>
+  <tr><th>sc</th><th>symbol</th>
+  <th>Diff</th>
   <th>ζ val</th>
-  <th>price/l.cl.</th></tr>";
+  <th>chg</th><th>off200</th></tr>";
 
-$query ="select symbol,pe,range,beta,divyield,avgflag,sector,
-round((pe+range+beta)-divyield,2) as z from MPT where flag = 'U' and sector != 'Bonds' and avgflag != 'A50A200'
+$query ="select MPT.symbol,pe,range,beta,MPT.divyield,avgflag,prices.price,sectorshort,sector,
+  round((pe+range+beta)-MPT.divyield,2) as z 
+  from MPT,prices 
+  where MPT.symbol = prices.symbol AND
+  flag = 'U' AND
+  sector != 'Bonds' 
+  and (prices.price < mean200 or prices.price < mean50)
 order by z";
 
 foreach ($dbh->query($query) as $trow) {
-  $symbol = $trow['symbol'];
+  $symbol = $trow['symbol'];$sectorshort=$trow['sectorshort'];
   
-  $subquery="select MPT.symbol,prices.price-(select close from security_values where symbol = MPT.symbol order by timestamp desc limit 1) as pricediff from MPT,prices 
-where flag = 'U' and MPT.symbol = '$symbol'
-and MPT.symbol = prices.symbol";
+    $subquery="select MPT.symbol,(prices.price-mean200)/prices.price as avg200diff,prices.price-(select close from security_values where symbol = MPT.symbol order by timestamp desc limit 1) as pricediff 
+    from MPT,prices 
+    where flag = 'U' and MPT.symbol = '$symbol'
+    and MPT.symbol = prices.symbol";
+
   $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
-  $pricediff = round($zrow['pricediff'],2);
+  $pricediff = round($zrow['pricediff'],2); $diff200=round($zrow['avg200diff']*100,1);
   
   if ($pricediff < 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#1111cc";}
+    else {$bgstring = "#000000"; $clrstring = "#11ee11";}
   
- echo "<tr><td style=\"background: $bgstring; color: $clrstring;\">$trow[symbol]</td>
+  if ($diffamt[$symbol] < 0 and $diffamt[$symbol] > -3 ) {continue;}
+  
+ echo "<tr>
+  <td style=\"background: $bgstring;\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
+  <td style=\"background: $bgstring; color: $clrstring;\">$trow[symbol]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$symbol]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$trow[z]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$diff200%</td>
   </tr>\n"; 
 }
 
@@ -257,7 +312,7 @@ foreach ($dbh->query($query) as $trow) {
   $pricediff = round(($zrow['price'] - $zrow['pprice']),2);
   
   if ($pricediff > 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#1111cc";}
+    else {$bgstring = "#000000"; $clrstring = "#11ee11";}
    
 	$barwidth = $diffamt[$sym]*.04 . "vw" ; 
         $gradwidth = 0;

@@ -102,22 +102,22 @@ foreach ($dbh->query($query) as $row) {
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
     
     $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow[sellunits];
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
     
     $subquery = "select price from prices where symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow[price];
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
     
     $netunits = ($buyunits-$sellunits);
     if ($netunits == 0) continue;
     
     $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow[buytotal],3);
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow['buytotal'],3);
         
     $subquery="SELECT sum(units*price) AS selltotal FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow[selltotal],3);
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow['selltotal'],3);
     
     $subquery="SELECT sum(gain) as rgain FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow[rgain],3);
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow['rgain'],3);
     
     $posvalue = round(($netunits * $cprice),3);
     $netcost = round(($buytotal - $selltotal),3);
@@ -165,7 +165,7 @@ if ( $_SERVER['QUERY_STRING'] == "sectorpct") {
     where security_values.timestamp = historical.date
     group by timestamp
     order by timestamp desc
-    limit 3
+    limit $tf
     ";
     foreach ($dbh->query($query) as $row) {
     $array[] = array('date'=> "$row[timestamp]", 'comd'=> "$row[comd]",
@@ -176,7 +176,7 @@ if ( $_SERVER['QUERY_STRING'] == "sectorpct") {
 
 
 if ( $_SERVER['QUERY_STRING'] == "catpct") {
-    $tf=365;
+    $tf=370;
     $query = "select timestamp,(sum(shares*close)/value)*100 as pct
     from security_values,historical 
     where symbol IN 
@@ -238,6 +238,20 @@ if ( $_SERVER['QUERY_STRING'] == "catpct") {
     }
 
     
+    $ix=0;
+    
+     $query = "select timestamp,(sum(shares*close)/value)*100 as pct
+    from security_values,historical 
+    where symbol IN 
+    (select symbol from prices where asset_class = 'Real Estate')
+    and security_values.timestamp = historical.date
+    and timestamp > date('now','-$tf days')
+    group by timestamp order by timestamp";
+     
+         foreach ($dbh->query($query) as $row) {
+        $array[$ix]["pctRE"]="$row[pct]";
+        $ix++;
+    }
     
 }
  

@@ -4,6 +4,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <html>
 <head>
+<meta http-equiv="refresh" content="120">
 <link rel="stylesheet" type="text/css" href="main.css">
 <link rel="stylesheet" type="text/css" href="nav.css">
 <title>Tax Lot Analysis</title>

@@ -15,8 +15,6 @@ $dollarreturn = ($pvalue - $pcost);
 
 $return = round((($dollarreturn/$pcost)*100),3);
 
-
-
 $dbh  = new PDO($dir) or die("cannot open the database");
 
 echo "query 1\n";
@@ -44,7 +42,10 @@ $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma36
 $subquery = "select avg(return) as wma64 from historical where date >= date('now','-448 days')";
 $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma64 = round($zrow['wma64'],3);
 
-$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA55,WMA36,WMA64) VALUES('$curdate','$pvalue','$pcost','$dollarreturn','$return', '$wma8','$wma24', '$wma28','$wma41', '$wma48', '$wma55', '$wma36','$wma64')";
+$subquery = "select avg(return) as wma72 from historical where date >= date('now','-504 days')";
+$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma72 = round($zrow['wma72'],3);
+
+$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA36,WMA64,WMA72) VALUES('$curdate','$pvalue','$pcost','$dollarreturn','$return', '$wma8','$wma24', '$wma28','$wma41', '$wma48',  '$wma36','$wma64', '$wma72')";
 echo "query is $q\n";
 
 $stmt = $dbh->prepare($q);$stmt->execute();
@@ -110,7 +111,7 @@ function get_porfolio_cost() {
             $netcost = round(($buytotal - $selltotal),3)+$gain;
             $tnetcost = ($netcost + $tnetcost);
             
-            echo "$tsym\t\t$gain\t$netcost\t$tnetcost\n";
+            //echo "$tsym\t\t$gain\t$netcost\t$tnetcost\n";
          
             }
         return $tnetcost;

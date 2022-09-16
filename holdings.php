@@ -140,7 +140,7 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 	<th>net cost</th>
 	<th>cost basis</th>
 	
-	<th>UGL\$</th>
+	<th onclick=\"numericsort(11)\">UGL\$</th>
 	<th onclick=\"numericsort(12)\">return%</th>
 	<th>RGL\$</th>
 	<th onclick=\"numericsort(14)\">compidx2</th>
@@ -237,7 +237,8 @@ foreach ($dbh->query($query) as $row) {
     if ($cprice < $zrow['mean200']) {echo '<span class=icon style="color: #ff0000;">▼200</span>';}
     if ($cprice > $zrow['mean50'] && $zrow['mean50'] > 1 ) {echo '<span class=icon style="color: #08ac08;" >▲50</span>';}
     if ($cprice > $zrow['mean200'] && $zrow['mean200'] > 1) {echo '<span class=icon style="color: #08ac08;">▲200</span>';}
-    
+   
+ 
     $subquery="SELECT close from security_values where symbol = '$sym' order by timestamp desc limit 1";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevclose = $zrow['close'];
         

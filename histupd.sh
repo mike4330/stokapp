@@ -60,7 +60,7 @@ do
 
     $CMD "$q";
 
-    sleep 25;
+    sleep 21;
 
 done;
 
@@ -71,5 +71,5 @@ echo "finished updating historical" | logger -t "stockportfolio"
 
 
 ./hist2.sh
-./rtn.plot
-
+./rtn2.plot
+./movingaverages.sh

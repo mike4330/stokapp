@@ -6,13 +6,13 @@ import requests_cache
 import sqlite3
 
 
-session = requests_cache.CachedSession('yfinanceinfo.cache',expire_after=86400)
+session = requests_cache.CachedSession('yfinanceinfo.cache',expire_after=42400)
 #session = requests_cache.CachedSession(expire_after=86400)
 
 stocks = ['ASML','AVGO','AMX','BEN','BRK-B','BG','BRT','BSIG','C',
-'CNHI','D','DGX','CARR','F','FAF','TGS','FTS','GILD','GSL','HUN','INGR',
-'IPAR','IPI','JBL','KMB','LYB','MLI','NHC','NVS','NXST','PBR','PLD','PNM',
-'RL','TAIT','EVC','SAH','SNP','SSNC','VALE','VMC','MPW']
+'CNHI','D','DGX','CARR','F','FAF','FRG','TGS','FTS','GILD','GSL','HUN','INGR',
+'IPAR','HTLD','JBL','KMB','LYB','NHC','NICE','NVS','NXST','OTIS','PBR','PLD','PNM',
+'RL','TAIT','EVC','SAH','SCI','SNP','SSNC','VALE','VMC','MPW']
 
 con = sqlite3.connect('/var/www/html/portfolio/portfolio.sqlite')
 cur = con.cursor()

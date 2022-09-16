@@ -20,13 +20,13 @@ include ("nav.php");
 ?>
     <table class="chart">
     <tr class="chart">
-    <td><canvas id="mychart" style="width:720px;height:384px"></canvas></td>
-    <td><canvas id="valuechart" style="width:720px;height:384px"></canvas></td>
+    <td><canvas id="mychart" style="width:46vw;height:44vh;">"</canvas></td>
+    <td><canvas id="valuechart" style="width:46vw;height:44vh;"></canvas></td>
     </tr>
     
     <tr>
-    <td><canvas id="quarterdivs" style="width:720px;height:384px"></canvas></td>
-    <td><canvas id="averageschart" style="width:720px;height:384px"></canvas></td>
+    <td><canvas id="quarterdivs" style="width:46vw;height:44vh;"></canvas></td>
+    <td><canvas id="averageschart" style="width: 46vw;height:44vh;"></canvas></td>
     </tr></table>
 
     <script>
@@ -50,9 +50,8 @@ $.ajax({
             datasets: [
               {
                 label: 'Div Amount',
-                backgroundColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(90, 90, 132)',
                 data:cost
-                
               }
             ] 
         };
@@ -62,17 +61,14 @@ $.ajax({
             type:'bar',
             data: chartdata,  
             options: {responsive: false}
-            
         });
       },
-
     });
     
 
   $.ajax({
     url: 'data.php?q=valuetrend',
     type: 'GET',
-    // this was what I needed to make it work.
     dataType: 'json',
     success:function(data){
     
@@ -105,25 +101,21 @@ $.ajax({
             ] 
             };
             
-            
         var ctx = $('#valuechart');
         var barGraph = new Chart(ctx, {
             type:'line',
             data: chartdata, 
-            
             options: {
                 responsive: false,
             }
         });
     }
-  
   });  
 
    $.ajax({
   
     url: 'data.php?q=averages',
     type: 'GET',
-    // this was what I needed to make it work.
     dataType: 'json',
     success:function(data){
     
@@ -161,9 +153,9 @@ $.ajax({
 
                {
                 label: 'return',
-                radius: 1,
+                radius: 1.5,
                 borderColor: 'rgb(32, 32, 32)',
-                borderWidth: 1.5,
+                borderWidth: 1,
                 data: rtn
               },
  
@@ -178,9 +170,7 @@ $.ajax({
             };
             
             
-        var ctx = $('#averageschart');
-        
-        
+        var ctx = $('#averageschart');        
         var barGraph = new Chart(ctx, {
             type:'line',
             data: chartdata,  
