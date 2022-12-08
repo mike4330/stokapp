@@ -169,29 +169,29 @@ echo "</table>";
 
 
 // model trade table
-$query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL order by asset_class";
-
-echo "<table class=\"alloc_modeltrade\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
-
-foreach ($dbh->query($query) as $rowb) { 
-    $ac=$rowb['asset_class'];
-    
-    $subquery = "select symbol 
-    FROM prices 
-    WHERE asset_class = '$ac' 
-    AND class is NOT NULL
-    order by compidx2 limit 1";
-    
-    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $winner_symbol = $zrow['symbol'];
-    
-    if ($show[$ac]) {    
-        echo "<tr><td class=\"alloc\">$rowb[asset_class]</td>";
-        echo "<td class=\"alloc\">$winner_symbol </td><td class=\"alloc\">\$$addinvest[$ac]</td>";
-        echo '</tr>';
-        }
-    }
-
-echo "</table>";
+// $query = "SELECT DISTINCT asset_class from prices where asset_class IS NOT NULL order by asset_class";
+// 
+// echo "<table class=\"alloc_modeltrade\"><th>Class</th><th>Sym pick</th><th>Add. Invest.</th>";
+// 
+// foreach ($dbh->query($query) as $rowb) { 
+//     $ac=$rowb['asset_class'];
+//     
+//     $subquery = "select symbol 
+//     FROM prices 
+//     WHERE asset_class = '$ac' 
+//     AND class is NOT NULL
+//     order by compidx2 limit 1";
+//     
+//     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $winner_symbol = $zrow['symbol'];
+//     
+//     if ($show[$ac]) {    
+//         echo "<tr><td class=\"alloc\">$rowb[asset_class]</td>";
+//         echo "<td class=\"alloc\">$winner_symbol </td><td class=\"alloc\">\$$addinvest[$ac]</td>";
+//         echo '</tr>';
+//         }
+//     }
+// 
+// echo "</table>";
 
 ?>
 

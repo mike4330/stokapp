@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # updates historical cumulative position values
+# takes last updated price from prices table
 
 cd /var/www/html/portfolio
 CMD="/usr/bin/sqlite3 portfolio.sqlite"
@@ -15,7 +16,7 @@ cat XAG.csv |sort -r > $tfile
 cp $tfile XAG.csv
 
 
- for f  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL"` 
+ for f  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL and symbol !='0386.HK'"` 
 
 do
    
@@ -38,13 +39,15 @@ do
     cum_divs=`$CMD "select ifnull(sum(price*units),0) from transactions where symbol = '$f' and xtype = 'Div'"`
     cum_rgl=`$CMD "select ifnull(sum(gain),0) from transactions where symbol = '$f' and xtype = 'Sell'"`
     
+	CLOSE=`$CMD "select price from prices where symbol = '$f'"`
 	
-	
-	IN=`head -2 $f.csv |grep -vi open`
-	arrIN=(${IN//,/ });
+# 	IN=`head -2 $f.csv |grep -vi open`
+# 	arrIN=(${IN//,/ });
+
+	TS=`date +%Y-%m-%d`
 	echo "values ${arrIN[0]},${arrIN[4]} $cbps"
 	q="insert into security_values (symbol,timestamp,close,shares,cost_basis,cum_divs,cbps,cum_real_gl) \
-	values('$f','${arrIN[0]}','${arrIN[4]}', '$nu', '$net_cost','$cum_divs','$cbps','$cum_rgl')" ;
+	values('$f','$TS','$CLOSE', '$nu', '$net_cost','$cum_divs','$cbps','$cum_rgl')" ;
 
 # 	echo "insert into security_values (symbol,timestamp,close,shares) values('$f','${arrIN[0]}','${arrIN[4]}', '$nu')" ;
 	
@@ -58,8 +61,11 @@ rm -f $tfile
 ./divdata.sh
 /usr/bin/dos2unix *.csv
 
-for f in `sqlite3 portfolio.sqlite "select distinct symbol from prices"`; 
-	do z=`grep 2 $f.csv|head -65 |awk -F, '{print $6}' |/usr/local/bin/st -f="%f" --mean`;
-	echo -e "$z,$f";
-	sqlite3 portfolio.sqlite "update prices set vol90 = '$z' where symbol = '$f'";
-	done
+utils/snpdaily.sh
+./movingaverages.sh
+
+# for f in `sqlite3 portfolio.sqlite "select distinct symbol from prices"`; 
+# 	do z=`grep 2 $f.csv|head -65 |awk -F, '{print $6}' |/usr/local/bin/st -f="%f" --mean`;
+# 	echo -e "$z,$f";
+# 	sqlite3 portfolio.sqlite "update prices set vol90 = '$z' where symbol = '$f'";
+# 	done

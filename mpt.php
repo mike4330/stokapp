@@ -4,7 +4,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="test.css">
 <link rel="stylesheet" type="text/css" href="nav.css">
 <title>MPT Modeling</title>
 <script src="/js/jquery-3.1.1.min.js"></script>
@@ -166,7 +166,8 @@ foreach ($dbh->query($query) as $row) {
     
     $subquery = "select asset_class,compidx2 from prices where symbol = '$sym'";
     $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch();
-    $current_class = $zrow['asset_class']; $compidx2=round($zrow['compidx2'],1);
+    $current_class = $zrow['asset_class']; 
+//     $compidx2=round($zrow['compidx2'],1);
     
     $talloc=round($row['target_alloc'],4);
     $talloc_display=round(($row['target_alloc']*100),2);
@@ -198,14 +199,17 @@ foreach ($dbh->query($query) as $row) {
     
     $diffamt[$sym]=$tdiff;
     
-    $diffpct = round(100*($tdiff / $tvalue),2);  
+    $diffpct = round(100*($tdiff / $tvalue),2); 
+    
+    $uquery = "update MPT set overamt = $diffamt[$sym] where symbol = '$sym'";
+    $stmt = $dbh->prepare($uquery);$stmt->execute();
     
     if ($diffpct > 100) {$pbg="#00ff00";} 
       else {$pbg="#ffffff";}
     
     echo "<tr class=\"main\">
     
-    <td>$sym</td><td>$talloc_display %</td>
+    <td><a href=\"/portfolio/?symfilter=$sym\">$sym</a></td><td>$talloc_display %</td>
     <td>\$$pos_val</td><td>\$$tvalue</td>
     <td style=\"background: $color2;color: $tcolor2\">$tdiff</td><td style=\"background: $pbg;\">$diffpct %</td>
     <td>$compidx2</td><td>$current_class</td><td>$sector</td></tr>";
@@ -238,16 +242,16 @@ $fbc=$class_total['Foreign Bonds'];
 $fbpct_p=round(($fbp/$portfolio_value*100),2);
 $fbpct_c=round(($fbc/$portfolio_value*100),2);
 
-echo "<table class=\"mpt2\">";
-echo "<th></th><th>Current</th><th>Proposed</th><th>Cur. Alloc</th><th>Prop. Alloc</th>";
-echo "<tr><td>Commodities</td><td>$class_total[Commodities]</td><td>$class_proposed_total[Commodities]</td><td>$cmpct_c</td><td>$cmpct_p</td></tr>";
-echo "<tr><td>Domestic Stock</td><td>$dsc</td><td>$dsp</td><td>$dspct_c</td><td>$dspct_p</td></tr>";
-echo "<tr><td>Foreign Stock</td><td>$fsc</td><td>$fsp</td><td>$fspct_c</td><td>$fspct_p</td></tr>";
-echo "<tr><td>Domestic Bonds</td><td>$dbc</td><td>$dbp</td><td>$dbpct_c</td><td>$dbpct_p</td></tr>";
-echo "<tr><td>Foreign Bonds</td><td>$fbc</td><td>$fbp</td><td>$fbpct_c</td><td>$fbpct_p</td></tr>";
-$totalbonds=($dbpct_p+$fbpct_p);
-echo "<tr><td>Total Bonds in Target</td><td>$totalbonds%</td></tr>";
-echo "</table>\n";
+// echo "<table class=\"mpt2\">";
+// echo "<th></th><th>Current</th><th>Proposed</th><th>Cur. Alloc</th><th>Prop. Alloc</th>";
+// echo "<tr><td>Commodities</td><td>$class_total[Commodities]</td><td>$class_proposed_total[Commodities]</td><td>$cmpct_c</td><td>$cmpct_p</td></tr>";
+// echo "<tr><td>Domestic Stock</td><td>$dsc</td><td>$dsp</td><td>$dspct_c</td><td>$dspct_p</td></tr>";
+// echo "<tr><td>Foreign Stock</td><td>$fsc</td><td>$fsp</td><td>$fspct_c</td><td>$fspct_p</td></tr>";
+// echo "<tr><td>Domestic Bonds</td><td>$dbc</td><td>$dbp</td><td>$dbpct_c</td><td>$dbpct_p</td></tr>";
+// echo "<tr><td>Foreign Bonds</td><td>$fbc</td><td>$fbp</td><td>$fbpct_c</td><td>$fbpct_p</td></tr>";
+// $totalbonds=($dbpct_p+$fbpct_p);
+// echo "<tr><td>Total Bonds in Target</td><td>$totalbonds%</td></tr>";
+// echo "</table>\n";
 
 
 // picker table
@@ -258,14 +262,28 @@ echo "\n\n<table class=\"picker\">
   <th>ζ val</th>
   <th>chg</th><th>off200</th></tr>";
 
-$query ="select MPT.symbol,pe,range,beta,MPT.divyield,avgflag,prices.price,sectorshort,sector,
-  round((pe+range+beta)-MPT.divyield,2) as z 
-  from MPT,prices 
-  where MPT.symbol = prices.symbol AND
-  flag = 'U' AND
-  sector != 'Bonds' 
-  and (prices.price < mean200 or prices.price < mean50)
+// $query ="select MPT.symbol,pe,range,beta,MPT.divyield,avgflag,prices.price,sectorshort,sector,
+//   round((pe+range+beta)-MPT.divyield,2) as z 
+//   from MPT,prices 
+//   where MPT.symbol = prices.symbol AND
+//   flag = 'U' AND
+//   sector != 'Bonds' 
+//   and (prices.price < mean200 or prices.price < mean50)
+// order by z";
+
+
+// alternate algorithm
+$query = "select MPT.symbol,volat,sectorshort,sector,
+range,prices.divyield,round(((volat+range)-prices.divyield),2) as z
+from MPT,prices
+where MPT.symbol = prices.symbol
+and sector != 'Bonds'
+and flag = 'U' 
+and (prices.price < mean200 OR prices.price < mean50)
 order by z";
+
+
+
 
 foreach ($dbh->query($query) as $trow) {
   $symbol = $trow['symbol'];$sectorshort=$trow['sectorshort'];

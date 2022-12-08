@@ -9,7 +9,7 @@ dos2unix $INF
 while IFS=, read symbol weight
 do 
   #echo "Do something with $symbol $weight"
-  	sqlite3 portfolio.sqlite "update MPT set target_alloc=round('$weight',5) where symbol = '$symbol'"
+  	sqlite3 portfolio.sqlite "update MPT set target_alloc=round('$weight',6) where symbol = '$symbol'"
   
 	weight=`echo $weight*100|bc -l`
 	sqlite3 portfolio.sqlite "update prices set alloc_target=round('$weight',4) where symbol = '$symbol'"

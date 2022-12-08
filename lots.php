@@ -120,28 +120,31 @@ $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 $dbh  = new PDO($dir) or die("cannot open the database");
 
-$query = "SELECT  symbol,flag FROM MPT where flag = 'O' order by symbol";
+$query = "SELECT  symbol,flag,overamt FROM MPT where flag = 'O' order by symbol";
 foreach ($dbh->query($query) as $row) {
     $symbol=$row['symbol'];
     $flag=$row['flag'];
     
     $pquery = "select price from prices where symbol = '$symbol'";
     $stmt = $dbh->prepare($pquery);$stmt->execute();$zrow = $stmt->fetch();$cprice=$zrow['price'];
-    
+
+	
+    if ($row['overamt'] < 1) {continue;}
     echo "<tr><td colspan=9 style=\"background: black;\"></td></tr>";
     $subquery = "select * from transactions 
     where symbol = '$symbol' and xtype='Buy' and disposition IS NULL ";
         foreach ($dbh->query($subquery) as $rowb) {
             
             if ($rowb['price'] < $cprice) {
-              $units=$rowb['units'];
+              if ($rowb['units_remaining']) {$units=$rowb['units_remaining'];}
+                else {$units=$rowb['units'];}
               $curval=round(($cprice*$units),2);
               $cost=$rowb['price']*$units;
               $profit=round(($curval - $cost),3);
               
               #discard trash
-              if ($profit < .03) {continue;}
-              if ($curval < 2) {continue;}
+              if ($profit < .003) {continue;}
+              if ($curval < 1) {continue;}
               
               echo "<tr><td class=lots>$rowb[acct]</td><td class=lots>$symbol</td>
               <td class=lots>$rowb[date_new]</td>
@@ -163,6 +166,7 @@ foreach ($dbh->query($query) as $row) {
 	echo "<tr><td style=\"color: #a0a0a0;\">profit for $symbol</td>
 	<td><b><span style=\"background: $hcolor[$ci];color:#000000;\">\$$sum[$symbol]</b></span></td></tr>";
 	$totalprofit=$totalprofit+$sum[$symbol];
+    echo "<tr><td>Total over weight </td><td>$$row[overamt]</td></tr>";
 	}
 }
 echo "<tr><td colspan=3>total avail profit $totalprofit</td></tr>";

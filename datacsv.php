@@ -35,7 +35,7 @@ if ($_GET['q'] == "cumshares2") {
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
     $query= "select timestamp,shares from security_values where symbol = '$isym' 
-    AND  timestamp > date('now','-18 months') order by timestamp";
+    AND  timestamp > date('now','-21 months') order by timestamp";
     
     #echo "date,symbol,shares\n";
     foreach ($dbh->query($query) as $row) {
@@ -133,7 +133,7 @@ if (!empty($_GET['symquery'])) {
 //     echo "symquery for $symbol\n";
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions where symbol = '$symbol' 
-    and xtype = 'Div' group by month";    
+    and xtype = 'Div' group by month order by id desc limit 24";    
     foreach ($dbh->query($query) as $row) {
        
      $array[] = array('date'=> "$row[month]",'symbol'=> "$row[symbol]",'cost'=>"$row[cost]" );   

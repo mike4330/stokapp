@@ -11,11 +11,25 @@ $dbh  = new PDO($dir) or die("cannot open the database");
 
 // echo "q $_GET[q]\n";
 
+if ($_GET['q'] == "pv") {
+    $v=get_portfolio_value();  
+    $subquery = "select value from historical order by date desc limit 1";
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch();
+    $prev_value = $zrow['value'];
+
+    $diff = round(($v - $prev_value ),2);
+
+    $array = array('value'=> "$v", 'prev_value' => "$prev_value", 'diff'=> "$diff");
+    echo json_encode($array);
+
+    exit;
+}  
+
 
 if ($_GET['q'] == "divs") { 
 //     echo "ok\n";
 //     echo "ok2\n";
-    $query = "select sum(price*units) as cost,substr(date_new,1,7) as p from transactions where xtype = 'Div' group by p ";
+    $query = "select sum(price*units) as cost,substr(date_new,1,7) as p from transactions where xtype = 'Div' group by p order by p desc limit 24 ";
     }
 
 if ($_GET['q'] == "valuetrend") {
@@ -23,12 +37,12 @@ if ($_GET['q'] == "valuetrend") {
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,return as rtn from historical where date > date('now','-180 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,WMA72,return as rtn from historical where date > date('now','-255 days')";
     }
     
 if ($_GET['q'] == "quarterdivs") {
     $query= "select sum(units*price) as total,(strftime('%Y', date_new)) || 'Q' || ((strftime('%m', date_new) + 2) / 3) as q 
-    from transactions where xtype = 'Div' group by q";
+    from transactions where xtype = 'Div' group by q order by q desc limit 8";
     }
     
 
@@ -52,7 +66,7 @@ foreach ($dbh->query($query) as $row) {
         
         $subquery = "select target_alloc from MPT where symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
-	$model_rec = $zrow['target_alloc'];
+        $model_rec = $zrow['target_alloc'];
         
         $pos_value=($curprice * $netunits);
         
@@ -66,6 +80,9 @@ foreach ($dbh->query($query) as $row) {
        
          
     }
+    
+
+  
     
 
 $array[] = array('symbol'=> "Other", 'pos_pct'=> "$otherpct");

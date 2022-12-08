@@ -19,7 +19,7 @@ tickers = ["ANGL","ASML","AVGO","AMX","BEN","BG","BRK-B","FRG",
 "FTS","GILD","GSL",
 "HUN","INGR","IPAR","JPIB","KMB","HTLD","LYB","MLN","NHC","NICE",
 "NXST","SSNC","PBR","PDBC","PLD","PNM","MPW","NVS","REM",
-"SAH","SCI","SGOL","OTIS","SNP","SOXX","TAIT","VALE","VCSH","VMC",  ]
+"SAH","SCI","SGOL","OTIS","0386.HK","SOXX","TAIT","VALE","VCSH","VMC",  ]
 
 sector_mapper = {    
     "AMX": "Communication Services",
@@ -69,7 +69,7 @@ sector_mapper = {
     "PNM": "Utilities",
     "SAH": "Consumer Discretionary",
     "SCI": "Consumer Discretionary",
-    "SNP": "Energy",
+    "0386.HK": "Energy",
     "SGOL": "Precious Metals",
     "VALE": "Materials",
     "VMC": "Materials",
@@ -84,43 +84,45 @@ sector_mapper = {
     "FRG": "Consumer Discretionary"
 }
 
+#use only 5-10 yr. avg now
+
 sector_lower = {
-    "Bonds": 0.365,     
+    "Bonds": 0.355,     
     "Commodities": 0.025,
-    "Communication Services": .00938,
-    "Consumer Discretionary": .06802,
-    "Consumer Staples": .03368,
-    "Energy": .03219,
-    "Financials": .04083,
-    "Healthcare": .06737,
-    "Industrials": .03733,
-    "Materials": .04210,
-    "Tech": 0.12090 ,
-    "Real Estate": .02152,
+    "Communication Services": .001636,
+    "Consumer Discretionary": .083791,
+    "Consumer Staples": .041259,
+    "Energy": .006627,
+    "Financials": .028536,
+    "Healthcare": .081285,
+    "Industrials": .024663,
+    "Materials": .032810,
+    "Tech": 0.151344 ,
+    "Real Estate": .002150,
     "Precious Metals": .05,
-    "Utilities": .03786
+    "Utilities": .037139
 }
 
 sector_upper = {
     "Bonds": .47,
     "Commodities": 0.061,
-    "Communication Services": .01146,
-    "Consumer Discretionary": .08314,
-    "Consumer Staples": .04117,
-    "Energy": .03934,
-    "Financials": .0499,
-    "Healthcare": .08234,
-    "Industrials": .04563,
-    "Materials": .05146,
+    "Communication Services": .001999,
+    "Consumer Discretionary": .102411,
+    "Consumer Staples": .050427,
+    "Energy": .008100,
+    "Financials": .034877,
+    "Healthcare": .099348,
+    "Industrials": .034877,
+    "Materials": .040102,
     #"Precious Metals": .061,
-    "Real Estate": .02596,
-    "Tech": 0.14776,
-    "Utilities": .04627
+    "Real Estate": .002627,
+    "Tech": 0.184976,
+    "Utilities": .045392
 }
 
-ohlc = yf.download(tickers, start="2012-09-15", end="2022-09-16")
-prices = ohlc["Adj Close"].dropna(how="all")
-prices.to_csv("pricedataset.csv", index=True)
+#ohlc = yf.download(tickers, start="2012-09-26", end="2022-09-28")
+#prices = ohlc["Adj Close"].dropna(how="all")
+#prices.to_csv("pricedataset.csv", index=True)
 
 import sys
 gammainput = sys.argv[1]
@@ -178,12 +180,12 @@ print("------------------------------")
 ef.portfolio_performance(verbose=True)
 
 
-cla = CLA(mu, S)
-cla.max_sharpe()
-fig, ax = plt.subplots()
+#cla = CLA(mu, S)
+#cla.max_sharpe()
+#fig, ax = plt.subplots()
 plt.tight_layout()
 plt.grid()
-plotting.plot_efficient_frontier(cla, showfig=False,ax=ax,show_tickers="True",filename="ef.png")
+#plotting.plot_efficient_frontier(cla, showfig=False,ax=ax,show_tickers="True",filename="ef.png")
 
 
 print("------------------------------")
@@ -206,8 +208,8 @@ with open('semivariance.csv', 'w', newline='') as csvfile:
 today = date.today()
 
 
-with open("weights.log", 'a') as f: 
-    for key, value in weights.items(): 
-        f.write("%s %s %s\n" % (today, key, value))
+#with open("weights.log", 'a') as f: 
+    #for key, value in weights.items(): 
+        #f.write("%s %s %s\n" % (today, key, value))
 
 

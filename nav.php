@@ -23,12 +23,8 @@ $dir = 'sqlite:portfolio.sqlite';
 // echo "</div>";
 
 echo ' <div class="navbar">
-  <a href="/portfolio/">Transactions</a>
-  <a href="holdings.php">Holdings</a>
   <a href="alloc.php">Allocations</a>
-  <a href="lots.php">Lots</a>
-  <a href="mpt.php">Modelling</a>
-  <div class="dropdown">
+    <div class="dropdown">
     <button class="dropbtn">Charts
       <i class="fa fa-caret-down"></i>
     </button>
@@ -39,6 +35,14 @@ echo ' <div class="navbar">
       <a href="posvalues.php">Pos. Value Charts</a>
     </div>
   </div>
+  <a href="holdings.php">Holdings</a>
+  <a href="lots.php">Lots</a>
+  <a href="mpt.php">Modelling</a>
+  <a href="sectors.php">Sectors</a>
+  <a href="/portfolio/">Transactions</a>
+  
+  
+
 </div> ';
 
 function gpv() {

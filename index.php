@@ -54,6 +54,7 @@ $sc['INGR']="#0fcfcf";$tc['INGR']="#02041f";
 $sc['IPAR']="#3aff30";$tc['IPAR']="#02041f";
 $sc['IPI']="#01fff0";$tc['IPI']="#02041f";
 $sc['HTLD']="#01fff0";$tc['HTLD']="#02041f";
+$sc['HPK']="#cccc00";$tc['HPK']="#000000";
 $sc['F']="#3f2341";$tc['F']="#fefefe";
 $sc['HUN']="#6f2300";$tc['HUN']="#fefefe";
 $sc['NICE']="#ff2341";$tc['NICE']="#fefefe";
@@ -110,7 +111,7 @@ if (!empty($_GET['symfilter'])):
             echo  "<td><a href=\"/portfolio/?symfilter=$symbol\" class=\"buttonsmall\">$symbol</a></td>";
             if ($i > 7) {echo "</tr>";$i=0;}
         }
-        echo "</table";
+        echo "</table>";
         
 //        echo "total holdings for $filterterm<br>";
         $tclass="moved";
@@ -187,7 +188,7 @@ endif;
 
 <?php
 //table view
-echo "<table class=$tclass>";
+echo "<table class=\"transactions\">";
 echo "<th>id</th><th>acct.</th>
 <th>date</th>
 <th>type</th>

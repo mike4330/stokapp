@@ -16,7 +16,7 @@ echo "updating historial prices and risk indices" | logger -t "stockportfolio"
 
 $CMD "update prices set compidx2 = compidx where divyield IS NULL;" 
 
- for sym  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL"`;
+ for sym  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL and symbol !='0386.HK'"`;
 #for sym in  FNBGX ;
 
 #retreive csv files
@@ -72,4 +72,4 @@ echo "finished updating historical" | logger -t "stockportfolio"
 
 ./hist2.sh
 ./rtn2.plot
-./movingaverages.sh
+

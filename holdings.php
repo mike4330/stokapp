@@ -126,7 +126,7 @@ $query = "SELECT DISTINCT symbol FROM transactions order by symbol";
 $ttotal=get_portfolio_value();
 //echo "total is $ttotal<br>";
 
-echo "<table id=\"myTable2\">";
+echo "<table class=\"holdings\" id=\"myTable2\">";
 echo "<th onclick=\"sortTable(0)\">symbol</th>
 
 	<th>net units</th>
@@ -135,7 +135,7 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 	<th>tgt. diff \$</th>
 	<th onclick=\"numericsort(6)\">port pct.</th>
 	<th>all. tgt.</th>
-	<th>class</th>
+	
 
 	<th>net cost</th>
 	<th>cost basis</th>
@@ -143,10 +143,10 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 	<th onclick=\"numericsort(11)\">UGL\$</th>
 	<th onclick=\"numericsort(12)\">return%</th>
 	<th>RGL\$</th>
-	<th onclick=\"numericsort(14)\">compidx2</th>
-	<th onclick=\"numericsort(15)\">Divs</th>
+	
+	<th onclick=\"numericsort(14)\">Divs</th>
 	<th>PriceChg</th>
-	<th onclick=\"numericsort(17)\">PosValChg</th>
+	<th onclick=\"numericsort(15)\">PosValChg</th>
 	";
 
 //main tabular output
@@ -161,7 +161,7 @@ foreach ($dbh->query($query) as $row) {
         $netunits = round(($buyunits-$sellunits),4);
         
         $subquery = "select price from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],2);
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],4);
         
         if ($netunits == 0) continue;
                 
@@ -216,7 +216,7 @@ foreach ($dbh->query($query) as $row) {
         $portfolio_pct = round((($value / $ttotal)*100),2);
         $subquery = "select alloc_target,compidx2,class as sclass,mean50,mean200 from prices where symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow['alloc_target'];
-        $compidx=round($zrow['compidx2'],2);
+//         $compidx=round($zrow['compidx2'],2);
         $sclass=$zrow['sclass'];
         
         $target_value = ($ttotal * ($alloc_target/100));
@@ -253,13 +253,13 @@ foreach ($dbh->query($query) as $row) {
     <td class=\"cntr\" style=\"background: $tcellcolor;color: $targetcolor\">\$$target_diff</td>
     <td class=\"cntr\">$portfolio_pct</td>
     <td class=\"cntr\">$alloc_target</td>
-    <td class=\"cntr\">$sclass</td>
+  
     <td class=\"cntr\">\$$netcost</td>
     <td class=\"cntr\">$costbasis</td>
     <td class=\"cntr\" style=\"background: $cellcolor;color: $unrealtcolor\">$dollarreturn</td>
     <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnpct</td>
     <td>$gain</td>
-    <td class=\"cntr\">$compidx</td>
+    
     <td class=\"cntr\">$total_dividends</td>
     <td class=\"cntr\">$pos_price_change</td>
     <td class=\"cntr\">$pos_day_change</td>
@@ -290,10 +290,10 @@ $daychange = round(($ttotal - $prevvalue),2);
 // echo "</table>";
 
 echo "<div class=statusmessage>Portfolio Value: \$$ttotal ($daychange)
-<br>Dollar Return \$$tdollarrtn
-<br>Pct Return $trtnpct %
+<br>Dol. Rtn. \$$tdollarrtn
+<br>Pct. Rtn. $trtnpct %
 <br>Profit Skim $freecash
-<br>Profitable Position Value: $profitable_position
+<br>Profitable Pos. Val.: $profitable_position
 </div>";
 
 function get_portfolio_value() {

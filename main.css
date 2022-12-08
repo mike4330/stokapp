@@ -9,6 +9,11 @@ background-color: #1f1f1f;
   src: url(DSEG7Modern-Bold.woff2);
 }
 
+@font-face {
+  font-family: LCD;
+  src: url(res/pixelpointregular.ttf);
+}
+
 
 
 @font-face {
@@ -25,13 +30,29 @@ table {
 	border-radius: 8px;
 	overflow: hidden; 
 	box-shadow: 4px 4px 5px #111111;
+    position: absolute;
+    left: 4vw;
+    top: 5vh;
 }
 
+table.holdings {
+position: absolute;
+left: 1vw;
+}
+
+table.transactions {
+position: absolute;
+top: 7vw;
+left: 30vw;
+}
 
 
 table.lots {
 background: white;
-    font-size: 2vw;
+position: relative;
+top: 4.5vh;
+font-size: 2vw;
+
 }
 
 td.lots {
@@ -43,13 +64,10 @@ padding-right: .7vw;
 }
 
 table.mpt  {
-    max-width: 58vw;  
-	display: block;
-/*    text-align: center; */
     background: white;
     position: absolute;
-    right: 0vw;
-    top: 10vh;
+    top: 5vw;
+    right: 1vw;
 }
 
 table.mpt th  {
@@ -100,8 +118,11 @@ svg.bars {
 table.alloc_breakdown {
    position:absolute; 
    top:10vh; 
-   right:2vw; 
+   right:1vw; 
+   left:66vw; 
    z-index:1;
+   margin-left: 0 ;
+   margin-right: 0 ;
 }
 
 table.alloc_modeltrade {
@@ -160,8 +181,32 @@ table.chart {
 	margin-left: auto;
 	margin-right: auto;
 	background: #ffffff;
+	
+	position: absolute;
+	top: 4vw;
+	left: 4vw;
+	#right: .5vw;
+	#width: 98vw;
 	#border-collapse: collapse;
 	overflow: hidden;   
+        z-index: -99;
+}
+
+
+table.chart2 {   
+	margin-bottom: 40px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #ffffff;
+	
+	position: absolute;
+	top: 4vw;
+	left: 3vw;
+	#right: .5vw;
+	#width: 98vw;
+	#border-collapse: collapse;
+	overflow: hidden;   
+        z-index: -99;
 }
 
 table.model {
@@ -183,7 +228,7 @@ table.picker {
    	display: block;
 	position:absolute; 
 	top:10vh; 
-	left:0vw;
+	right:0vw;
     	max-width: 27vw;
 }
 
@@ -197,7 +242,7 @@ table.picker {
 }
 
 .picker th {
-font-size: 1.2vh;
+font-size: 1.1vh;
 }
 
 table.overs {
@@ -210,7 +255,7 @@ table.overs {
 }
 
 .overs td {
- font-size: 1.3vw;
+ font-size: 1.1vw;
  font-family: font3;
  padding-left: .9vw;
  border-bottom: 1.5px solid #111181;
@@ -227,10 +272,10 @@ div.minichart {
 	background-color: #fefefe;
 	position:absolute; 
 	top:180px; 
-	right:10vw; 
+	right:.5vw; 
 	z-index:1; 
 	height: 50vh;
-	width: 35vw;
+	width: 30vw;
 	border-radius: 4px;
 }
 
@@ -239,13 +284,33 @@ div.rangebar {
 	padding: 0;
 }
 
+
+div.divboard {
+
+	background: #333333;
+	position: absolute;
+	left: .4vw;
+	top: 4vw;
+	width: fit-content;
+    	z-index=5;
+	font-family: "LCD";
+    color: #eed;
+    text-shadow:
+      0 0 6px #1f3109,
+      0 0 9px #eee,
+      0 0 20px #eee;
+}
+
 div.statusmessage { 
 	background: #333333;
 	width: fit-content;
 	margin: 0 auto;
-#font-family: "VCR OSD Mono";
-	font-family: "PixelPoint";
-	font-size: .8vw;
+    z-index=5;
+    position: absolute;
+    right: 4vw;
+    top: 10vh;
+	font-family: "LCD";
+	font-size: 1.1vw;
     color: #eed;
     text-shadow:
       0 0 6px #1f3109,
@@ -268,6 +333,8 @@ div.toggles {
 	margin-top: 20px;
 	font-family: monospace;
 	font-size: 14px;
+	position: relative;
+	top: 3vw;
 }
 
 span.icon {
@@ -467,8 +534,8 @@ table.smallnav {
     background: #3f3f3f;   
     position:absolute; 
     padding: 5px;
-    top:650px; 
-    right: 10vw;
+    top:40vh; 
+    right: 1vw;
     width: auto;
     height: auto;
 }
@@ -491,8 +558,8 @@ div.chart-container {
     background-color: #ff000000;
     border-radius: 2px;
     padding: 3px;
-    width:19vw;
-    height:22vh;
+    width:18vw;
+    height:23vh;
     z-index: -1;
 }
 
@@ -502,8 +569,9 @@ height:31vh;
 }
 
 div.chart-container3 {
-width:23vw;
-height:34vh;
+width:22vw;
+height:30vh;
+z-index: 0;
 }
 
 div.returncharts {

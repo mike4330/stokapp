@@ -18,7 +18,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 ?>
-    <table class="chart">
+    <table class="chart2">
     <tr class="chart">
     <td><canvas id="mychart" style="width:46vw;height:44vh;">"</canvas></td>
     <td><canvas id="valuechart" style="width:46vw;height:44vh;"></canvas></td>
@@ -121,7 +121,7 @@ $.ajax({
     
         var WMA8 = [];var date = [];
         var WMA24 = []; var WMA28 = []; var WMA36=[]; var WMA41=[]; 
-        var WMA48=[];var rtn=[]; var WMA64=[];
+        var WMA48=[];var rtn=[]; var WMA64=[]; var WMA72=[];
          
          for(var i in data){
           date.push(data[i].date);
@@ -129,6 +129,7 @@ $.ajax({
           WMA28.push(data[i].WMA28);WMA36.push(data[i].WMA36);
           WMA41.push(data[i].WMA41);WMA48.push(data[i].WMA48);
           WMA64.push(data[i].WMA64);
+          WMA72.push(data[i].WMA72);
           rtn.push(data[i].rtn);
         }
 
@@ -144,11 +145,11 @@ $.ajax({
                 data: WMA8
               },
               {
-                label: '36WMA',
+                label: '41WMA',
                 radius: 0,
                 borderColor: 'rgb(32, 54, 240)',
                 borderWidth: 2.5,
-                data: WMA36
+                data: WMA41
               },
 
                {
@@ -159,12 +160,19 @@ $.ajax({
                 data: rtn
               },
  
-                        {
-                label: 'WMA64',
+                    {
+                label: 'WMA28',
                 radius: 0,
-                borderColor: 'rgb(40,40,128)',
+                borderColor: 'rgb(255,255,0)',
                 borderWidth: 2.5,
-                data: WMA64
+                data: WMA28
+              },
+                     {
+                label: 'WMA72',
+                radius: 0,
+                borderColor: 'rgb(30,225,30)',
+                borderWidth: 2.5,
+                data: WMA72
               }
             ] 
             };
