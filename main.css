@@ -1,5 +1,5 @@
 body {
-background-color: #1f1f1f;
+background-color: #000000;
 /* background-image: url("graylines.png");  */
 
 } 
@@ -25,14 +25,14 @@ table {
 	margin-bottom: 5px;
 	margin-left: auto;
 	margin-right: auto;
-	background: #111111;
+	background: #404040;
 	border-collapse: collapse;
-	border-radius: 8px;
+	border-radius: 5px;
 	overflow: hidden; 
 	box-shadow: 4px 4px 5px #111111;
     position: absolute;
     left: 4vw;
-    top: 5vh;
+    top: 5.5vh;
 }
 
 table.holdings {
@@ -42,13 +42,13 @@ left: 1vw;
 
 table.transactions {
 position: absolute;
-top: 7vw;
+top: 10vw;
 left: 30vw;
 }
 
 
 table.lots {
-background: white;
+/* background: white; */
 position: relative;
 top: 4.5vh;
 font-size: 2vw;
@@ -57,8 +57,8 @@ font-size: 2vw;
 
 td.lots {
 font-family: "monospace";
-color: #0c0cb7;
-font-size: 1.2vh;
+/* color: #0c0cb7; */
+font-size: 1.4vh;
 padding-left: .7vw;
 padding-right: .7vw;   
 }
@@ -174,6 +174,12 @@ div.clock {
     text-shadow:
       0 0 20px #ff0000,
       0 0 48px #ffeeee;
+}
+
+div.sectorchart {
+background: #ffffff;
+ width: 26vw;
+ height: 26vh;
 }
 
 table.chart {   
@@ -334,7 +340,7 @@ div.toggles {
 	font-family: monospace;
 	font-size: 14px;
 	position: relative;
-	top: 3vw;
+	top: 7vw;
 }
 
 span.icon {
@@ -362,9 +368,15 @@ span.navicon {
     
 }
 
-span.status2 {
-	background: #676767;
+div.status2 {
+	background: #404040;
 	color: #ffffff;
+	position: relative;
+	top: 40vh;
+	width: fit-content;
+	font-family: "LCD";
+	font-size: 1.2vw;
+	padding: 10px;
 }
 
 span.toggle {
@@ -378,11 +390,11 @@ td {
 	vertical-align: bottom;
 	font-size: 1.5vh;
 	text-align: bottom;
-	padding-left: .1vw;
-	padding-right: .1vw;
+	padding-left: .2vw;
+	padding-right: .2vw;
 	padding-top: .1vh;
 	padding-bottom: .1vh;
-	color: #9999ff;
+	color: #ffffff;
 	text-shadow:
 		0 0 7px #1f3109,
 		0 0 10px #eee,
@@ -418,7 +430,7 @@ td.a {
 
 td.cntr {
    /*font: 15px monospace;*/
-    border-left: 2px dotted #111199;    
+    border-left: 3px dotted black;    
    text-align: right;
 }
 
@@ -438,13 +450,13 @@ th {
     text-align: center;
     padding-left: .2vw;
     padding-right: .2vw;
-    background: #3131cc;
-    color: #000000;
+    background: #808080;
+    color: #ffffff;
     
 }
 
 tr.main:hover {
-          background-color: #ffff99;
+          background-color: #999999;
         }
 
 a {
@@ -459,11 +471,11 @@ a:visited {
 }
 
 a.holdinglist:link {
-	color: #0000ff;
+	color: #ffffff;
 }
 
 a.holdinglist:visited {
-	color: #0000ff;
+	color: #ffffff;
 }
 
 .button1 {
@@ -569,7 +581,7 @@ height:31vh;
 }
 
 div.chart-container3 {
-width:22vw;
+width:17.9vw;
 height:30vh;
 z-index: 0;
 }

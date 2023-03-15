@@ -105,7 +105,7 @@ function sortTable(n) {
 <table class="lots"><th>Account</th><th>symbol</th><th>date</th>
 <th>units</th>
 
-<th>Current Price</th><th>cur val</th>
+<th>CPrice</th><th>cur val</th>
 <th>profit</th>
 <th>flag</th>
 <?php
@@ -126,10 +126,10 @@ foreach ($dbh->query($query) as $row) {
     $flag=$row['flag'];
     
     $pquery = "select price from prices where symbol = '$symbol'";
-    $stmt = $dbh->prepare($pquery);$stmt->execute();$zrow = $stmt->fetch();$cprice=$zrow['price'];
+    $stmt = $dbh->prepare($pquery);$stmt->execute();$zrow = $stmt->fetch();$cprice=round($zrow['price'],4);
 
 	
-    if ($row['overamt'] < 1) {continue;}
+    if ($row['overamt'] < 5) {continue;}
     echo "<tr><td colspan=9 style=\"background: black;\"></td></tr>";
     $subquery = "select * from transactions 
     where symbol = '$symbol' and xtype='Buy' and disposition IS NULL ";
@@ -141,18 +141,74 @@ foreach ($dbh->query($query) as $row) {
               $curval=round(($cprice*$units),2);
               $cost=$rowb['price']*$units;
               $profit=round(($curval - $cost),3);
-              
-              #discard trash
+	      $profit_pct = round(($profit / $cost),3)*100;
+             
+	$pclr = ""; $ptxt = ""; $fs=100;
+    
+    $hmcolors = array(
+    '#9e0142',
+    '#d53e4f',
+    '#f46d43',
+    '#fdae61',
+    '#fee08b',
+    '#ffffbf',
+    '#e6f598',
+    '#abdda4',
+    '#66c2a5',
+    '#3288bd',
+    '#5e4fa2',
+);
+
+ 
+	switch ($profit_pct) {
+
+      case $profit_pct > 30:
+        $pclr = $hmcolors[10]; $fs=122;
+      continue;
+      case $profit_pct > 27.5:
+        $pclr = $hmcolors[9]; $fs=120;
+      continue;
+      case $profit_pct > 25:
+        $pclr = $hmcolors[8]; $fs=118;
+      continue;
+      case $profit_pct > 22.5:
+        $pclr = $hmcolors[7]; $fs=116;$ptxt="black";
+      continue;
+      case $profit_pct > 20:
+        $pclr = $hmcolors[6]; $fs=114; $ptxt="black";
+      continue;
+      case $profit_pct > 17.5:
+        $pclr = $hmcolors[5]; $fs=112; $ptxt="black";
+      continue;
+      case $profit_pct > 15:
+        $pclr = $hmcolors[4]; $ptxt="black"; $fs=110;
+      continue;
+      case $profit_pct > 12.5:
+        $pclr = $hmcolors[3]; $ptxt="black"; $fs=108;
+      continue;
+      case $profit_pct > 10:
+        $pclr = $hmcolors[2]; $ptxt="black"; $fs=106;
+      continue;
+      case $profit_pct > 7.5:
+        $pclr = $hmcolors[1]; $ptxt="black"; $fs=104;
+      continue;
+      case $profit_pct > 5:
+        $pclr = $hmcolors[0]; $ptxt="blacka"; $fs=102;
+      continue;
+		}   
+ 
+          #discard trash
               if ($profit < .003) {continue;}
               if ($curval < 1) {continue;}
               
-              echo "<tr><td class=lots>$rowb[acct]</td><td class=lots>$symbol</td>
+              echo "\n<tr><td class=lots>$rowb[acct]</td><td class=lots>$symbol</td>
               <td class=lots>$rowb[date_new]</td>
               <td class=lots>$units</td>
               <td class=lots>$cprice</td>
               <td class=lots>$curval</td>
               <td class=lots><b>$profit</b></td>
-              <td class=lots>$flag</td>
+	
+              <td class=lots><span style=\"padding:1px; font-size: $fs%;background:$pclr;color: $ptxt\">$profit_pct%</span></td>
               </tr>";
             $sum[$symbol]=$sum[$symbol]+$profit;
             }

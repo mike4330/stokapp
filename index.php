@@ -25,71 +25,22 @@ $c['Div']="#eefb0b";
 $c['Sell']="#dd3333";
 
 
-$sc['ANGL']="#1192e8";$tc['ANGL']="#000000";
-$sc['AMX']="#11f298";$tc['AMX']="#000000";
-$sc['AVGO']="#f192e8";$tc['AVGO']="#000000";
-$sc['ASML']="#002d9c";
-$sc['BEN']="#484848";$tc['BEN']="#eedd48";
-$sc['BRT']="#0a380f";$tc['BRT']="#aeeee0";
-$sc['BG']="#999900";$tc['BG']="#aeeee0";
-$sc['BSIG']="#fa380f";$tc['BSIG']="#aeeee0";
-$sc['BSJN']="#005d5d";
-$sc['BRK.B']="#eeee99";
-$sc['BTCUSD']="#116e6e";$sc['C']="#eeee00";
-$sc['CARR']="#116e6e";$tc['CARR']="#eeee00";
-$sc['CNHI']="#116eff";$tc['CARR']="#eeee00";
-$sc['DBB']="#b28600";$sc['EMB']="#5818b3";
-$sc['D']="#b28600";$tc['D']="#5818b3";
-$sc['DGX']="#12a610";
-$sc['EVC']="#12a6fa";
-$sc['EWJ']="#aaaa00";$sc['ETHUSD']="#5818b3";
-$sc['FPE']="#6929c4";$sc['FNBGX']="#ffee11";
-$sc['FTS']="#69ffc4";$tc['FTS']="#000011";
-$sc['FAF']="#69ffc4";$tc['FAF']="#000011";
-$sc['FAGIX']="#69ccc4";$tc['FAGIX']="#000011";
-$sc['FRG']="#f9ffc4";$tc['FRG']="#000011";
-$sc['GILD']="#012749";$tc['GILD']="#eeee11";
-$sc['GSL']="#9a2530";$tc['GSL']="#ffffff";
-$sc['INGR']="#0fcfcf";$tc['INGR']="#02041f";
-$sc['IPAR']="#3aff30";$tc['IPAR']="#02041f";
-$sc['IPI']="#01fff0";$tc['IPI']="#02041f";
-$sc['HTLD']="#01fff0";$tc['HTLD']="#02041f";
-$sc['HPK']="#cccc00";$tc['HPK']="#000000";
-$sc['F']="#3f2341";$tc['F']="#fefefe";
-$sc['HUN']="#6f2300";$tc['HUN']="#fefefe";
-$sc['NICE']="#ff2341";$tc['NICE']="#fefefe";
-$sc['JPIB']="#ff2341";$tc['JPIB']="#fefefe";
-$sc['JBL']="#ff2341";$tc['JBL']="#0efefe";
-$sc['KMB']="#8a3800";$tc['KMB']="#eeeeee";
-$sc['KHC']="#0a3800";$tc['KHC']="#aeeeee";
-$sc['LKOR']="#772428"; $tc['LKOR']="#EEEEEC";
-$sc['LNG']="#a724f8"; $tc['LNG']="#AEEEEC";
-$sc['LYB']="#0f24ff"; $tc['LYB']="#AEEEEC";
-$sc['LNG']="#a56eff";$sc['MLN']="#fa4d56";
-$sc['MPW']="#ee3333";$tc['MPW']="#ffff00";
-$sc['NHC']="#11aa33";$tc['NHC']="#ffff00";
-$sc['NVS']="#ee55cc";$tc['NVS']="#ffff00";
-$sc['NXST']="#11339f";$tc['NXST']="#ffff00";
-$sc['OTIS']="#41ccf0";$tc['OTIS']="#e011e0";
-$sc['PDBC']="#4c4c4c";$tc['PDBC']="#fefefe";
-$sc['PBR']="#0a0a2d";$tc['PBR']="#11cc11";
-$sc['PLD']="#fc4cfc";$tc['PLD']="#fefefe";
-$sc['PNM']="#225522";$tc['PNM']="#ccfecc";
-$sc['REM']="#dd427a"; $sc['RL']="#cc428b";
-$sc['SAH']="#fc4c4c";$tc['SAH']="#0efefe";
-$sc['SCI']="#FFA500";$tc['SCI']="#1111fe";
-$sc['SNP']="#fc4c00";$tc['SNP']="#0efefe";
-$sc['SGOL']="#ee538b";
-$sc['SOXX']="#009d9a";
-$sc['SSNC']="#c0c0c0";
-$sc['TAIT']="#f9f9f9";$tc['TAIT']="#0000cc";
-$sc['TGS']="#f909f9";$tc['TGS']="#0000cc";
-$sc['VALE']="#09f9f9";$tc['VALE']="#f000cc";
-$sc['VCSH']="#1234ff";$tc['VCSH']="#cccc00";
-$sc['UFPI']="#9f1853";$sc['VMC']="#167735"; $sc['XAG']="#e9e9e9";
+
+
+
 
 $dir = 'sqlite:portfolio.sqlite';
 $dbh  = new PDO($dir) or die("cannot open the database");
+
+$query = "select symbol from prices";
+
+foreach ($dbh->query($query) as $row) {
+    $symbol = $row['symbol'];
+    $sc[$symbol]=$colors[$x];
+    $tc[$symbol]=$contrasting_colors[$x];
+    $x++;
+    
+}
 
 //echo "db ok<br>";
 
@@ -131,7 +82,14 @@ echo "<tr><th>account</th>
 </tr>";
 
 echo "<tr>
-<td><select name=\"acct\"><option value=\"CB\">CB</option><option value=\"RH\">RH</option><option value=\"FID\" selected>FID</option></select>
+<td><select name=\"acct\">
+<option value=\"CB\">CB</option>
+<option value=\"IB\">IB</option>
+<option value=\"RH\">RH</option>
+<option value=\"FIDRI\" >FIDRI</option>
+<option value=\"FID\" selected>FID</option>
+
+</select>
 <td><input type=date size=8 id=\"date\" name=\"date\" value=$curdate></td>
 <td><input type=text size=6 name=\"symbol\"></td>
 
@@ -237,12 +195,12 @@ if (!empty($_GET['symfilter'])):
     $query = "select price from prices where symbol = '$sym'";$stmt = $dbh->prepare($query);$stmt->execute();
     $zrow = $stmt->fetch();
     $price = $zrow['price'];
-    $value = ($price * $netunits);
+    $value = round(($price * $netunits),2);
     
-    echo "<span class=status2>bought $buyunits sold $sellunits<br>";
+    echo "<div class=status2>bought $buyunits sold $sellunits<br>";
     echo "net units $netunits<br>";
     echo "current price \$$price<br>";
-    echo "$sym position value \$$value</span>";
+    echo "$sym position value \$$value</div>";
 endif;
 
 ?>

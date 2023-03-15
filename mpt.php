@@ -260,7 +260,7 @@ echo "\n\n<table class=\"picker\">
   <tr><th>sc</th><th>symbol</th>
   <th>Diff</th>
   <th>ζ val</th>
-  <th>chg</th><th>off200</th></tr>";
+  <th>chg</th><th>off200</th><th>52range</th></tr>";
 
 // $query ="select MPT.symbol,pe,range,beta,MPT.divyield,avgflag,prices.price,sectorshort,sector,
 //   round((pe+range+beta)-MPT.divyield,2) as z 
@@ -271,19 +271,17 @@ echo "\n\n<table class=\"picker\">
 //   and (prices.price < mean200 or prices.price < mean50)
 // order by z";
 
-
 // alternate algorithm
 $query = "select MPT.symbol,volat,sectorshort,sector,
-range,prices.divyield,round(((volat+range)-prices.divyield),2) as z
+hlr,prices.divyield,round(((volat+range)-prices.divyield),2) as z
 from MPT,prices
 where MPT.symbol = prices.symbol
+and (prices.price < mean200 OR prices.price < mean50 or hlr < .88)
 and sector != 'Bonds'
 and flag = 'U' 
-and (prices.price < mean200 OR prices.price < mean50)
 order by z";
 
-
-
+//
 
 foreach ($dbh->query($query) as $trow) {
   $symbol = $trow['symbol'];$sectorshort=$trow['sectorshort'];
@@ -300,6 +298,8 @@ foreach ($dbh->query($query) as $trow) {
     else {$bgstring = "#000000"; $clrstring = "#11ee11";}
   
   if ($diffamt[$symbol] < 0 and $diffamt[$symbol] > -3 ) {continue;}
+
+	$range=round($trow['hlr'],2);
   
  echo "<tr>
   <td style=\"background: $bgstring;\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
@@ -308,6 +308,7 @@ foreach ($dbh->query($query) as $trow) {
   <td style=\"background: $bgstring;color: $clrstring;\">$trow[z]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diff200%</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$range</td>
   </tr>\n"; 
 }
 
