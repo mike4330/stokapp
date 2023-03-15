@@ -133,43 +133,63 @@ if (!empty($_GET['symquery'])) {
 //     echo "symquery for $symbol\n";
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions where symbol = '$symbol' 
-    and xtype = 'Div' group by month order by id desc limit 24";    
+    and xtype = 'Div' group by month order by date_new desc limit 24";    
     foreach ($dbh->query($query) as $row) {
        
      $array[] = array('date'=> "$row[month]",'symbol'=> "$row[symbol]",'cost'=>"$row[cost]" );   
     }
 }
 
-if ( $_SERVER['QUERY_STRING'] == "sectorpct") {
+if ( $_GET['verb'] == "sectorpct") {
+    
     $tf = 90;
+    if (!empty($_GET['tf'])) {$tf = $_GET['tf'];}
     $query = "
     select timestamp,historical.value,
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Consumer Discretionary')) as CDisc,
-  
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Commodities')) as comd,
-  
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Consumer Staples')) as CStaples,
-  
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Energy')) as Energy,
-  
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Financials')) as Financials,
-  
-  sum(close*shares/historical.value*100) 
-	filter (where \"symbol\" IN (select symbol from MPT where sector = 'Tech')) as Tech
-    from security_values,historical
-    where security_values.timestamp = historical.date
+  	sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Consumer Discretionary')) as cdisc,
+    
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Commodities')) as comd,
+
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Healthcare')) as healthcare,
+
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Industrials')) as industrials,   
+        
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Materials')) as materials,
+        
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Precious Metals')) as pm,
+        
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Consumer Staples')) as cstaples,
+    
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Energy')) as energy,
+    
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Financials')) as financials,
+        
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Utilities')) as utilities,
+    
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Tech')) as tech
+    
+	from security_values,historical
+    
+    where security_values.timestamp > DATE('now','-$tf day')
+    and security_values.timestamp = historical.date
+
     group by timestamp
-    order by timestamp desc
-    limit $tf
+    order by timestamp 
+    
     ";
     foreach ($dbh->query($query) as $row) {
-    $array[] = array('date'=> "$row[timestamp]", 'comd'=> "$row[comd]",
-                'Tech'=> "$row[Tech]",'Energy'=>"$row[Energy]" );
+    $array[] = array('date'=> "$row[timestamp]",'materials'=>"$row[materials]", 'financials'=>"$row[financials]",'comd'=> "$row[comd]",'healthcare'=>"$row[healthcare]",'industrials'=>"$row[industrials]",'tech'=> "$row[tech]",'energy'=>"$row[energy]", 'utilities'=>"$row[utilities]",'pm'=>"$row[pm]",'cdisc'=>"$row[cdisc]",'cstaples'=>"$row[cstaples]" );
     }
 }
 

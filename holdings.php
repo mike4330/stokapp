@@ -140,8 +140,8 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 	<th>net cost</th>
 	<th>cost basis</th>
 	
-	<th onclick=\"numericsort(11)\">UGL\$</th>
-	<th onclick=\"numericsort(12)\">return%</th>
+	<th onclick=\"numericsort(10)\">UGL\$</th>
+	<th onclick=\"numericsort(11)\">return%</th>
 	<th>RGL\$</th>
 	
 	<th onclick=\"numericsort(14)\">Divs</th>
@@ -163,7 +163,7 @@ foreach ($dbh->query($query) as $row) {
         $subquery = "select price from prices where symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],4);
         
-        if ($netunits == 0) continue;
+        if ($netunits <= 0) continue;
                 
         $value = round(($netunits * $cprice),3);
                 
