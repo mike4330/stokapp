@@ -69,6 +69,34 @@ function gpv() {
 return $ttotal;
 }
 
+// Initialize an empty array to store the colors
+$colors = [];
 
+// Use a while loop to generate and add colors to the array until it has 61 elements
+while (count($colors) < 61) {
+  // Generate a random hexadecimal color value
+  $color = dechex(mt_rand(0x000000, 0xFFFFFF));
+  // Pad the color value with leading zeros if it is less than 6 characters long
+  $color = str_pad($color, 6, "0", STR_PAD_LEFT);
+  // Add a # character to the beginning of the color value
+  $color = "#" . $color;
+  // Add the color to the array if it is not already present
+  if (!in_array($color, $colors)) {
+    $colors[] = $color;
+  }
+}
+
+
+
+$contrasting_colors = array();
+foreach ($colors as $color) {
+    $rgb = sscanf($color, "#%02x%02x%02x");
+    $luminance = 1 - (0.299 * $rgb[0] + 0.587 * $rgb[1] + 0.114 * $rgb[2]) / 255;
+    if ($luminance < 0.5) {
+        $contrasting_colors[] = '#000000';
+    } else {
+        $contrasting_colors[] = '#ffffff';
+    }
+}
 
 ?>
