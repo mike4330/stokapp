@@ -42,7 +42,7 @@ left: 1vw;
 
 table.transactions {
 position: absolute;
-top: 10vw;
+top: 11vw;
 left: 30vw;
 }
 
@@ -56,12 +56,13 @@ font-size: 2vw;
 }
 
 td.lots {
-font-family: "monospace";
-/* color: #0c0cb7; */
-font-size: 1.4vh;
-padding-left: .7vw;
-padding-right: .7vw;   
+  font-family: monospace;
+  font-size: 1.6vh;
+  border-left: 1px solid #0a2222;
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
 }
+
 
 table.mpt  {
     background: white;
@@ -239,6 +240,7 @@ table.picker {
 }
 
 .picker td {
+    font: "monospace"
  font-size: 1.1vw;
  font-family: font3;
  border-bottom: 1.4px solid #111181;
@@ -277,11 +279,11 @@ font-size: 1.3vh;
 div.minichart {
 	background-color: #fefefe;
 	position:absolute; 
-	top:180px; 
-	right:.5vw; 
+	top:150px; 
+	right:.75vw; 
 	z-index:1; 
-	height: 50vh;
-	width: 30vw;
+	height: 48vh;
+	width: 33vw;
 	border-radius: 4px;
 }
 
@@ -339,8 +341,9 @@ div.toggles {
 	margin-top: 20px;
 	font-family: monospace;
 	font-size: 14px;
-	position: relative;
-	top: 7vw;
+	position: absolute;
+	top: 6.25vw;
+    left: 37vw;
 }
 
 span.icon {
@@ -371,7 +374,7 @@ span.navicon {
 div.status2 {
 	background: #404040;
 	color: #ffffff;
-	position: relative;
+	position: absolute;
 	top: 40vh;
 	width: fit-content;
 	font-family: "LCD";
@@ -543,13 +546,13 @@ div.nav {
 }
 
 table.smallnav {
-    background: #3f3f3f;   
-    position:absolute; 
-    padding: 5px;
-    top:40vh; 
-    right: 1vw;
+    background: #3f3f3f;
+    position: absolute; 
     width: auto;
-    height: auto;
+    top: 70vh;  
+    left: 65vw;
+    margin: 0px;
+
 }
 
 .smallnav td {

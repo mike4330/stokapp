@@ -145,7 +145,7 @@ foreach ($dbh->query($query) as $row) {
              
 	$pclr = ""; $ptxt = ""; $fs=100;
     
-    $hmcolors = array(
+$hmcolors = array(
     '#9e0142',
     '#d53e4f',
     '#f46d43',
@@ -157,43 +157,53 @@ foreach ($dbh->query($query) as $row) {
     '#66c2a5',
     '#3288bd',
     '#5e4fa2',
+    '#a05195',
+    '#b09d93',
+    '#c8d5a4'
 );
+
+
 
  
 	switch ($profit_pct) {
-
-      case $profit_pct > 30:
-        $pclr = $hmcolors[10]; $fs=122;
+    case $profit_pct > 44.58:
+      $pclr = $hmcolors[12]; $fs=126;
+    continue;
+    case $profit_pct > 37.15:
+      $pclr = $hmcolors[11]; $fs=125;
+    continue;
+      case $profit_pct > 30.96:
+        $pclr = $hmcolors[10]; $fs=123;
       continue;
-      case $profit_pct > 27.5:
+      case $profit_pct > 25.8:
         $pclr = $hmcolors[9]; $fs=120;
       continue;
-      case $profit_pct > 25:
+      case $profit_pct > 21.5:
         $pclr = $hmcolors[8]; $fs=118;
       continue;
-      case $profit_pct > 22.5:
+      case $profit_pct > 17.92:
         $pclr = $hmcolors[7]; $fs=116;$ptxt="black";
       continue;
-      case $profit_pct > 20:
+      case $profit_pct > 14.93:
         $pclr = $hmcolors[6]; $fs=114; $ptxt="black";
       continue;
-      case $profit_pct > 17.5:
+      case $profit_pct > 12.44:
         $pclr = $hmcolors[5]; $fs=112; $ptxt="black";
       continue;
-      case $profit_pct > 15:
+      case $profit_pct > 10.37:
         $pclr = $hmcolors[4]; $ptxt="black"; $fs=110;
       continue;
-      case $profit_pct > 12.5:
+      case $profit_pct > 8.64:
         $pclr = $hmcolors[3]; $ptxt="black"; $fs=108;
       continue;
-      case $profit_pct > 10:
+      case $profit_pct > 7.2:
         $pclr = $hmcolors[2]; $ptxt="black"; $fs=106;
       continue;
-      case $profit_pct > 7.5:
+      case $profit_pct > 6:
         $pclr = $hmcolors[1]; $ptxt="black"; $fs=104;
       continue;
       case $profit_pct > 5:
-        $pclr = $hmcolors[0]; $ptxt="blacka"; $fs=102;
+        $pclr = $hmcolors[0]; $ptxt="white"; $fs=102;
       continue;
 		}   
  
@@ -208,7 +218,7 @@ foreach ($dbh->query($query) as $row) {
               <td class=lots>$curval</td>
               <td class=lots><b>$profit</b></td>
 	
-              <td class=lots><span style=\"padding:1px; font-size: $fs%;background:$pclr;color: $ptxt\">$profit_pct%</span></td>
+              <td class=lots style=\"background: $pclr;\"><span style=\"font-size: $fs%;color: $ptxt\">$profit_pct%</span></td>
               </tr>";
             $sum[$symbol]=$sum[$symbol]+$profit;
             }
@@ -219,10 +229,10 @@ foreach ($dbh->query($query) as $row) {
       elseif ($sum[$symbol] > 1.9) {$ci=2;} 
       elseif ($sum[$symbol] > 1) {$ci=1;} 
         else {$ci=0;}
-	echo "<tr><td style=\"color: #a0a0a0;\">profit for $symbol</td>
-	<td><b><span style=\"background: $hcolor[$ci];color:#000000;\">\$$sum[$symbol]</b></span></td></tr>";
+	echo "<tr><td style=\"color: #a0a0a0;font-size: .85vw;\">profit for $symbol</td>
+	<td><b><span style=\"font-size: .85vw;background: $hcolor[$ci];color:#000000; padding-left: 2px; padding-right: 2px;\">\$$sum[$symbol]</b></span></td></tr>";
 	$totalprofit=$totalprofit+$sum[$symbol];
-    echo "<tr><td>Total over weight </td><td>$$row[overamt]</td></tr>";
+    echo "<tr><td style=\"font-size: .86vw;\">Total over weight </td><td style=\"font-size: .86vw;\">$$row[overamt]</td></tr>";
 	}
 }
 echo "<tr><td colspan=3>total avail profit $totalprofit</td></tr>";
