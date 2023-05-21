@@ -12,147 +12,34 @@ import numpy as np
 from pypfopt import objective_functions
 from pypfopt import CLA, plotting
 
-tickers = [
-    "0386.HK",
-    "ANGL",
-    "ASML",
-    "AVGO",
-    "AMX",
-    "BRT",
-    "BSIG",
-    "C",
-    "CARR",
-    "BG",
-    "BRK-B",
-    "FNBGX",
-    "FAGIX",
-    "FRG",
-    "CNHI",
-    "D",
-    "DBB",
-    "DGX",
-    "EMB",
-    "EVC",
-    "EWJ",
-    "F",
-    "FAF",
-    "FPE",
-    "TGS",
-    "FTS",
-    "GILD",
-    "HPK",
-    "HUN",
-    "INGR",
-    "IPAR",
-    "JPIB",
-    "KMB",
-    "HTLD",
-    "LYB",
-    "MLN",
-    "NHC",
-    "NICE",
-    "NXST",
-    "SSNC",
-    "PBR",
-    "PDBC",
-    "PLD",
-    "PNM",
-    "MPW",
-    "NVS",
-    "REM",
-    "SCI",
-    "SGOL",
-    "OTIS",
-    "SOXX",
-    "TAIT",
-    "VALE",
-    "VCSH",
-    "VMC",
-    "LKOR",
-    "SIVR",
-]
 
-sector_mapper = {
-    "AMX": "Communication Services",
-    "ANGL": "Bonds",
-    "LKOR": "Bonds",
-    "ASML": "Tech",
-    "AVGO": "Tech",
-    "BSIG": "Financials",
-    "BG": "Consumer Staples",
-    "BRK-B": "Financials",
-    "FBMS": "Financials",
-    "BRT": "Real Estate",
-    "C": "Financials",
-    "CARR": "Industrials",
-    "CNHI": "Industrials",
-    "DBB": "Commodities",
-    "DGX": "Healthcare",
-    "EMB": "Bonds",
-    "EVC": "Communication Services",
-    "EWJ": "Industrials",
-    "F": "Consumer Discretionary",
-    "FAF": "Financials",
-    "FPE": "Bonds",
-    "HPK": "Energy",
-    "0386.HK": "Energy",
-    "TGS": "Energy",
-    "FNBGX": "Bonds",
-    "FAGIX": "Bonds",
-    "GILD": "Healthcare",
-    "GIS": "Consumer Staples",
-    "HUN": "Materials",
-    "HTLD": "Industrials",
-    "INGR": "Consumer Staples",
-    "IPAR": "Consumer Staples",
-    "JPIB": "Bonds",
-    "KMB": "Consumer Staples",
-    "LYB": "Materials",
-    "MLN": "Bonds",
-    "NHC": "Healthcare",
-    "NVS": "Healthcare",
-    "NICE": "Tech",
-    "NXST": "Communication Services",
-    "MPW": "Real Estate",
-    "OTIS": "Industrials",
-    "SSNC": "Tech",
-    "PDBC": "Commodities",
-    "PBR": "Energy",
-    "PNM": "Utilities",
-    "SCI": "Consumer Discretionary",
-    "SGOL": "Precious Metals",
-    "SIVR": "Precious Metals",
-    "VALE": "Materials",
-    "VMC": "Materials",
-    "PLD": "Real Estate",
-    "REM": "Real Estate",
-    "TAIT": "Tech",
-    "SOXX": "Tech",
-    "VCSH": "Bonds",
-    "FTS": "Utilities",
-    "D": "Utilities",
-    "PNM": "Utilities",
-    "FRG": "Consumer Discretionary",
-}
+
+with open("tickers.txt", "r") as f:
+    tickers = f.read().splitlines()
+
+
+with open('sectormap.txt', 'r') as f:
+    sector_mapper = dict(line.strip().split(',') for line in f)
+
 
 
 sector_lower = {
-"Bonds":0.3049,
+"Bonds":0.3026,
 "Commodities":0.025,
-"Communication Services":0.05,
-"Consumer Discretionary":0.0564,
-"Consumer Staples":0.0564,
-"Energy":0.0396,
-"Financials":0.0543,
-"Healthcare":0.0577,
-"Industrials":0.0564,
-"Materials":0.0564,
-"Tech":0.09,
-"Real Estate":0.0564,
+"Misc":0.0125,
+"Communication Services":0.0501,
+"Consumer Discretionary":0.0552,
+"Consumer Staples":0.055,
+"Energy":0.0399,
+"Financials":0.0547,
+"Healthcare":0.0556,
+"Industrials":0.0554,
+"Materials":0.0554,
+"Tech":0.0864,
+"Real Estate":0.0554,
 "Precious Metals":0.05,
-"Utilities":0.0465,
+"Utilities":0.0468,
 }
-
 
 sector_upper = {
     "Bonds": 0.47,
@@ -181,10 +68,8 @@ gammainput = sys.argv[1]
 rgoal = float(sys.argv[2])
 lb = float(sys.argv[3])
 
-
 prices = pd.read_csv("pricedataset.csv", parse_dates=True, index_col="Date")
 # print(prices)
-
 
 #### semivariance
 # from pypfopt import expected_returns, EfficientSemivariance
@@ -198,7 +83,6 @@ prices = pd.read_csv("pricedataset.csv", parse_dates=True, index_col="Date")
 # es.add_sector_constraints(sector_mapper, sector_lower, sector_upper)
 # es.efficient_return(rgoal)
 
-
 from pypfopt.efficient_frontier import EfficientFrontier
 from pypfopt.expected_returns import mean_historical_return
 from pypfopt.risk_models import CovarianceShrinkage
@@ -209,9 +93,7 @@ mu = mean_historical_return(prices)
 S = CovarianceShrinkage(prices).ledoit_wolf()
 ef = EfficientFrontier(mu, S, weight_bounds=(lb, 0.058), verbose=False)
 
-
 # print(mu)
-
 
 ef.add_sector_constraints(sector_mapper, sector_lower, sector_upper)
 ef.add_objective(objective_functions.L2_reg, gamma=gammainput)
@@ -223,7 +105,6 @@ weights = ef.efficient_risk(rgoal)
 
 print("------------------------------")
 
-
 # We can use the same helper methods as before
 # weights = es.clean_weights()
 # pprint.pprint(weights)
@@ -234,8 +115,8 @@ ef.portfolio_performance(verbose=True)
 # cla = CLA(mu, S)
 # cla.max_sharpe()
 # fig, ax = plt.subplots()
-plt.tight_layout()
-plt.grid()
+# plt.tight_layout()
+# plt.grid()
 # plotting.plot_efficient_frontier(cla, showfig=False,ax=ax,show_tickers="True",filename="ef.png")
 
 
@@ -246,7 +127,6 @@ for sector in set(sector_mapper.values()):
         if sector_mapper[t] == sector:
             total_weight += w
     print(f"{sector}: {total_weight:.3f}")
-
 
 import csv
 
@@ -260,5 +140,5 @@ today = date.today()
 
 
 with open("weights.log", "a") as f:
-    for key, value in weights.items():
-        f.write("%s %s %s\n" % (today, key, value))
+     for key, value in weights.items():
+         f.write("%s %s %s\n" % (today, key, value))
