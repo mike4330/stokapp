@@ -37,7 +37,7 @@ if ($_GET['q'] == "valuetrend") {
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,WMA72,return as rtn from historical where date > date('now','-255 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,WMA88,return as rtn from historical where date > date('now','-255 days')";
     }
     
 if ($_GET['q'] == "quarterdivs") {
@@ -108,9 +108,10 @@ echo json_encode($data);
 
 function get_portfolio_value() {
 //     echo "executing function<br>";
+    $ttotal=0;
     $dir = 'sqlite:portfolio.sqlite';
     $dbh  = new PDO($dir) or die("cannot open the database");
-    $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
+    $q = "SELECT DISTINCT symbol FROM prices order by symbol";
     foreach ($dbh->query($q) as $trow) {
         $tsym=$trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
@@ -119,7 +120,17 @@ function get_portfolio_value() {
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         $netunits = ($buyunits-$sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
+        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); 
+	    
+        // $cprice = $zrow['price'];
+
+        if (is_array($zrow) && isset($zrow['price']) && $zrow['price'] !== '') {
+            $cprice = $zrow['price'];
+        } else {
+            // Handle the case where 'price' is not set or is an empty string.
+            $cprice = 0; // Set a default value, for example.
+            error_log("value error $cprice $tsym.");
+        }
         
         if ($netunits == 0) continue;
         
