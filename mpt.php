@@ -99,7 +99,6 @@ function sortTable(n) {
   }
 }
 
-
 function startTime() {
   const today = new Date();
   let h = today.getHours();
@@ -122,9 +121,10 @@ function checkTime(i) {
 </head>
 <body onload="startTime()">
 <div id="txt" class="clock"></div>
-
+<div class="clock2">00:88:88</div>
 <?php
 
+$iconcolor['B']="#153315";$icontc['B']="#f9f9f9";$icon['B']="📜";
 $iconcolor['CD']="#9999ff";$icontc['CD']="#000000";$icon['CD']="💍";
 $iconcolor['CM']="#ee4400";$icontc['CM']="#000000";$icon['CM']="🌽";
 $iconcolor['CO']="#404040";$icontc['CO']="#c9c900";$icon['CO']="☎";
@@ -135,6 +135,7 @@ $iconcolor['H']="#880088";$icontc['H']="#fefefe"; $icon['H']="🏥";
 $iconcolor['ID']="#fefefe";$icontc['ID']="#000000";$icon['ID']="🏭";
 $iconcolor['IT']="#338833";$icontc['IT']="#000000";$icon['IT']="💻";
 $iconcolor['M']="#333333";$icontc['M']="#ffcc11";$icon['M']="⛏";
+$iconcolor['MS']="#e9e9e9";$icontc['MS']="#000000";$icon['MS']="🎱";
 $iconcolor['RE']="#990101";$icontc['RE']="#fdfdfd";$icon['RE']="🏡";
 $iconcolor['U']="#785600";$icontc['U']="#ffffff";$icon['U']="⚡";
 
@@ -273,11 +274,10 @@ echo "\n\n<table class=\"picker\">
 
 // alternate algorithm
 $query = "select MPT.symbol,volat,sectorshort,sector,
-hlr,prices.divyield,round(((volat+range)-prices.divyield),2) as z
+hlr,prices.divyield,MPT.div_growth_rate as gr,round(((volat+range)-prices.divyield-MPT.div_growth_rate),2) as z
 from MPT,prices
 where MPT.symbol = prices.symbol
 and (prices.price < mean200 OR prices.price < mean50 or hlr < .88)
-and sector != 'Bonds'
 and flag = 'U' 
 order by z";
 
@@ -295,7 +295,7 @@ foreach ($dbh->query($query) as $trow) {
   $pricediff = round($zrow['pricediff'],2); $diff200=round($zrow['avg200diff']*100,1);
   
   if ($pricediff < 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#11ee11";}
+    else {$bgstring = "#000000"; $clrstring = "#22dd22";}
   
   if ($diffamt[$symbol] < 0 and $diffamt[$symbol] > -3 ) {continue;}
 
@@ -331,7 +331,7 @@ foreach ($dbh->query($query) as $trow) {
   $pricediff = round(($zrow['price'] - $zrow['pprice']),2);
   
   if ($pricediff > 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#11ee11";}
+    else {$bgstring = "#000000"; $clrstring = "#22dd22";}
    
 	$barwidth = $diffamt[$sym]*.04 . "vw" ; 
         $gradwidth = 0;
