@@ -19,7 +19,7 @@ cp $tfile XAG.csv
  for f  in `sqlite3 portfolio.sqlite "select symbol from prices where class IS NOT NULL and symbol !='0386.HK'"` 
 
 do
-   
+    echo "current symbol $f"  
     nu=`$CMD "select ((select sum(units) from transactions \
     where xtype = 'Buy' and  symbol = '$f'))-coalesce(((select sum(units) \
     from transactions where xtype = 'Sell' and symbol = '$f')),0)"`
@@ -58,7 +58,7 @@ do
 
 rm -f $tfile
 
-./divdata.sh
+#./divdata.sh
 /usr/bin/dos2unix *.csv
 
 utils/snpdaily.sh

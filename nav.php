@@ -46,28 +46,37 @@ echo ' <div class="navbar">
 </div> ';
 
 function gpv() {
-//     echo "executing function<br>";
     $dir = 'sqlite:portfolio.sqlite';
-    $dbh  = new PDO($dir) or die("cannot open the database");
+    $dbh = new PDO($dir) or die("cannot open the database");
+    $ttotal = 0;
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow['symbol'];
+        $tsym = $trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $buyunits = $zrow['buyunits'];
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
-        $netunits = ($buyunits-$sellunits);
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $sellunits = $zrow['sellunits'];
+        $netunits = ($buyunits - $sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
-        
-        if ($netunits == 0) continue;
-        
-        $value = round(($netunits * $cprice),3);
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $cprice = $zrow['price'];
+        if ($netunits == 0) {
+            continue;
+        }
+        $value = round(($netunits * $cprice), 3);
         $ttotal = ($ttotal + $value);
-//      echo "total $ttotal <br>";
     }
-return $ttotal;
+    return $ttotal;
 }
+
 
 // Initialize an empty array to store the colors
 $colors = [];
