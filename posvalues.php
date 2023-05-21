@@ -26,22 +26,24 @@ $dbh  = new PDO($dir) or die("cannot open the database");
     <td><div class="chart-container"   ><canvas id="ANGL" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="ASML" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="AVGO" ></canvas></div></td>
-    <td><div class="chart-container"   ><canvas id="BEN" ></canvas></div></td>
+      <td><div class="chart-container"   ><canvas id="BG" ></canvas></div></td>
         
 </tr>
 <tr>
-    <td><div class="chart-container"   ><canvas id="BG" ></canvas></div></td>
+
     <td><div class="chart-container"   ><canvas id="BRKB" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="BRT" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="BSIG" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="C" ></canvas></div></td>
+    <td><div class="chart-container"   ><canvas id="CARR" ></canvas></div></td>
 
  
 </tr>
 <tr>
-    <td><div class="chart-container"   ><canvas id="CARR" ></canvas></div></td>
-    <td><div class="chart-container"   ><canvas id="CNHI" ></canvas></div></td>
+    
+    <td><div class="chart-container"   ><canvas id="BAH" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="D" ></canvas></div></td>
+    <td><div class="chart-container"   ><canvas id="DBB" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="DGX" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="EMB" ></canvas></div></td>
 
@@ -51,17 +53,16 @@ $dbh  = new PDO($dir) or die("cannot open the database");
     <td><div class="chart-container"   ><canvas id="EVC" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="EWJ" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="F" ></canvas></div></td>
-    <td><div class="chart-container"   ><canvas id="FAF" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="FAGIX" ></canvas></div></td>
-
+ <td><div class="chart-container"   ><canvas id="FNBGX" ></canvas></div></td>
 </tr>
 
 <tr>
-    <td><div class="chart-container"   ><canvas id="FNBGX" ></canvas></div></td>
+    <td><div class="chart-container"   ><canvas id="FDGFX" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="FRG" ></canvas></div></td>
      <td><div class="chart-container"   ><canvas id="FTS" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="GILD" ></canvas></div></td>
-    <td><div class="chart-container"   ><canvas id="GSL" ></canvas></div></td>
+    <td><div class="chart-container"   ><canvas id="HPK" ></canvas></div></td>
 
 </tr>
 <tr>    
@@ -70,10 +71,11 @@ $dbh  = new PDO($dir) or die("cannot open the database");
     <td><div class="chart-container"   ><canvas id="INGR" ></canvas></div></td>
      <td><div class="chart-container"   ><canvas id="IPAR" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="JPIB" ></canvas></div></td>
+  
 </tr>
 
 <tr>  
-      <td><div class="chart-container"   ><canvas id="KMB" ></canvas></div></td>
+        <td><div class="chart-container"   ><canvas id="KMB" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="LKOR" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="LYB" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="MLN" ></canvas></div></td>
@@ -81,28 +83,32 @@ $dbh  = new PDO($dir) or die("cannot open the database");
 
 </tr>
 <tr>
-        <td><div class="chart-container"   ><canvas id="NVS" ></canvas></div></td>
+   <td><div class="chart-container"   ><canvas id="NICE" ></canvas></div></td>
+    <td><div class="chart-container"   ><canvas id="NVS" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="NXST" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="OTIS" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="PDBC" ></canvas></div></td>
-     <td><div class="chart-container"   ><canvas id="PLD" ></canvas></div></td>
+  
 
 </tr>
 <tr>
+   <td><div class="chart-container"   ><canvas id="PLD" ></canvas></div></td>
      <td><div class="chart-container"   ><canvas id="PNM" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="REM" ></canvas></div></td>  
-    <td><div class="chart-container"   ><canvas id="SAH" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="SCI" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="SGOL" ></canvas></div></td>
+   
 </tr>
 <tr>
+  <td><div class="chart-container"   ><canvas id="SIVR" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="SOXX" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="SSNC" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="TAIT" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="TGS" ></canvas></div></td>
-    <td><div class="chart-container"   ><canvas id="VALE" ></canvas></div></td>
+    
 </tr>
 <tr>
+<td><div class="chart-container"   ><canvas id="VALE" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="VMC" ></canvas></div></td>
     <td><div class="chart-container"   ><canvas id="XAG" ></canvas></div></td>
 </tr>
@@ -119,10 +125,10 @@ Chart.defaults.datasets.line.borderWidth = .9;
 Chart.defaults.animation.duration = 225;
 Chart.defaults.datasets.line.pointRadius = 0;
 
-const array = ["AMX","ASML", "ANGL", "AVGO","BEN", "BG","BRKB","BRT","BSIG","C","CARR","CNHI",
-"D","DGX","EMB","EVC","EWJ","F","FAF","FAGIX","FNBGX","FRG","FTS","GILD","GSL","HTLD","HUN","INGR",
-"IPAR","JPIB","KMB", "LKOR","LYB", "MLN", "MPW","NVS","NXST","OTIS","PDBC","PLD","PNM","REM","SAH",
-"SCI","SGOL","SOXX","SSNC","TAIT","TGS","VALE","VMC" , "XAG"];
+const array = ["AMX","ASML", "ANGL", "AVGO", "BG","BRKB","BRT","BSIG","C","CARR","BAH",
+"D","DBB","DGX","EMB","EVC","EWJ","F","FAF","FAGIX","FDGFX","FNBGX","FRG","FTS","GILD","HPK","HTLD","HUN","INGR",
+"IPAR","JPIB","KMB", "LKOR","LYB", "MLN", "MPW","NICE","NVS","NXST","OTIS","PDBC","PLD","PNM","REM",
+"SCI","SGOL","SIVR","SOXX","SSNC","TAIT","TGS","VALE","VMC" , "XAG"];
 
 // const array = ["ASML", "ANGL", "BRKB"];
 
