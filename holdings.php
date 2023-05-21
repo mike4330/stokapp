@@ -279,15 +279,7 @@ $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevv
 
 $daychange = round(($ttotal - $prevvalue),2);
 
-// echo "<table>";
-// echo "<tr><td class=\"summaryline\" >Portfolio Value</td><td class=\"summaryline\">\$$ttotal ($daychange) </td>
-// <td class=\"summaryline\">Portfolio Cost</td>
-// <td class=\"summaryline\"\>\$$tnetcost</td></tr>
-// <tr><td class=\"summaryline\">Dollar Return</td><td class=\"summaryline\">\$$tdollarrtn</td>
-// <td class=\"summaryline\">Return</td>
-// <td class=\"summaryline\">$trtnpct % </td></tr>";
-// 
-// echo "</table>";
+
 
 echo "<div class=statusmessage>Portfolio Value: \$$ttotal ($daychange)
 <br>Dol. Rtn. \$$tdollarrtn
