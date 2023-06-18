@@ -13,7 +13,6 @@ fig = px.sunburst(df, path=["sector", "industry", "symbol"], values="value")
 
 fig.write_html("visualizations/sunburst.html")
 
-
 fig = px.treemap(
     df, path=[px.Constant("all"), "sector", "industry", "symbol"], values="value"
 )
