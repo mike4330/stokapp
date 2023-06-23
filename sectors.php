@@ -19,7 +19,6 @@ include ("nav.php");
 $dbh  = new PDO($dir) or die("cannot open the database"); 
 
 
-
 $pf=gpv();
 
 echo $pf;
