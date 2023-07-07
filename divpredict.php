@@ -1,3 +1,5 @@
+<!--Copyright (C) 2022-2023 Mike Roetto <mike@roetto.org>
+SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 
 <html>
@@ -19,26 +21,27 @@ include ("nav.php");
 // echo $forecastTable;
 
 $table = "<table style='position: relative; top: 40px;'>";
-$tickers = array('ANGL','AVGO','BG', 'BRT','BSIG','D', 'DGX','EMB',
-'EVC','FAF','FAGIX','FNBGX','GILD','HUN','INGR','IPAR','JPIB' ,'KMB','LKOR','MLN','PLD','VMC','VCSH');
+$tickers = array('ANGL','ASML','AVGO','BG', 'BRT','BSIG','CARR','D', 'DGX','EMB',
+'EVC','F','FPE','FAF','FAGIX','FNBGX','FTS','GILD','HUN','INGR','IPAR','JPIB' ,
+'KMB','LKOR','LYB','MLN','MPW','NXST','OTIS','PBR','PLD','SCI','VMC','VCSH');
 
 $count = 0;
 foreach ($tickers as $ticker) {
-    if ($count % 7 == 0) {
+    if ($count % 8 == 0) {
         $table .= "<tr>"; // start new row
     }
     
-    $monthlies = ['ANGL','EMB','JPIB', 'LKOR','FAGIX','FNBGX', 'MLN','VCSH'];
+    $monthlies = ['ANGL','EMB','FPE','JPIB', 'LKOR','FAGIX','FNBGX', 'MLN','VCSH'];
     if (in_array($ticker, $monthlies)) {
-        $table .= "<td><div style='padding: 1vw;'>" . monthpredict($ticker) . "</div></td>";
+        $table .= "<td><div style='padding: .5vw;'>" . monthpredict($ticker) . "</div></td>";
         $count++;
         continue;
     }
 
-    $table .= "<td><div style='padding: 1vw;'>" . qtrpredict($ticker) . "</div></td>";
+    $table .= "<td><div style='padding: .5vw;'>" . qtrpredict($ticker) . "</div></td>";
     
     $count++;
-    if ($count % 7 == 0) {
+    if ($count % 8 == 0) {
         $table .= "</tr>"; // end current row
     }
 }
@@ -96,7 +99,7 @@ function qtrpredict($symbol) {
 
     // Generate 12-quarter forecast
     $forecast = array();
-    for ($i = 0; $i < 48; $i++) {
+    for ($i = 0; $i < 49; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (3 * $i) . ' months'));
         $forecast[] = array(
             'date' => $forecastMonth,
@@ -175,7 +178,7 @@ function monthpredict($symbol) {
 
     // Generate 12-quarter forecast
     $forecast = array();
-    for ($i = 0; $i < 72; $i++) {
+    for ($i = 0; $i < 92; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
             'date' => $forecastMonth,

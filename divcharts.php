@@ -1,757 +1,235 @@
 <!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <html>
+
 <head>
-<link rel="stylesheet" type="text/css" href="main.css">
-<link rel="stylesheet" type="text/css" href="nav.css">
-<title>Position Values over Time</title>
-<script src="/js/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="/js/chart.js"></script> 
-<!-- <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script> -->
-<script type="text/javascript" src="/js/luxon.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="nav.css">
+  <title>Dividend Amounts over Time</title>
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/chart.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script> -->
+  <script type="text/javascript" src="/js/luxon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
 </head>
 
 <body>
-<?php
-include ("nav.php"); 
-$dir = 'sqlite:portfolio.sqlite';
-$dbh  = new PDO($dir) or die("cannot open the database");
+  <?php
+  include("nav.php");
+  $dir = 'sqlite:portfolio.sqlite';
+  $dbh = new PDO($dir) or die("cannot open the database");
 
-$query = "select symbol,dividend_date,expected_amount from aux_attributes where dividend_date LIKE '%-%' and dividend_date >=  date('now') order by dividend_date";
+  $query = "select symbol,dividend_date,expected_amount from aux_attributes where dividend_date LIKE '%-%' and dividend_date >=  date('now') order by dividend_date";
 
-echo "<div class=divboard style=\"font-family: Monospace;\">Upcoming Dividends<br>";
-foreach ($dbh->query($query) as $row) {
-    echo "<span style=\"display: inline-block;border: 2px solid #119911;padding: 2px;margin-bottom: 4px;margin-left:5px;\" >$row[dividend_date] $row[symbol] </span><br>"; $ix++;
-#    if ($ix > 4) {echo "<br>";$ix=0;}
-}
-echo "</div><br>";
-?>
+  echo "<div class=divboard style=\"font-family: Monospace;\">Upcoming Dividends<br>";
+  foreach ($dbh->query($query) as $row) {
+    echo "<span style=\"display: inline-block;border: 2px solid #119911;padding: 2px;margin-bottom: 4px;margin-left:5px;\" >$row[dividend_date] $row[symbol] </span><br>";
+    $ix++;
+    #    if ($ix > 4) {echo "<br>";$ix=0;}
+  }
+  echo "</div><br>";
+  ?>
 
-<table class=chart style="position: absolute;left: 8vw;">
-<tr>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="ANGL"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="ASML"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="EMB"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="FAGIX"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="FNBGX"></canvas></div></td>
-</tr>
-<tr>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="FPE"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="GILD"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="JPIB"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="KMB"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="LKOR"></canvas></div></td>
-  
-    
-  
-</tr>
-<tr>  
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="MLN"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="PBR"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="SOXX"></canvas></div></td>
-     <td><div class="chart-container3" style="position: relative;  "><canvas id="VCSH"></canvas></div></td>
-    <td><div class="chart-container3" style="position: relative;  "><canvas id="VMC"></canvas></div></td>
+  <table class=chart style="position: absolute;left: 8vw;">
+    <tr>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="ANGL"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="ASML"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="AVGO"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="BG"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="BRT"></canvas></div>
+      </td>
 
-   
-    
-</tr>
-</table>
+    </tr>
 
-<script>
+    <tr>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="D"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="DGX"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="EMB"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="EVC"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="F"></canvas></div>
+      </td>
 
-Chart.defaults.plugins.legend.display = false;
+    </tr>
 
-c1='rgb(224, 224, 32)'
+    <tr>
+    <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="FAF"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="FAGIX"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="FNBGX"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="FPE"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="FTS"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="GILD"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="HUN"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="IPAR"></canvas></div>
+      </td>
+    </tr>
 
-$.ajax({
-      url: 'datacsv.php?symquery=ANGL',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
+    <tr>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="JPIB"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="KMB"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="LKOR"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="LYB"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="MLN"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="NXST"></canvas></div>
+      </td>
 
-        var cost = [];
-        var date = [];
+    </tr>
+    <tr>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="PBR"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="PLD"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="PNM"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="REM"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="SCI"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="SSNC"></canvas></div>
+      </td>
 
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
 
-        var chartdata = {
+    </tr>
+    <tr>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="TAIT"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="VCSH"></canvas></div>
+      </td>
+      <td>
+        <div class="chart-container3" style="position: relative;  "><canvas id="VMC"></canvas></div>
+      </td>
+    </tr>
+  </table>
+
+  <script>
+
+    Chart.defaults.plugins.legend.display = false;
+    Chart.defaults.datasets.line.fill = true;
+    Chart.defaults.datasets.line.borderWidth = 1.2;
+    Chart.defaults.animation.duration = 225;
+    Chart.defaults.datasets.line.pointRadius = 1.2;
+
+    c1 = 'rgb(224, 224, 32)'
+
+
+    const chartDataList = ['ANGL', 'ASML', 'AVGO', 'BG', 'BRT', 'D', 'DGX', 'EMB', 'EVC', 'F', 'FAF', 'FAGIX',
+      'FNBGX', 'FPE', 'FTS', 'GILD', 'HUN', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'NXST', 'PBR', 'PLD', 'PNM',
+      'REM', 'SCI', 'SSNC', 'VCSH', 'VMC', 'TAIT'];
+    for (let i = 0; i < chartDataList.length; i++) {
+      loadChartData(chartDataList[i]);
+    }
+
+
+    function loadChartData(item) {
+      $.ajax({
+        url: `datacsv.php?symquery=${item}`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          var cost = [];
+          var date = [];
+
+          for (var i in data) {
+            cost.push(data[i].cost);
+            date.push(data[i].date);
+          }
+
+          const randomColor = () => {
+            const r = Math.floor(Math.random() * 226);
+            const g = Math.floor(Math.random() * 226);
+            const b = Math.floor(Math.random() * 226);
+            return `rgba(${r}, ${g}, ${b}, 0.5)`;
+          };
+          const backgroundColor = randomColor()
+
+          var chartData = {
             labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: c1,
-                data:cost
-                
-              }
-            ] 
-        };
+            datasets: [{
+              label: 'Div Amount',
+              backgroundColor: randomColor(),
+              borderColor: 'rgb(65, 65, 65)',
+              tension: 0.15,
+              data: cost
+            }]
+          };
 
-        var ctx = $('#ANGL');
+          var canvasId = `#${item}`;
+          var ctx = $(canvasId);
 
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
+          var barGraph = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            fill: true,
             options: {
-                plugins: {title: {text: "ANGL",display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-    
-$.ajax({
-      url: 'datacsv.php?symquery=SOXX',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'SOXX';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(245, 89, 89)',
-                data:cost
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true,
-                
+              plugins: {
+                title: {
+                  text: item,
+                  display: true,
+                  padding: { top: 15 }
+                }
+              },
+              maintainAspectRatio: false,
+              responsive: true
             }
-            
-        });
-      },
-
-    });
- 
-
-$.ajax({
-      url: 'datacsv.php?symquery=JPIB',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'JPIB';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
+          });
         }
+      });
+    }
 
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(255, 99, 132)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
 
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
 
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=ASML',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'ASML';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(255, 99, 132)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=LKOR',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'LKOR';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(255, 99, 132)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=MLN',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'MLN';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(32, 99, 132)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=VMC',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'VMC';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(42, 120, 42)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=FPE',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'FPE';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(32, 32, 240)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=FNBGX',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'FNBGX';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(32, 32, 240)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=EMB',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'EMB';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(40, 255, 40)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-
-$.ajax({
-      url: 'datacsv.php?symquery=KMB',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'KMB';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(65, 65, 0)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-
-$.ajax({
-      url: 'datacsv.php?symquery=GILD',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'GILD';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(0, 65, 120)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=PBR',
-      type: 'GET',
-      // this was what I needed to make it work.
-      dataType: 'json',
-      success:function(data){
-
-        item = 'PBR';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(32, 32, 64)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=FAGIX',
-      type: 'GET',
-      dataType: 'json',
-      success:function(data){
-
-        item = 'FAGIX';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(0, 65, 120)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=SOXX',
-      type: 'GET',
-      dataType: 'json',
-      success:function(data){
-
-        item = 'SOXX';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(0, 65, 120)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-
-$.ajax({
-      url: 'datacsv.php?symquery=VCSH',
-      type: 'GET',
-      dataType: 'json',
-      success:function(data){
-
-        item = 'VCSH';  
-        var cost = [];
-        var date = [];
-
-        for(var i in data){
-          cost.push(data[i].cost);
-          date.push(data[i].date);
-        }
-
-        var chartdata = {
-            labels: date,
-            datasets: [
-              {
-                label: 'Div Amount',
-                backgroundColor: 'rgb(0, 65, 120)',
-                data:cost
-                
-              }
-            ] 
-        };
-        var iname = '#' + item;
-        var ctx = $(iname);
-
-        var barGraph = new Chart(ctx, {
-            type:'bar',
-            data: chartdata,  
-            options: {
-                plugins: {title: {text: item,display: true}},
-                maintainAspectRatio: false,
-                responsive: true}
-            
-        });
-      },
-
-    });
-</script>
-
+  </script>
 </body>
+
 </html>

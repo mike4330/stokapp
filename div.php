@@ -65,7 +65,6 @@ $.ajax({
       },
     });
     
-
   $.ajax({
     url: 'data.php?q=valuetrend',
     type: 'GET',
@@ -121,7 +120,7 @@ $.ajax({
     
         var WMA8 = [];var date = [];
         var WMA24 = []; var WMA28 = []; var WMA36=[]; var WMA41=[]; 
-        var WMA48=[];var rtn=[]; var WMA64=[]; var WMA72=[];
+        var WMA48=[];var rtn=[]; var WMA64=[]; var WMA72=[]; var WMA88=[];
          
          for(var i in data){
           date.push(data[i].date);
@@ -129,12 +128,11 @@ $.ajax({
           WMA28.push(data[i].WMA28);WMA36.push(data[i].WMA36);
           WMA41.push(data[i].WMA41);WMA48.push(data[i].WMA48);
           WMA64.push(data[i].WMA64);
-          WMA72.push(data[i].WMA72);
+          WMA72.push(data[i].WMA72); WMA88.push(data[i].WMA88);
           rtn.push(data[i].rtn);
         }
 
-        var chartdata = {
- 
+        var chartdata = { 
           labels: date,
             datasets: [
               {
@@ -145,11 +143,11 @@ $.ajax({
                 data: WMA8
               },
               {
-                label: '41WMA',
+                label: '48WMA',
                 radius: 0,
                 borderColor: 'rgb(32, 54, 240)',
                 borderWidth: 2.5,
-                data: WMA41
+                data: WMA48
               },
 
                {
@@ -168,11 +166,11 @@ $.ajax({
                 data: WMA28
               },
                      {
-                label: 'WMA72',
+                label: 'WMA88',
                 radius: 0,
                 borderColor: 'rgb(30,225,30)',
                 borderWidth: 2.5,
-                data: WMA72
+                data: WMA88
               }
             ] 
             };
@@ -196,7 +194,6 @@ $.ajax({
   
     url: 'data.php?q=quarterdivs',
     type: 'GET',
-    // this was what I needed to make it work.
     dataType: 'json',
     success:function(data){
     
@@ -234,10 +231,7 @@ $.ajax({
     }
   
   }); 
-  
- 
  
  </script>
-
 </body>
 </html>

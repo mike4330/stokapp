@@ -226,7 +226,9 @@ foreach ($dbh->query($query) as $row) {
             $tcellcolor = "#2222ee" ;$targetcolor="black";}
             else {$tcellcolor = "";$targetcolor="";}
                     
-            
+    $rquery = "UPDATE returns set returnpct = $returnpct where symbol = '$sym'";
+    $stmt = $dbh->prepare($rquery);$stmt->execute();
+    
     //row output
     echo "<tr class=\"main\"><td><a href=\"/portfolio/?symfilter=$row[symbol]\" class=\"holdinglist\">$sym</a></td>  
     <td class=\"cntr\">$netunits</td>
@@ -258,6 +260,7 @@ foreach ($dbh->query($query) as $row) {
     <td class=\"cntr\">$costbasis</td>
     <td class=\"cntr\" style=\"background: $cellcolor;color: $unrealtcolor\">$dollarreturn</td>
     <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnpct</td>
+
     <td>$gain</td>
     
     <td class=\"cntr\">$total_dividends</td>

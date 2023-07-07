@@ -1,5 +1,5 @@
 #!/bin/bash
-# yield updater script
+# dividend yield updater script
 
 cd /var/www/html/portfolio || exit
 
@@ -8,9 +8,10 @@ source apikeys
 
 echo "start updating portfolio dividend yields" | logger -t "stockportfolio"
 
-for s in AMX ASML AVGO BG BRT BSIG C CARR BAH D DGX EVC \
-F FAF FTS GILD HPK HUN INGR HTLD IPAR KMB LYB  MPW NHC \
-NICE NVS NXST OTIS PNM PBR PLD SCI 0386.HK SSNC TAIT VALE VMC; do
+
+for s  in $(sqlite3 portfolio.sqlite "select symbol from prices\
+		 where class IS NOT NULL and asset_class LIKE '%Stock' order by symbol")
+	do
 
     dy_prev=$(jq -r '.DividendYield' "datafiles/$s.json")
 

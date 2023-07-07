@@ -37,7 +37,7 @@ if ($_GET['q'] == "valuetrend") {
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA55,WMA64,WMA88,return as rtn from historical where date > date('now','-255 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA64,WMA88,return as rtn from historical where date > date('now','-255 days')";
     }
     
 if ($_GET['q'] == "quarterdivs") {

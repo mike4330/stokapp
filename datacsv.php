@@ -9,6 +9,26 @@ $dir = 'sqlite:portfolio.sqlite';
 
 $dbh  = new PDO($dir) or die("cannot open the database");
 
+if ($_GET['q'] == "weightcomp") {
+    $isym = $_GET['symbol']; 
+    if ($isym == "BRKB") {$isym ="BRK.B";}
+
+    $query = "select security_values.timestamp,((close*shares)/value) as wgt ,
+    (select weight from weights where symbol = '$isym' and weights.timestamp = security_values.timestamp) as tgt
+    from security_values,historical
+    where symbol = '$isym' and tgt > 0
+    AND  security_values.timestamp > date('now','-180  days')
+    and security_values.timestamp = historical.date
+    order by security_values.timestamp";
+   
+    foreach ($dbh->query($query) as $row) {
+        $array[] = array('weight'=>$row['wgt'],'target'=> $row['tgt'],'date'=> $row['timestamp']);
+    }
+
+}
+
+
+
 if ($_GET['q'] == "cumshares") {
     $isym = $_GET[symbol]; 
     if ($isym == "BRKB") {$isym ="BRK.B";}
@@ -128,17 +148,23 @@ foreach ($dbh->query($query) as $row) {
     }
 }
 
+//returns 2 years of dividends
 if (!empty($_GET['symquery'])) {
     $symbol = $_GET['symquery'];
-//     echo "symquery for $symbol\n";
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
-    from transactions where symbol = '$symbol' 
-    and xtype = 'Div' group by month order by date_new desc limit 24";    
-    foreach ($dbh->query($query) as $row) {
-       
-     $array[] = array('date'=> "$row[month]",'symbol'=> "$row[symbol]",'cost'=>"$row[cost]" );   
+    from transactions 
+    where symbol = '$symbol' 
+    AND date_new >= Date('now', '-24 months')
+    and xtype = 'Div' group by month order by date_new ";    
+    foreach ($dbh->query($query) as $row) {       
+        $array[] = array(
+            'date' => "$row[month]",
+            'symbol' => "$row[symbol]",
+            'cost' => "$row[cost]"
+        );   
     }
 }
+
 
 if ( $_GET['verb'] == "sectorpct") {
     
@@ -247,7 +273,7 @@ if ( $_SERVER['QUERY_STRING'] == "catpct") {
      $query = "select timestamp,(sum(shares*close)/value)*100 as pct
     from security_values,historical 
     where symbol IN 
-    (select symbol from prices where symbol IN ('SGOL','XAG')
+    (select symbol from prices where symbol IN ('SGOL','XAG','SIVR')
     and security_values.timestamp = historical.date)
     and timestamp > date('now','-$tf days')
     group by timestamp order by timestamp";
