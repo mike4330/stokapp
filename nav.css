@@ -1,15 +1,12 @@
-
-
-
-
- /* Navbar container */
+/* Navbar container */
 .navbar {
   overflow: hidden;
   background-color: #333;
   font-family: monospace;
-  position: fixed; top: 0;
+  position: fixed;
+  top: 0;
   z-index: 90;
-  opacity: 0.8;
+  opacity: 0.92;
   /* height: auto; */
   width: 100vw;
 }
@@ -24,8 +21,8 @@
   padding: 14px 12px;
   text-decoration: none;
   z-index: 90;
-/*   background -color: #0000cc; */
-  
+  /*   background -color: #0000cc; */
+
 }
 
 /* The dropdown container */
@@ -43,12 +40,16 @@
   color: white;
   padding: 14px 16px;
   background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
+
+  font-family: inherit;
+  /* Important for vertical align on mobile phones */
+  margin: 0;
+  /* Important for vertical align on mobile phones */
 }
 
 /* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover,
+.dropdown:hover .dropbtn {
   background-color: #2222ee;
   opacity: 1;
 }
@@ -59,18 +60,19 @@
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 99;
   border-radius: 8px;
-  width: 200px;
-  position: sticky; top: 0;
+  width: 230px;
+  position: sticky;
+  top: 0;
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
   float: none;
   color: black;
-  padding: 12px 16px;
+  padding: 2px 6px;
   text-decoration: none;
   display: block;
   text-align: left;
@@ -79,12 +81,18 @@
 
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
-  background-color: #ddd;
-  border-radius: 8px;
+  background-color: #0acc61;
+  border-radius: 4px;
 }
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
-} 
+}
 
+.dropdown-content button {
+  background-color: rgb(220, 255, 155);
+  width: 100%;
+  padding-top: 1px;
+  border-color: #222222;
+}

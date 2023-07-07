@@ -23,24 +23,35 @@ $dir = 'sqlite:portfolio.sqlite';
 // echo "</div>";
 
 echo ' <div class="navbar">
-  <a href="alloc.php">Allocations</a>
+  <a href="/portfolio/alloc.php">Allocations</a>
     <div class="dropdown">
     <button class="dropbtn">Charts
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="div.php">Value Trends</a>
-      <a href="divcharts.php">Dividend Charts</a>
-      <a href="chart3.php">Pos. Size Charts</a>
-      <a href="posvalues.php">Pos. Value Charts</a>
+      <button><a href="/portfolio/div.php">Value Trends</a></button>
+      <button><a href="/portfolio/divcharts.php">Dividend Charts</a></button>
+      <button><a href="/portfolio/chart3.php">Pos. Size Charts</a></button>
+      <button><a href="/portfolio/posvalues.php">Pos. Value Charts</a></button>
+      <button><a href="/portfolio/reports/sectoralloc.php">Model Sector Allocations</a></button>
+      <button><a href="/portfolio/reports/symbolweights.php">Model Target Tracking</a></button>
     </div>
   </div>
-  <a href="holdings.php">Holdings</a>
-  <a href="lots.php">Lots</a>
-  <a href="mpt.php">Modelling</a>
-  <a href="sectors.php">Sectors</a>
+  <a href="/portfolio/holdings.php">Holdings</a>
+  <a href="/portfolio/lots.php">Lots</a>
+  <a href="/portfolio/mpt.php">Modelling</a>
+  <a href="/portfolio/sectors.php">Sectors</a>
   <a href="/portfolio/">Transactions</a>
-  
+  <div class="dropdown">
+  <button class="dropbtn">Analysis
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-content">
+    <button><a href="/portfolio/divpredict.php">Dividend Predicition</a></button>
+    <button><a href="/portfolio/reports/pairs.php">Pair Analysis</a></button>
+  </div>
+</div>
+
   
 
 </div> ';

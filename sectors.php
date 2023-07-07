@@ -75,7 +75,7 @@ echo "</table>";
 
 echo '<div style="position: absolute;top: 53vh;width: 40vw; height: 36vh; background: white;"><canvas id="sectors"></canvas></div>';
 
-echo '<table style="position: relative;left:22vw;top: 0vh;">
+echo '<table style="position: relative;left:22vw;top: 2vh;">
 <tr>
   <td><div class="sectorchart"><canvas id="comd"></canvas></div></td>
   <td><div  class="sectorchart"><canvas id="cdisc"></canvas></div></td>
@@ -206,8 +206,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 16, 16)',
                             borderWidth:  1.75,
-                            yMin: 4.01,
-                            yMax: 4.01     
+                            yMin: 4.45,
+                            yMax: 4.45     
                       }
                     }
                   }
@@ -257,8 +257,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 16, 16)',
                             borderWidth:  1.75,
-                            yMin: 8.55,
-                            yMax: 8.55
+                            yMin: 8.44,
+                            yMax: 8.44
                       }
                     }
                   }
@@ -309,8 +309,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(64, 16, 200)',
                             borderWidth:  1.75,
-                            yMin: 4.69,
-                            yMax: 4.69
+                            yMin: 4.76,
+                            yMax: 4.76
                       }
                     }
                   }
@@ -413,8 +413,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 255, 64)',
                             borderWidth:  1.75,
-                            yMin: 5.49,
-                            yMax: 5.49
+                            yMin: 5.52,
+                            yMax: 5.52
                       }
                     }
                   }
@@ -463,8 +463,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(200, 200, 200)',
                             borderWidth:  1.75,
-                            yMin: 5.52,
-                            yMax: 5.52
+                            yMin: 5.53,
+                            yMax: 5.53
                       }
                     }
                   }
@@ -514,8 +514,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(20, 255, 10)',
                             borderWidth:  1.75,
-                            yMin: 5.6,
-                            yMax: 5.6
+                            yMin: 5.55,
+                            yMax: 5.55
                       }
                     }
                   }
@@ -564,8 +564,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 12, 12)',
                             borderWidth:  1.75,
-                            yMin: 5.53,
-                            yMax: 5.53
+                            yMin: 5.54,
+                            yMax: 5.54
                       }
                     }
                   }
@@ -628,7 +628,7 @@ $.ajax({
 
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf=170',
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -663,8 +663,8 @@ $.ajax({
                     annotations: {
                       line2: {
                             type: 'line',
-                            borderColor: 'rgb(12, 12, 25)',
-                            borderWidth:  3.75,
+                            borderColor: 'rgb(12, 240, 25)',
+                            borderWidth:  2,
                             yMin: 5,
                             yMax: 5
                       }

@@ -104,6 +104,7 @@ function startTime() {
   let h = today.getHours();
   let m = today.getMinutes();
   let s = today.getSeconds();
+  h = checkTime(h);
   m = checkTime(m);
   s = checkTime(s);
   document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
@@ -257,29 +258,21 @@ $fbpct_c=round(($fbc/$portfolio_value*100),2);
 
 // picker table
 echo "\n\n<table class=\"picker\">
-<tr><th colspan=6>Picker</th></tr>
+<tr><th colspan=7>Picker</th></tr>
   <tr><th>sc</th><th>symbol</th>
   <th>Diff</th>
   <th>ζ val</th>
   <th>chg</th><th>off200</th><th>52range</th></tr>";
 
-// $query ="select MPT.symbol,pe,range,beta,MPT.divyield,avgflag,prices.price,sectorshort,sector,
-//   round((pe+range+beta)-MPT.divyield,2) as z 
-//   from MPT,prices 
-//   where MPT.symbol = prices.symbol AND
-//   flag = 'U' AND
-//   sector != 'Bonds' 
-//   and (prices.price < mean200 or prices.price < mean50)
-// order by z";
+
 
 // alternate algorithm
-$query = "select MPT.symbol,volat,sectorshort,sector,
-hlr,prices.divyield,MPT.div_growth_rate as gr,round(((volat+range)-prices.divyield-MPT.div_growth_rate),2) as z
-from MPT,prices
-where MPT.symbol = prices.symbol
-and (prices.price < mean200 OR prices.price < mean50 or hlr < .88)
-and flag = 'U' 
-order by z";
+$query = "select sectorshort,prices.symbol,hlr,overamt,volat,
+((price-mean50)/price) + ((price-mean200)/price) + volat - (prices.divyield/2) - (div_growth_rate/3) as z
+from prices,MPT
+where prices.symbol = MPT.symbol
+and overamt < -5 
+order by z limit 15";
 
 //
 
@@ -295,17 +288,18 @@ foreach ($dbh->query($query) as $trow) {
   $pricediff = round($zrow['pricediff'],2); $diff200=round($zrow['avg200diff']*100,1);
   
   if ($pricediff < 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#22dd22";}
+    else {$bgstring = "#000000"; $clrstring = "#88dd88";}
   
   if ($diffamt[$symbol] < 0 and $diffamt[$symbol] > -3 ) {continue;}
 
 	$range=round($trow['hlr'],2);
+  $zeta=round(($trow['z']*1000),0);
   
  echo "<tr>
-  <td style=\"background: $bgstring;\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
+  <td style=\"background: $iconcolor[$sectorshort];\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
   <td style=\"background: $bgstring; color: $clrstring;\">$trow[symbol]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$symbol]</td>
-  <td style=\"background: $bgstring;color: $clrstring;\">$trow[z]</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$zeta</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diff200%</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$range</td>
@@ -331,7 +325,7 @@ foreach ($dbh->query($query) as $trow) {
   $pricediff = round(($zrow['price'] - $zrow['pprice']),2);
   
   if ($pricediff > 0) {$bgstring = "#03aa03"; $clrstring = "#000000";}
-    else {$bgstring = "#000000"; $clrstring = "#22dd22";}
+    else {$bgstring = "#000000"; $clrstring = "#88dd88";}
    
 	$barwidth = $diffamt[$sym]*.04 . "vw" ; 
         $gradwidth = 0;

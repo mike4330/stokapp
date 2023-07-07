@@ -24,21 +24,21 @@ with open('sectormap.txt', 'r') as f:
 
 
 sector_lower = {
-"Bonds":0.3026,
+"Bonds":0.301,
 "Commodities":0.025,
 "Misc":0.0125,
-"Communication Services":0.0501,
-"Consumer Discretionary":0.0552,
-"Consumer Staples":0.055,
-"Energy":0.0399,
-"Financials":0.0547,
-"Healthcare":0.0556,
-"Industrials":0.0554,
-"Materials":0.0554,
-"Tech":0.0864,
-"Real Estate":0.0554,
+"Communication Services":0.0508,
+"Consumer Discretionary":0.0556,
+"Consumer Staples":0.0555,
+"Energy":0.0405,
+"Financials":0.0554,
+"Healthcare":0.0555,
+"Industrials":0.0555,
+"Materials":0.0555,
+"Tech":0.084,
+"Real Estate":0.0555,
 "Precious Metals":0.05,
-"Utilities":0.0468,
+"Utilities":0.0477,
 }
 
 sector_upper = {
@@ -67,6 +67,7 @@ import sys
 gammainput = sys.argv[1]
 rgoal = float(sys.argv[2])
 lb = float(sys.argv[3])
+ub = float(sys.argv[4])
 
 prices = pd.read_csv("pricedataset.csv", parse_dates=True, index_col="Date")
 # print(prices)
@@ -91,7 +92,7 @@ from pypfopt import expected_returns, EfficientSemivariance
 
 mu = mean_historical_return(prices)
 S = CovarianceShrinkage(prices).ledoit_wolf()
-ef = EfficientFrontier(mu, S, weight_bounds=(lb, 0.058), verbose=False)
+ef = EfficientFrontier(mu, S, weight_bounds=(lb, ub), verbose=False)
 
 # print(mu)
 
@@ -111,14 +112,12 @@ print("------------------------------")
 # es.portfolio_performance(verbose=True)
 ef.portfolio_performance(verbose=True)
 
-
 # cla = CLA(mu, S)
 # cla.max_sharpe()
 # fig, ax = plt.subplots()
 # plt.tight_layout()
 # plt.grid()
 # plotting.plot_efficient_frontier(cla, showfig=False,ax=ax,show_tickers="True",filename="ef.png")
-
 
 print("------------------------------")
 for sector in set(sector_mapper.values()):
@@ -138,7 +137,18 @@ with open("semivariance.csv", "w", newline="") as csvfile:
         writer.writerow({"symbol": key, "weight": weights[key]})
 today = date.today()
 
-
 with open("weights.log", "a") as f:
-     for key, value in weights.items():
-         f.write("%s %s %s\n" % (today, key, value))
+    for key, value in weights.items():
+       f.write("%s %s %s\n" % (today, key, value))
+
+import sqlite3
+ 
+conn = sqlite3.connect('portfolio.sqlite')
+cursor = conn.cursor()
+ 
+for key, value in weights.items():
+    cursor.execute("INSERT INTO weights (timestamp, symbol, weight) VALUES (?, ?, ?)",
+                   (today, key, value))
+ 
+conn.commit()
+conn.close()
