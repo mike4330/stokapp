@@ -3,17 +3,19 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 
 <html>
+
 <head>
-<link rel="stylesheet" type="text/css" href="test.css">
-<link rel="stylesheet" type="text/css" href="nav.css">
-<title>Div Predictions</title>
+    <link rel="stylesheet" type="text/css" href="test.css">
+    <link rel="stylesheet" type="text/css" href="nav.css">
+    <title>Div Predictions</title>
 
 </head>
-</html>
+
+
 
 <?php
 
-include ("nav.php");
+include("nav.php");
 
 // Example usage
 // $symbol = "BG";
@@ -21,17 +23,57 @@ include ("nav.php");
 // echo $forecastTable;
 
 $table = "<table style='position: relative; top: 40px;'>";
-$tickers = array('ANGL','ASML','AVGO','BG', 'BRT','BSIG','CARR','D', 'DGX','EMB',
-'EVC','F','FPE','FAF','FAGIX','FNBGX','FTS','GILD','HUN','INGR','IPAR','JPIB' ,
-'KMB','LKOR','LYB','MLN','MPW','NXST','OTIS','PBR','PLD','SCI','VMC','VCSH');
+$tickers = array(
+    'ANGL',
+    'AMX',
+    'ASML',
+    'AVGO',
+    'BG',
+    'BRT',
+    'BSIG',
+    'CARR',
+    'C',
+    'D',
+    'DGX',
+    'EMB',
+    'EVC',
+    'F',
+    'FPE',
+    'FAF',
+    'FAGIX',
+    'FNBGX',
+    'FTS',
+    'GILD',
+    'HPK',
+    'HUN',
+    'INGR',
+    'IPAR',
+    'JPIB',
+    'KMB',
+    'LKOR',
+    'LYB',
+    'MLN',
+    'MPW',
+    'NHC',
+    'NXST',
+    'OTIS',
+    'PBR',
+    'PNM',
+    'PLD',
+    'REM',
+    'SCI',
+    'VALE',
+    'VMC',
+    'VCSH'
+);
 
 $count = 0;
 foreach ($tickers as $ticker) {
     if ($count % 8 == 0) {
         $table .= "<tr>"; // start new row
     }
-    
-    $monthlies = ['ANGL','EMB','FPE','JPIB', 'LKOR','FAGIX','FNBGX', 'MLN','VCSH'];
+
+    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'VCSH'];
     if (in_array($ticker, $monthlies)) {
         $table .= "<td><div style='padding: .5vw;'>" . monthpredict($ticker) . "</div></td>";
         $count++;
@@ -39,7 +81,7 @@ foreach ($tickers as $ticker) {
     }
 
     $table .= "<td><div style='padding: .5vw;'>" . qtrpredict($ticker) . "</div></td>";
-    
+
     $count++;
     if ($count % 8 == 0) {
         $table .= "</tr>"; // end current row
@@ -49,7 +91,8 @@ foreach ($tickers as $ticker) {
 $table .= "</table>";
 echo $table;
 
-function qtrpredict($symbol) {
+function qtrpredict($symbol)
+{
     // API endpoint URL
     $apiUrl = "http://localhost/portfolio/datacsv.php?symquery=" . urlencode($symbol);
 
@@ -95,7 +138,7 @@ function qtrpredict($symbol) {
     $nextQuarter = date('Y-m', strtotime($lastDataDate . ' + 3 months'));
     $startMonth = date('Y-m', strtotime($nextQuarter . ' + 0 months'));
 
-    echo $lastDataDate;
+    // echo $lastDataDate;
 
     // Generate 12-quarter forecast
     $forecast = array();
@@ -115,11 +158,19 @@ function qtrpredict($symbol) {
     $html = '<table class="forecast">';
     $html .= "<tr><th colspan=3>$symbol</th></tr><tr><th>Date</th><th>Cost</th></tr>";
     foreach ($lastThreeEntries as $entry) {
-        if ($entry['cost'] < 0) {$entry['cost'] = 0;}
+        if ($entry['cost'] < 0) {
+            $entry['cost'] = 0;
+        }
         $html .= '<tr>';
         $html .= '<td>' . $entry['date'] . '</td>';
         // $html .= '<td>' . $entry['symbol'] . '</td>';
-        $html .= '<td style="width: 3.5vw;">' . round($entry['cost'],2) . '</td>';
+
+        $cost = round($entry['cost'], 2);
+        getbgstring($cost);
+
+        $html .= '<td style="width: 3.5vw; background: ' . getbgstring($cost) . ';">' . $cost . '</td>';
+
+
 
         $html .= '</tr>';
     }
@@ -128,7 +179,8 @@ function qtrpredict($symbol) {
     return $html;
 }
 
-function monthpredict($symbol) {
+function monthpredict($symbol)
+{
     // API endpoint URL
     $apiUrl = "http://localhost/portfolio/datacsv.php?symquery=" . urlencode($symbol);
 
@@ -174,11 +226,11 @@ function monthpredict($symbol) {
     $nextQuarter = date('Y-m', strtotime($lastDataDate . ' + 1 months'));
     $startMonth = date('Y-m', strtotime($nextQuarter . ' + 0 months'));
 
-    echo $lastDataDate;
+    // echo $lastDataDate;
 
     // Generate 12-quarter forecast
     $forecast = array();
-    for ($i = 0; $i < 92; $i++) {
+    for ($i = 0; $i < 144; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
             'date' => $forecastMonth,
@@ -194,11 +246,19 @@ function monthpredict($symbol) {
     $html = '<table class="forecast">';
     $html .= "<tr><th colspan=3>$symbol</th></tr><tr><th>Date</th><th>Cost</th></tr>";
     foreach ($lastThreeEntries as $entry) {
-        if ($entry['cost'] < 0) {$entry['cost'] = 0;}
+        if ($entry['cost'] < 0) {
+            $entry['cost'] = 0;
+        }
         $html .= '<tr>';
         $html .= '<td>' . $entry['date'] . '</td>';
         // $html .= '<td>' . $entry['symbol'] . '</td>';
-        $html .= '<td style="width: 3.5vw;">' . round($entry['cost'],2) . '</td>';
+
+        $cost = round($entry['cost'], 2);
+        getbgstring($cost);
+
+        $html .= '<td style="width: 3.5vw; background: ' . getbgstring($cost) . ';">' . $cost . '</td>';
+
+
         $html .= '</tr>';
     }
     $html .= '</table>';
@@ -206,4 +266,32 @@ function monthpredict($symbol) {
     return $html;
 }
 
+function getbgstring($cost)
+{
+    if ($cost > 70) {
+        $bgstring = '#006600';
+    } else if ($cost > 50) {
+        $bgstring = '#00ff00';
+    } 
+    else if ($cost > 30) {
+        $bgstring = '#84ff84';
+    } 
+    else if ($cost > 10) {
+        $bgstring = '#a4ffa4';
+    }
+    else if ($cost > 5) {
+        $bgstring = '#cdffcd';
+    }
+    else if ($cost == 0) {
+        $bgstring = '#1c1c1c';
+    }
+    else {
+        $bgstring = 'transparent'; // Use default background color for other values
+    }
+
+    return $bgstring;
+}
+
 ?>
+</body>
+</html>
