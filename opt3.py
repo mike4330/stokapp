@@ -24,21 +24,22 @@ with open('sectormap.txt', 'r') as f:
 
 
 sector_lower = {
-"Bonds":0.301,
+"Bonds":0.2981,
 "Commodities":0.025,
 "Misc":0.0125,
-"Communication Services":0.0508,
-"Consumer Discretionary":0.0556,
-"Consumer Staples":0.0555,
-"Energy":0.0405,
-"Financials":0.0554,
-"Healthcare":0.0555,
-"Industrials":0.0555,
-"Materials":0.0555,
-"Tech":0.084,
-"Real Estate":0.0555,
+"Communication Services":0.0515,
+"Consumer Discretionary":0.0559,
+"Consumer Staples":0.0559,
+"Energy":0.0418,
+"Financials":0.0559,
+"Healthcare":0.0558,
+"Industrials":0.0558,
+"Materials":0.0558,
+"Tech":0.0821,
+"Real Estate":0.0557,
 "Precious Metals":0.05,
-"Utilities":0.0477,
+"Utilities":0.0482,
+
 }
 
 sector_upper = {
@@ -147,6 +148,9 @@ conn = sqlite3.connect('portfolio.sqlite')
 cursor = conn.cursor()
  
 for key, value in weights.items():
+    if (key == 'BRK-B') :
+        key = 'BRK.B'
+
     cursor.execute("INSERT INTO weights (timestamp, symbol, weight) VALUES (?, ?, ?)",
                    (today, key, value))
  

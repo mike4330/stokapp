@@ -102,9 +102,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="FDGFX"></canvas></div>
             </td>
-            <td>
-                <div class="chart-container"><canvas id="FRG"></canvas></div>
-            </td>
+  
             <td>
                 <div class="chart-container"><canvas id="FTS"></canvas></div>
             </td>
@@ -114,12 +112,13 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="HPK"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="HTLD"></canvas></div>
             </td>
+
+        </tr>
+        <tr>
+   
             <td>
                 <div class="chart-container"><canvas id="HUN"></canvas></div>
             </td>
@@ -132,13 +131,13 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="JPIB"></canvas></div>
             </td>
-
-        </tr>
-
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="KMB"></canvas></div>
             </td>
+        </tr>
+
+        <tr>
+ 
             <td>
                 <div class="chart-container"><canvas id="LKOR"></canvas></div>
             </td>
@@ -151,12 +150,12 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="MPW"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="NICE"></canvas></div>
             </td>
+        </tr>
+        <tr>
+      
             <td>
                 <div class="chart-container"><canvas id="NVS"></canvas></div>
             </td>
@@ -166,6 +165,10 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="OTIS"></canvas></div>
             </td>
+            <td>
+                <div class="chart-container"><canvas id="PANW"></canvas></div>
+            </td>
+
             <td>
                 <div class="chart-container"><canvas id="PDBC"></canvas></div>
             </td>
@@ -204,15 +207,25 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             <td>
                 <div class="chart-container"><canvas id="TGS"></canvas></div>
             </td>
+            <td>
+                <div class="chart-container"><canvas id="TSLA"></canvas></div>
+            </td>
 
         </tr>
         <tr>
+    
             <td>
-                <div class="chart-container"><canvas id="TSLA"></canvas></div>
+                <div class="chart-container"><canvas id="ULTA"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="VALE"></canvas></div>
             </td>
+
+            <td>
+                <div class="chart-container"><canvas id="VCSH"></canvas></div>
+            </td>
+
+
             <td>
                 <div class="chart-container"><canvas id="VMC"></canvas></div>
             </td>
@@ -234,9 +247,9 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     Chart.defaults.datasets.line.pointRadius = 0;
 
     const array = ["AMX", "ASML", "ANGL", "AVGO", "BG", "BRKB", "BRT", "BSIG", "C", "CARR", "BAH",
-        "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAF", "FAGIX", "FDGFX", "FNBGX", "FRG", "FTS", "GILD", "HPK", "HTLD", "HUN", "INGR",
-        "IPAR", "JPIB", "KMB", "LKOR", "LYB", "MLN", "MPW", "NICE", "NVS", "NXST", "OTIS", "PDBC", "PLD", "PNM", "REM",
-        "SCI", "SGOL", "SIVR", "SOXX", "SSNC", "TAIT", "TGS", "TSLA", "VALE", "VMC", "XAG"];
+        "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAF", "FAGIX", "FDGFX", "FNBGX",  "FTS", "GILD", "HPK", "HTLD", "HUN", "INGR",
+        "IPAR", "JPIB", "KMB", "LKOR", "LYB", "MLN", "MPW", "NICE", "NVS", "NXST", "OTIS", "PANW","PDBC", "PLD", "PNM", "REM",
+        "SCI", "SGOL", "SIVR", "SOXX", "SSNC", "TAIT", "TGS", "TSLA","ULTA", "VALE", "VCSH","VMC", "XAG"];
 
     // const array = ["ASML", "ANGL", "BRKB"];
 

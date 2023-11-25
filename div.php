@@ -84,10 +84,10 @@ $.ajax({
             datasets: [
               {
                 label: 'Value',
-                
-                radius: 2,
+                radius: 0,
                 borderColor: 'rgb(255, 0, 0)',
                 borderWidth: 1,
+                tension: .9,
                 data:value
               },
             {
@@ -120,7 +120,8 @@ $.ajax({
     
         var WMA8 = [];var date = [];
         var WMA24 = []; var WMA28 = []; var WMA36=[]; var WMA41=[]; 
-        var WMA48=[];var rtn=[]; var WMA64=[]; var WMA72=[]; var WMA88=[];
+        var WMA48=[];var rtn=[]; var WMA64=[]; var WMA72=[]; 
+        var WMA88=[]; var WMA110=[]; var WMA135=[];
          
          for(var i in data){
           date.push(data[i].date);
@@ -128,7 +129,8 @@ $.ajax({
           WMA28.push(data[i].WMA28);WMA36.push(data[i].WMA36);
           WMA41.push(data[i].WMA41);WMA48.push(data[i].WMA48);
           WMA64.push(data[i].WMA64);
-          WMA72.push(data[i].WMA72); WMA88.push(data[i].WMA88);
+          WMA72.push(data[i].WMA72); WMA88.push(data[i].WMA88); WMA110.push(data[i].WMA110);
+          WMA135.push(data[i].WMA135);
           rtn.push(data[i].rtn);
         }
 
@@ -143,11 +145,11 @@ $.ajax({
                 data: WMA8
               },
               {
-                label: '48WMA',
+                label: '72WMA',
                 radius: 0,
                 borderColor: 'rgb(32, 54, 240)',
                 borderWidth: 2.5,
-                data: WMA48
+                data: WMA72
               },
 
                {
@@ -159,18 +161,26 @@ $.ajax({
               },
  
                     {
-                label: 'WMA28',
+                label: 'WMA36',
                 radius: 0,
                 borderColor: 'rgb(255,255,0)',
                 borderWidth: 2.5,
-                data: WMA28
+                data: WMA36
               },
                      {
-                label: 'WMA88',
+                label: 'WMA110',
                 radius: 0,
                 borderColor: 'rgb(30,225,30)',
                 borderWidth: 2.5,
-                data: WMA88
+                data: WMA110
+              },
+
+                     {
+                label: 'WMA135',
+                radius: 0,
+                borderColor: 'rgb(125,125,255)',
+                borderWidth: 2.5,
+                data: WMA135
               }
             ] 
             };

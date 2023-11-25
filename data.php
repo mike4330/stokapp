@@ -33,11 +33,12 @@ if ($_GET['q'] == "divs") {
     }
 
 if ($_GET['q'] == "valuetrend") {
-    $query= "select date,value,cost from historical where date > date('now','-180 days')";
+    $query= "select date,value,cost from historical where date > date('now','-1 year')";
     }
     
 if ($_GET['q'] == "averages") {
-    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,WMA64,WMA88,return as rtn from historical where date > date('now','-255 days')";
+    $query= "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,
+    WMA64,WMA72,WMA88,WMA110,WMA135,return as rtn from historical where date > date('now','-6 months')";
     }
     
 if ($_GET['q'] == "quarterdivs") {

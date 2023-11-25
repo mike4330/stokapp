@@ -12,6 +12,26 @@
 </style>
 
 <script>
+function changeFontSize(increase) {
+  var tds = document.getElementsByTagName("td");
+
+  for (var i = 0; i < tds.length; i++) {
+    var currentFontSize = parseInt(window.getComputedStyle(tds[i]).fontSize);
+    var newFontSize;
+
+    if (increase) {
+      newFontSize = currentFontSize + 2;
+    } else {
+      newFontSize = currentFontSize - 2;
+    }
+
+    tds[i].style.fontSize = newFontSize + 'px';
+  }
+}
+</script>
+
+
+<script>
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   table = document.getElementById("myTable2");
@@ -104,12 +124,14 @@ function numericsort(n) {
   }
 }
 </script>
+
 </head>
 
 <body>
 
-<?php include ("nav.php"); ?> 
 
+<?php include ("nav.php"); ?> 
+<?php include ("functions.php"); ?> 
 <?php
 $dir = 'sqlite:portfolio.sqlite';
 $dbh  = new PDO($dir) or die("cannot open the database");
@@ -127,12 +149,14 @@ $ttotal=get_portfolio_value();
 //echo "total is $ttotal<br>";
 
 echo "<table class=\"holdings\" id=\"myTable2\">";
+
+
 echo "<th onclick=\"sortTable(0)\">symbol</th>
 
 	<th>net units</th>
 	<th colspan=2>last price</th>
 	<th onclick=\"numericsort(4)\">pos. value</th>
-	<th>tgt. diff \$</th>
+	<th onclick=\"numericsort(5)\">tgt. diff \$</th>
 	<th onclick=\"numericsort(6)\">port pct.</th>
 	<th>all. tgt.</th>
 	
@@ -142,9 +166,9 @@ echo "<th onclick=\"sortTable(0)\">symbol</th>
 	
 	<th onclick=\"numericsort(10)\">UGL\$</th>
 	<th onclick=\"numericsort(11)\">return%</th>
-	<th>RGL\$</th>
+	<th onclick=\"numericsort(12)\">RGL\$</th>
 	
-	<th onclick=\"numericsort(14)\">Divs</th>
+	<th onclick=\"numericsort(13)\">Divs</th>
 	<th>PriceChg</th>
 	<th onclick=\"numericsort(15)\">PosValChg</th>
 	";
@@ -159,9 +183,25 @@ foreach ($dbh->query($query) as $row) {
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         
         $netunits = round(($buyunits-$sellunits),4);
+
+        $nuquery ="SELECT SUM(result) AS total_sum
+        FROM (
+        SELECT CASE
+            WHEN units_remaining IS NULL THEN units
+            ELSE units_remaining
+        END AS result
+        FROM transactions
+        WHERE xtype = 'Buy'
+        AND symbol = '$sym'
+        AND disposition IS NULL
+        ) subquery;";
+
+        $stmt = $dbh->prepare($nuquery);$stmt->execute();$zrow = $stmt->fetch(); $nu = $zrow['total_sum'];
         
         $subquery = "select price from prices where symbol = '$sym'";
         $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],4);
+
+        $netunits = $nu;
         
         if ($netunits <= 0) continue;
                 
@@ -188,6 +228,9 @@ foreach ($dbh->query($query) as $row) {
 //         echo "gain for $sym is $gain<br>";
         
         $netcost = round(($buytotal - $selltotal),2)+$gain;
+
+        $netcost = round(sym_costbasis($sym),2);
+
         $tnetcost = ($netcost + $tnetcost);
         $dollarreturn=round(($value - $netcost),2);
         
@@ -252,7 +295,7 @@ foreach ($dbh->query($query) as $row) {
 //     ▲
     echo "</td>
     <td class=\"cntr\">$value</td>
-    <td class=\"cntr\" style=\"background: $tcellcolor;color: $targetcolor\">\$$target_diff</td>
+    <td class=\"cntr\" style=\"background: $tcellcolor;color: $targetcolor\">$target_diff</td>
     <td class=\"cntr\">$portfolio_pct</td>
     <td class=\"cntr\">$alloc_target</td>
   
@@ -284,11 +327,12 @@ $daychange = round(($ttotal - $prevvalue),2);
 
 
 
-echo "<div class=statusmessage>Portfolio Value: \$$ttotal ($daychange)
+echo "<div class=\"statusmessage\" style=\"position: fixed;\">Portfolio Value: \$$ttotal ($daychange)
 <br>Dol. Rtn. \$$tdollarrtn
 <br>Pct. Rtn. $trtnpct %
 <br>Profit Skim $freecash
 <br>Profitable Pos. Val.: $profitable_position
+
 </div>";
 
 function get_portfolio_value() {
@@ -316,6 +360,17 @@ return $ttotal;
 }
 
 ?>
+
+
+<div style="position: fixed; right: 0; top: 50%; transform: translateY(-50%);">
+  <button onclick="changeFontSize(true)" style="font-size: 20px;">Aa &#8593;</button>
+  <button onclick="changeFontSize(false)" style="font-size: 20px;">Aa &#8595;</button>
+</div>
+
+
+
+
+
 
 </body>
 </html>

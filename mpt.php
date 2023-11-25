@@ -144,8 +144,6 @@ $dir = 'sqlite:portfolio.sqlite';
 include ("nav.php"); 
 $dbh  = new PDO($dir) or die("cannot open the database");
 
-
-
 $portfolio_value=get_portfolio_value();
 
 echo "portfolio_value = $portfolio_value";
@@ -154,7 +152,7 @@ $query = "SELECT DISTINCT symbol,target_alloc,sector,logo_file FROM MPT order by
 echo "<table class=\"mpt\" id=\"myTable2\" >";
 echo "
 <tr><th>Symbol</th><th>tWgt</th>
-<th>Val</th><th>tVal</th><th onclick=\"numericsort(4)\">tDiff</th><th>Dpct</th><th onclick=\"numericsort(6)\">IDX</th><th>class</th><th onclick=\"sortTable(8)\">Sector</th></tr>";
+<th>Val</th><th>tVal</th><th onclick=\"numericsort(4)\">tDiff</th><th>Dpct</th><th>class</th><th onclick=\"sortTable(7)\">Sector</th></tr>";
 
 foreach ($dbh->query($query) as $row) {
     $sym=$row['symbol'];
@@ -214,7 +212,7 @@ foreach ($dbh->query($query) as $row) {
     <td><a href=\"/portfolio/?symfilter=$sym\">$sym</a></td><td>$talloc_display %</td>
     <td>\$$pos_val</td><td>\$$tvalue</td>
     <td style=\"background: $color2;color: $tcolor2\">$tdiff</td><td style=\"background: $pbg;\">$diffpct %</td>
-    <td>$compidx2</td><td>$current_class</td><td>$sector</td></tr>";
+    <td>$current_class</td><td>$sector</td></tr>";
 }
 
 echo "</table>";
@@ -264,8 +262,6 @@ echo "\n\n<table class=\"picker\">
   <th>ζ val</th>
   <th>chg</th><th>off200</th><th>52range</th></tr>";
 
-
-
 // alternate algorithm
 $query = "select sectorshort,prices.symbol,hlr,overamt,volat,
 ((price-mean50)/price) + ((price-mean200)/price) + volat - (prices.divyield/2) - (div_growth_rate/3) as z
@@ -273,8 +269,6 @@ from prices,MPT
 where prices.symbol = MPT.symbol
 and overamt < -5 
 order by z limit 15";
-
-//
 
 foreach ($dbh->query($query) as $trow) {
   $symbol = $trow['symbol'];$sectorshort=$trow['sectorshort'];
@@ -297,7 +291,7 @@ foreach ($dbh->query($query) as $trow) {
   
  echo "<tr>
   <td style=\"background: $iconcolor[$sectorshort];\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
-  <td style=\"background: $bgstring; color: $clrstring;\">$trow[symbol]</td>
+  <td><a href=\"/portfolio/?symfilter=$trow[symbol]\" class=\"symclick\">$trow[symbol]</a></td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$symbol]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$zeta</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
@@ -335,7 +329,7 @@ foreach ($dbh->query($query) as $trow) {
     <td><svg class=\"bars\" width=\"$barwidth\" height=\"1vw\">";
 
     echo '  <linearGradient id="myGradient" >
-      <stop offset="1px"  stop-color="#004c00" />';
+      <stop offset="1%"  stop-color="#004c00" />';
       echo "<stop offset=\"95%\" stop-color=\"#22ff22\" />
     </linearGradient>";
 

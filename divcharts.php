@@ -30,142 +30,50 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   echo "</div><br>";
   ?>
 
-  <table class=chart style="position: absolute;left: 8vw;">
-    <tr>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="ANGL"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="ASML"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="AVGO"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="BG"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="BRT"></canvas></div>
-      </td>
+<?php
+// $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BRKB','BSIG','CARR','C','D','DBB','DGX','EMB',
+// 'EVC','EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR',
+// 'IPAR','JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NICE','NXST','NVS','OTIS','PANW','PBR','PDBC','PLD',
+// 'PNM','REM','SCI','SGOL','SIVR','SSNC','TAIT','TGS','TSLA','ULTA','VCSH','VMC'];
 
-    </tr>
-
-    <tr>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="D"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="DGX"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="EMB"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="EVC"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="F"></canvas></div>
-      </td>
-
-    </tr>
-
-    <tr>
-    <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="FAF"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="FAGIX"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="FNBGX"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="FPE"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="FTS"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="GILD"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="HUN"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="IPAR"></canvas></div>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="JPIB"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="KMB"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="LKOR"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="LYB"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="MLN"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="NXST"></canvas></div>
-      </td>
-
-    </tr>
-    <tr>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="PBR"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="PLD"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="PNM"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="REM"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="SCI"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="SSNC"></canvas></div>
-      </td>
+$symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX','EMB','EVC',
+'EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR','IPAR',
+'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','PLD','PNM','REM','SCI','SSNC','TAIT','VALE','VCSH','VMC'];
+?>
 
 
-    </tr>
-    <tr>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="TAIT"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="VCSH"></canvas></div>
-      </td>
-      <td>
-        <div class="chart-container3" style="position: relative;  "><canvas id="VMC"></canvas></div>
-      </td>
-    </tr>
-  </table>
+<div class="grid-container2"> 
+
+<?php
+   foreach ($symbols as $symbol) {
+  echo '<div  class="chart-container99" >';
+  echo "<canvas class=\"chart-canvas\" id=\"$symbol\"></canvas></div>";
+   }
+  ?>
+</div>
+
+ 
 
   <script>
-
     Chart.defaults.plugins.legend.display = false;
     Chart.defaults.datasets.line.fill = true;
     Chart.defaults.datasets.line.borderWidth = 1.2;
     Chart.defaults.animation.duration = 225;
     Chart.defaults.datasets.line.pointRadius = 1.2;
+    Chart.defaults.font.size = 8;
 
     c1 = 'rgb(224, 224, 32)'
 
 
-    const chartDataList = ['ANGL', 'ASML', 'AVGO', 'BG', 'BRT', 'D', 'DGX', 'EMB', 'EVC', 'F', 'FAF', 'FAGIX',
-      'FNBGX', 'FPE', 'FTS', 'GILD', 'HUN', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'NXST', 'PBR', 'PLD', 'PNM',
-      'REM', 'SCI', 'SSNC', 'VCSH', 'VMC', 'TAIT'];
+    const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH','BG', 'BRT', 'BSIG','CARR', 'C','D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF', 
+    'FAGIX',  'FDGFX','FNBGX', 'FPE', 'FTS', 'GILD','HPK','HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW', 
+    'NHC', 'NXST', 'OTIS', 'PBR', 'PLD', 'PNM', 'REM', 'SCI', 'SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
+    ];
+
+    $.ajaxSetup({
+  pool: true
+});
+
     for (let i = 0; i < chartDataList.length; i++) {
       loadChartData(chartDataList[i]);
     }
@@ -176,7 +84,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
         url: `datacsv.php?symquery=${item}`,
         type: 'GET',
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
           var cost = [];
           var date = [];
 
@@ -189,7 +97,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             const r = Math.floor(Math.random() * 226);
             const g = Math.floor(Math.random() * 226);
             const b = Math.floor(Math.random() * 226);
-            return `rgba(${r}, ${g}, ${b}, 0.5)`;
+            return `rgba(${r}, ${g}, ${b}, 0.6)`;
           };
           const backgroundColor = randomColor()
 
@@ -216,19 +124,18 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                 title: {
                   text: item,
                   display: true,
-                  padding: { top: 15 }
+                  padding: {
+                    top: 15
+                  }
                 }
               },
-              maintainAspectRatio: false,
+              maintainAspectRatio: true,
               responsive: true
             }
           });
         }
       });
     }
-
-
-
   </script>
 </body>
 

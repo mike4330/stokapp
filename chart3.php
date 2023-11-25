@@ -78,15 +78,16 @@
             <td>
                 <div class="chart-container"><canvas id="FAGIX"></canvas></div>
             </td>
+                    <td>
+                <div class="chart-container"><canvas id="FDGFX"></canvas></div>
+            </td>
             <td>
                 <div class="chart-container"><canvas id="FNBGX"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="FPE"></canvas></div>
             </td>
-            <td>
-                <div class="chart-container"><canvas id="FRG"></canvas></div>
-            </td>
+
             <td>
                 <div class="chart-container"><canvas id="GILD"></canvas></div>
             </td>
@@ -137,18 +138,25 @@
             <td>
                 <div class="chart-container"><canvas id="OTIS"></canvas></div>
             </td>
+                     <td>
+                <div class="chart-container"><canvas id="PANW"></canvas></div>
+            </td>
             <td>
                 <div class="chart-container"><canvas id="PBR"></canvas></div>
             </td>
-            <td>
-                <div class="chart-container"><canvas id="PDBC"></canvas></div>
-            </td>
+
 
 
         </tr>
         <tr>
+                        <td>
+                <div class="chart-container"><canvas id="PDBC"></canvas></div>
+            </td>
             <td>
                 <div class="chart-container"><canvas id="PLD"></canvas></div>
+            </td>
+                 <td>
+                <div class="chart-container"><canvas id="PNM"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="REM"></canvas></div>
@@ -156,16 +164,17 @@
             <td>
                 <div class="chart-container"><canvas id="SCI"></canvas></div>
             </td>
-            <td>
+
+
+
+        </tr>
+        <tr>
+                        <td>
                 <div class="chart-container"><canvas id="SGOL"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="SIVR"></canvas></div>
             </td>
-
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="SSNC"></canvas></div>
             </td>
@@ -175,15 +184,19 @@
             <td>
                 <div class="chart-container"><canvas id="TSLA"></canvas></div>
             </td>
-            <td>
+   
+
+        </tr>
+        <tr>
+                     <td>
                 <div class="chart-container"><canvas id="TGS"></canvas></div>
+            </td>
+                 <td>
+                <div class="chart-container"><canvas id="ULTA"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="VALE"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="VCSH"></canvas></div>
             </td>
@@ -203,10 +216,10 @@
         Chart.overrides.line.tension = 0.1;
 
         const array = ["AMX", "ASML", "ANGL", "AVGO", "BRKB", "BEN", "BG",
-            "BSJN", "C", "CARR", "CNHI", "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAGIX", "FNBGX", "FPE",
-            "FRG", "GILD", "HUN", "INGR", "IPAR", "JPIB", "KMB", "LYB", "MLN", "MPW", "NHC",
-            "NICE", "NVS", "NXST", "OTIS", "PBR", "PDBC", "PLD", "REM", "SCI", "SGOL", "SIVR", "SOXX", "SSNC", "TAIT",
-            "TGS", "TSLA", "VALE", "VCSH", "VMC"];
+            "BSJN", "C", "CARR", "CNHI", "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAGIX", "FDGFX","FNBGX", "FPE",
+             "GILD", "HUN", "INGR", "IPAR", "JPIB", "KMB", "LYB", "MLN", "MPW", "NHC",
+            "NICE", "NVS", "NXST", "OTIS", "PANW","PBR", "PDBC", "PLD", "PNM","REM", "SCI", "SGOL", "SIVR", "SOXX", "SSNC", "TAIT",
+            "TGS", "TSLA", "ULTA","VALE", "VCSH", "VMC"];
 
         array.forEach(function (item, index) {
 

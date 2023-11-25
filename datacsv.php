@@ -203,11 +203,14 @@ if ( $_GET['verb'] == "sectorpct") {
         filter (where \"symbol\" IN (select symbol from sectors where sector = 'Utilities')) as utilities,
     
         sum(close*shares/historical.value*100) 
-        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Tech')) as tech
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Tech')) as tech,
+
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Communication Services')) as commsvc
     
 	from security_values,historical
     
-    where security_values.timestamp > DATE('now','-$tf day')
+    where security_values.timestamp > DATE('now','-$tf day') and security_values.timestamp <= DATE('now','-1 day')
     and security_values.timestamp = historical.date
 
     group by timestamp
@@ -215,7 +218,9 @@ if ( $_GET['verb'] == "sectorpct") {
     
     ";
     foreach ($dbh->query($query) as $row) {
-    $array[] = array('date'=> "$row[timestamp]",'materials'=>"$row[materials]", 'financials'=>"$row[financials]",'comd'=> "$row[comd]",'healthcare'=>"$row[healthcare]",'industrials'=>"$row[industrials]",'tech'=> "$row[tech]",'energy'=>"$row[energy]", 'utilities'=>"$row[utilities]",'pm'=>"$row[pm]",'cdisc'=>"$row[cdisc]",'cstaples'=>"$row[cstaples]" );
+    $array[] = array('date'=> "$row[timestamp]",'materials'=>"$row[materials]", 'financials'=>"$row[financials]",'comd'=> "$row[comd]",
+    'healthcare'=>"$row[healthcare]",'industrials'=>"$row[industrials]",'tech'=> "$row[tech]",'energy'=>"$row[energy]", 
+    'utilities'=>"$row[utilities]",'pm'=>"$row[pm]",'cdisc'=>"$row[cdisc]",'cstaples'=>"$row[cstaples]" ,'commsvc'=>"$row[commsvc]" );
     }
 }
 
@@ -312,7 +317,7 @@ if (!empty($_GET['symreturn'])) {
 //     echo "symquery for $symbol\n";
     $query = "SELECT timestamp,symbol,cost_basis,
     close*shares as value,close,cbps,
-    (((shares*close)-(cost_basis)+cum_divs)/cost_basis)*100 as rtn
+    ((((close*shares)+cum_divs+cum_real_gl)-cost_basis ) / cost_basis)*100 as rtn
     FROM security_values WHERE symbol = '$symbol' AND timestamp > date('now','-$days  days') ORDER BY timestamp ";    
     
     foreach ($dbh->query($query) as $row) {

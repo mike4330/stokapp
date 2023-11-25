@@ -119,4 +119,41 @@ foreach ($colors as $color) {
     }
 }
 
+function generateLineChart($symbolName) {
+    // API Call URL
+    $apiUrl = "datacsv.php?symreturn=" . $symbolName . "&tf=180";
+    
+    // Fetch the data from the API
+    $apiData = file_get_contents($apiUrl);
+    
+    // Process the data and extract the necessary values for the chart
+    // ...
+
+    // Prepare the Chart.js configuration
+    $chartConfig = [
+        "type" => "line",
+        "data" => [
+            // Set up the chart data using the extracted values
+            // ...
+        ],
+        "options" => [
+            // Configure other options such as title, axis labels, etc.
+            // ...
+        ]
+    ];
+
+    // Generate the JavaScript code to render the chart
+    $chartScript = "
+        <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, " . json_encode($chartConfig) . ");
+        </script>
+    ";
+
+    // Return the chart HTML markup and the JavaScript code
+    return "<canvas id='myChart'></canvas>" . $chartScript;
+}
+
+
+
 ?>

@@ -10,7 +10,7 @@ echo "start updating portfolio dividend yields" | logger -t "stockportfolio"
 
 
 for s  in $(sqlite3 portfolio.sqlite "select symbol from prices\
-		 where class IS NOT NULL and asset_class LIKE '%Stock' order by symbol")
+		 where symbol IS NOT 'TGS' and class IS NOT NULL and asset_class LIKE '%Stock' order by symbol")
 	do
 
     dy_prev=$(jq -r '.DividendYield' "datafiles/$s.json")
@@ -23,7 +23,8 @@ for s  in $(sqlite3 portfolio.sqlite "select symbol from prices\
 
     sqlite3 portfolio.sqlite "update prices set symbol='$s',lastupdate='$ts',divyield='$dy' where symbol = '$s'";
 
-    sleep 14;
+    	sqlite3 portfolio.sqlite "update MPT set divyield='$dy' where symbol = '$s'";
+    sleep 13;
 done;
 
 
@@ -39,7 +40,7 @@ for s in ANGL DBB EMB EWJ FPE LKOR MLN JPIB PDBC REM VCSH; do
     	echo -e "div for $s is $divamt\t price is $price\tfrequency is $frequency\t annual yield is $dy";
     	sqlite3 portfolio.sqlite "update prices set lastupdate='$ts',divyield='$dy' where symbol = '$s'";
     	sqlite3 portfolio.sqlite "update MPT set divyield='$dy' where symbol = '$s'";
-	sleep 14;
+	sleep 13;
 done;
 
 echo "finished updating div yield" | logger  -t "stockportfolio"

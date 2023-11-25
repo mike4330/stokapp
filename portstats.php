@@ -51,10 +51,13 @@ $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma88
 $subquery = "select avg(return) as wma110 from historical where date >= date('now','-770 days')";
 $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma110 = round($zrow['wma110'],3);
 
+$subquery = "select avg(return) as wma135 from historical where date >= date('now','-945 days')";
+$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma135 = round($zrow['wma135'],3);
 
-$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA36,WMA64,WMA72,WMA88,WMA110) 
+
+$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA36,WMA64,WMA72,WMA88,WMA110,WMA135) 
 VALUES('$curdate','$pvalue','$pcost','$dollarreturn','$return', 
-'$wma8','$wma24', '$wma28','$wma41', '$wma48',  '$wma36','$wma64', '$wma72', '$wma88', '$wma110')";
+'$wma8','$wma24', '$wma28','$wma41', '$wma48',  '$wma36','$wma64', '$wma72', '$wma88', '$wma110', $wma135)";
 
 echo "query is $q\n";
 

@@ -1,87 +1,94 @@
 body {
-background-color: #000000;
-/* background-image: url("graylines.png");  */
+    background-color: #040404;
+    /* background-image: url("graylines.png");  */
 
-} 
-
-@font-face {
-  font-family: font2;
-  src: url(DSEG7Modern-Bold.woff2);
 }
 
 @font-face {
-  font-family: LCD;
-  src: url(res/pixelpointregular.ttf);
+    font-family: font2;
+    src: url(res/DSEG7Modern-Bold.woff2);
 }
 
-
+@font-face {
+    font-family: LCD;
+    src: url(res/pixelpointregular.ttf);
+}
 
 @font-face {
-  font-family: font3;
-  src: url(nk57-monospace-cd-rg.ttf);
+    font-family: font3;
+    src: url(nk57-monospace-cd-rg.ttf);
 }
 
 table {
-	margin-bottom: 5px;
-	margin-left: auto;
-	margin-right: auto;
-	background: #404040;
-	border-collapse: collapse;
-	border-radius: 5px;
-	overflow: hidden; 
-	box-shadow: 4px 4px 5px #111111;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #404040;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 4px 4px 5px #111111;
     position: absolute;
     left: 4vw;
     top: 5.5vh;
 }
 
 table.holdings {
-position: absolute;
-left: 1vw;
+    position: absolute;
+    left: 1vw;
 }
 
 table.transactions {
-position: absolute;
-top: 11vw;
-left: 30vw;
+    position: absolute;
+    top: 11vw;
+    left: 27vw;
 }
 
 
 table.lots {
-/* background: white; */
-position: relative;
-top: 4.5vh;
-font-size: 2vw;
+    /* background: white; */
+    position: relative;
+    top: 5.9vh;
+    font-size: 2vw;
+    width: auto;
 
 }
 
 td.lots {
-  font-family: monospace;
-  font-size: 1.6vh;
-  border-left: 1px solid #0a2222;
-  padding-left: 0.7vw;
-  padding-right: 0.7vw;
+    font-family: monospace;
+    font-size: 1.6vh;
+    border-left: 1px solid #0a2222;
+    padding-left: 0.7vw;
+    padding-right: 0.7vw;
+}
+
+table.lots th {
+    position: sticky;
+    top: 5.9vh;
+    width: auto;
+    font-family: font3;
+    font-size: 2vh;
 }
 
 
-table.mpt  {
+table.mpt {
     background: white;
     position: absolute;
     top: 5vw;
     right: 1vw;
 }
 
-table.mpt th  {
+table.mpt th {
     background: #e0e0e0;
-	font-size: 1vw;
+    font-size: 1vw;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
 }
 
-table.mpt td  {
+table.mpt td {
     font-size: .9vw;
-	font-family: font3;
+    font-family: font3;
     padding-left: .3vw;
     padding-right: .3vw;
     text-align: left;
@@ -91,431 +98,442 @@ table.mpt td  {
     border-bottom: .02vw dotted #cccccc;
 }
 
-table.mpt2  {
-/*    width: .9vw;  */
-/*    text-align: center; */
+table.mpt2 {
+    /*    width: .9vw;  */
+    /*    text-align: center; */
     position: absolute;
     left: 2vw;
     bottom: 8vh;
 }
 
-table.mpt2 th  {
+table.mpt2 th {
     font-size: 1.04vw;
     text-align: left;
 }
 
-table.mpt2 td  {
+table.mpt2 td {
     font-size: .94vw;
     text-align: left;
 }
 
 svg.bars {
-  filter: drop-shadow(0px 0px 16px rgb(64 230 64 / 0.8));
-  padding: 0px;
+    filter: drop-shadow(0px 0px 16px rgb(64 230 64 / 0.8));
+    padding: 0px;
 
 }
 
 
 table.alloc_breakdown {
-   position:absolute; 
-   top:10vh; 
-   right:1vw; 
-   left:66vw; 
-   z-index:1;
-   margin-left: 0 ;
-   margin-right: 0 ;
+    position: absolute;
+    top: 10vh;
+    right: 1vw;
+    left: 66vw;
+    z-index: 1;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 table.alloc_modeltrade {
-    position:absolute; 
-    top:13vh; 
-    left:44vw; 
-    z-index:0;  
+    position: absolute;
+    top: 13vh;
+    left: 44vw;
+    z-index: 0;
 }
 
 div.alloc_tickerpct {
-    position:absolute; 
-    bottom:2vh; 
-    left:2vw; 
-    z-index:1; 
+    position: absolute;
+    bottom: 2vh;
+    left: 2vw;
+    z-index: 1;
     height: 42vh;
-    width: 59vw;    
+    width: 59vw;
 }
 
 div.alloc_cat_timeseries {
-position:absolute; 
-top:6vh; 
-left:2vw; 
-z-index:-1; 
-height: 48vh;
-width: 46vw;
+    position: absolute;
+    top: 6vh;
+    left: 2vw;
+    z-index: -1;
+    height: 48vh;
+    width: 46vw;
 }
 
 div.alloc_cat_pie {
-position:absolute; 
-top:22vw; 
-right:1vw; 
-z-index:1; 
-height: 30vh;
-width: 20vw;    
+    position: absolute;
+    top: 22vw;
+    right: 1vw;
+    z-index: 1;
+    height: 30vh;
+    width: 20vw;
 }
 
 div.clock {
-    position:absolute; 
-    #background: white;  
-    color:red;
+    position: absolute;
+    #background: white;
+    color: red;
     font-size: 3vw;
-	padding: .5vw;
-    left:38vw;
-    bottom:5vh;
+    padding: .5vw;
+    left: 38vw;
+    bottom: 5vh;
     font-family: font2;
-	border-style: solid;
-  border-width: 5px;
-	border-color: #000000;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #000000;
     text-shadow:
-      0 0 20px #ff0000,
-      0 0 48px #ffeeee;
+        0 0 20px #ff0000,
+        0 0 48px #ffeeee;
 }
 
 div.sectorchart {
-background: #ffffff;
- width: 26vw;
- height: 26vh;
+    background: #ffffff;
+    width: 27.5vw;
+    height: 15.2vh;
 }
 
-table.chart {   
-	margin-bottom: 40px;
-	margin-left: auto;
-	margin-right: auto;
-	background: #ffffff;
-	
-	position: absolute;
-	top: 4vw;
-	left: 4vw;
-	#right: .5vw;
-	#width: 98vw;
-	#border-collapse: collapse;
-	overflow: hidden;   
-        z-index: -99;
+table.chart {
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #ffffff;
+
+    position: absolute;
+    top: 5.1vh;
+    left: 4vw;
+    #right: .5vw;
+    #width: 98vw;
+    #border-collapse: collapse;
+    overflow: hidden;
+    z-index: -99;
 }
 
 
-table.chart2 {   
-	margin-bottom: 40px;
-	margin-left: auto;
-	margin-right: auto;
-	background: #ffffff;
-	
-	position: absolute;
-	top: 4vw;
-	left: 3vw;
-	#right: .5vw;
-	#width: 98vw;
-	#border-collapse: collapse;
-	overflow: hidden;   
-        z-index: -99;
+table.chart2 {
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #ffffff;
+
+    position: absolute;
+    top: 4vw;
+    left: 3vw;
+    #right: .5vw;
+    #width: 98vw;
+    #border-collapse: collapse;
+    overflow: hidden;
+    z-index: -99;
 }
 
 table.model {
-	width: 75vw;
-	background: #cccccc;
+    width: 75vw;
+    background: #cccccc;
 }
 
 table.moved {
-	background-color: #0f0f0f;
-	position:absolute; 
-	top:180px; 
-	left:12vw; 
-	z-index:1; 
-	/* height: 50vh; */
-	width: 32vw;
-} 
+    background-color: #0f0f0f;
+    position: absolute;
+    top: 180px;
+    left: 12vw;
+    z-index: 1;
+    /* height: 50vh; */
+    width: 32vw;
+}
 
 table.picker {
-   	display: block;
-	position:absolute; 
-	top:10vh; 
-	right:0vw;
-    	max-width: 27vw;
+    display: block;
+    position: absolute;
+    top: 10vh;
+    right: 0vw;
+    max-width: 27vw;
 }
 
 .picker td {
-    font: "monospace"
- font-size: 1.1vw;
- font-family: font3;
- border-bottom: 1.4px solid #111181;
- border-right: 1.4px solid #111181;
- padding-right: .3vw;
- vertical-align: middle;
+    font: 1.1vw "monospace";
+    /* Changed order and added missing unit */
+    font-family: font3;
+    border-bottom: 1.4px solid #111181;
+    border-right: 1.4px solid #111181;
+    padding-right: .3vw;
+    padding-left: .3vw;
+    vertical-align: middle;
 }
 
+
 .picker th {
-font-size: 1.1vh;
+    font-size: 1.1vh;
 }
 
 table.overs {
-   display: block;
-	position:absolute;
-   left: 26vw;
-   max-width:20vw;
-   top:10vh;
-   z-index: -1;
+    display: block;
+    position: absolute;
+    left: 26vw;
+    max-width: 20vw;
+    top: 10vh;
+    z-index: -1;
 }
 
 .overs td {
- font-size: 1.1vw;
- font-family: font3;
- padding-left: .9vw;
- border-bottom: 1.5px solid #111181;
- background-color: #000000;
- vertical-align: middle;
- 
+    font-size: 1.1vw;
+    font-family: font3;
+    padding-left: .9vw;
+    border-bottom: 1.5px solid #111181;
+    background-color: #000000;
+    vertical-align: middle;
+
 }
 
 .overs th {
-font-size: 1.3vh;
+    font-size: 1.3vh;
 }
- 
+
 div.minichart {
-	background-color: #fefefe;
-	position:absolute; 
-	top:150px; 
-	right:.75vw; 
-	z-index:1; 
-	height: 48vh;
-	width: 33vw;
-	border-radius: 4px;
+    background-color: #fefefe;
+    position: absolute;
+    top: 150px;
+    right: .75vw;
+    z-index: 1;
+    height: 48vh;
+    width: 33vw;
+    border-radius: 4px;
 }
 
 div.rangebar {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 
 div.divboard {
 
-	background: #333333;
-	position: absolute;
-	left: .4vw;
-	top: 4vw;
-	width: fit-content;
-    	z-index=5;
-	font-family: "LCD";
+    background: #333333;
+    position: absolute;
+    left: .4vw;
+    top: 4vw;
+    width: fit-content;
+    z-index=5;
+    font-family: "LCD";
     color: #eed;
     text-shadow:
-      0 0 6px #1f3109,
-      0 0 9px #eee,
-      0 0 20px #eee;
+        0 0 6px #1f3109,
+        0 0 9px #eee,
+        0 0 20px #eee;
 }
 
-div.statusmessage { 
-	background: #333333;
-	width: fit-content;
-	margin: 0 auto;
+div.statusmessage {
+    background: #333333;
+    width: fit-content;
+    margin: 0 auto;
     z-index=5;
     position: absolute;
     right: 4vw;
     top: 10vh;
-	font-family: "LCD";
-	font-size: 1.1vw;
+    font-family: "LCD";
+    font-size: 1.1vw;
     color: #eed;
     text-shadow:
-      0 0 6px #1f3109,
-      0 0 9px #eee,
-      0 0 20px #eee;
-      /* 0 0 41px #0fa, */
-      /* 0 0 81px #0fa, */
-      /* 0 0 91px #0fa, */
-      /* 0 0 101px #0fa, */
-      /* 0 0 140px #0fa; */
-    
+        0 0 6px #1f3109,
+        0 0 9px #eee,
+        0 0 20px #eee;
+    /* 0 0 41px #0fa, */
+    /* 0 0 81px #0fa, */
+    /* 0 0 91px #0fa, */
+    /* 0 0 101px #0fa, */
+    /* 0 0 140px #0fa; */
+
 }
 
 div.toggles {
-	#background: white;
-	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 10px;
-	margin-top: 20px;
-	font-family: monospace;
-	font-size: 14px;
-	position: absolute;
-	top: 6.25vw;
-    left: 37vw;
+    #background: white;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-family: monospace;
+    font-size: 14px;
+    position: absolute;
+    top: 9.25vw;
+    left: 7vw;
 }
 
 span.icon {
-	border: 1px solid #2222dd;
-	border-radius: 2px;
-	font-family: "mono";
-	font-size: 13px;
-	margin-left: 3px;
-	padding: 0px;
-	vertical-align: bottom;
+    border: 1px solid #2222dd;
+    border-radius: 2px;
+    font-family: "mono";
+    font-size: 13px;
+    margin-left: 3px;
+    padding: 0px;
+    vertical-align: bottom;
 }
 
 span.sectoricon {
-padding: 2px;
-text-align: center;
-border-radius: 4px;
-min-width: 3.6vw;
-display: inline-block;
-font-size: 2.1vh;
-vertical-align: center;
+    padding: 2px;
+    text-align: center;
+    border-radius: 4px;
+    min-width: 3.6vw;
+    display: inline-block;
+    font-size: 2.1vh;
+    vertical-align: center;
 
 }
 
-span.navicon {
-    
+span.navicon {}
+
+table.status2 {
+    background: #171717;
+    position: absolute;
+    top: 25vh;
+    left: 10px;
+    width: fit-content;
+
 }
 
-div.status2 {
-	background: #404040;
-	color: #ffffff;
-	position: absolute;
-	top: 40vh;
-	width: fit-content;
-	font-family: "LCD";
-	font-size: 1.2vw;
-	padding: 10px;
+table.status2 td {
+    background: #2e2e2e;
+    font-family: "LCD";
+    color: #8c8cff;
+    font-size: 1.2vw;
+    border-top: 3px solid #171717;
+
 }
+
+
 
 span.toggle {
-	background: #4444ff;
-	padding: 6px;
-	border-radius: 4px;
+    background: #a0a0ff;
+    padding: 6px;
+    border-radius: 4px;
 }
 
 td {
-	font-family: "Hack Regular",monospace;
-	vertical-align: bottom;
-	font-size: 1.5vh;
-	text-align: bottom;
-	padding-left: .2vw;
-	padding-right: .2vw;
-	padding-top: .1vh;
-	padding-bottom: .1vh;
-	color: #ffffff;
-	text-shadow:
-		0 0 7px #1f3109,
-		0 0 10px #eee,
+    font-family: "Hack Regular", monospace;
+    vertical-align: bottom;
+    font-size: 1.2vw;
+    text-align: bottom;
+    padding-left: .2vw;
+    padding-right: .2vw;
+    padding-top: .1vh;
+    padding-bottom: .1vh;
+    color: #ffffff;
+    text-shadow:
+        0 0 7px #1f3109,
+        0 0 10px #eee,
 }
 
 td.alloc {
-	font-size: 2.5vh;
-	padding-right: 20px;
+    font-size: 2.5vh;
+    padding-right: 20px;
 }
 
 td.model {
-	font-family: "PixelPoint";
+    font-family: "PixelPoint";
     vertical-align: middle;
-	font-size: 1vw;
-	padding-right: 36px;
-	padding-left: 6px;
-	padding-top: 1px;
-	padding-bottom: 1px; 
+    font-size: 1vw;
+    padding-right: 36px;
+    padding-left: 6px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     background: #222222;
-     border-bottom: 1px solid;
+    border-bottom: 1px solid;
     border-bottom-color: #888888;
-   
+
 }
 
 tr.model {
- margin: 4px;   
+    margin: 4px;
 }
 
 td.a {
-   font: 15px monospace;
+    font: 15px monospace;
     text-align: center;
 }
 
 td.cntr {
-   /*font: 15px monospace;*/
-    border-left: 3px dotted black;    
-   text-align: right;
+    /*font: 15px monospace;*/
+    border-left: 3px dotted black;
+    text-align: right;
 }
 
 td.summaryline {
- 
-    font-weight: bold; 
+
+    font-weight: bold;
     background: #087708;
     color: #ffffff;
     font: 23px monospace;
-     text-shadow: 1px 1px 2px  #222222;
-   
+    text-shadow: 1px 1px 2px #222222;
+
 }
 
-th {	
+th {
     font-family: "monospace";
-    font-size: 1.3vh;    
+    font-size: 1.3vh;
     text-align: center;
     padding-left: .2vw;
     padding-right: .2vw;
     background: #808080;
     color: #ffffff;
-    
+
 }
 
 tr.main:hover {
-          background-color: #999999;
-        }
+    background-color: #999999;
+}
 
 a {
-text-decoration: none;
+    text-decoration: none;
 }
 
 a:link {
-  color: #181833;
+    color: #181833;
 }
+
 a:visited {
-  color: #181833;
+    color: #181833;
 }
 
 a.holdinglist:link {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 a.holdinglist:visited {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 .button1 {
-width: 200px;
-font: 15px sans-serif;
-background-color: #111170;
-padding: 10px;
-border-radius: 4px;
+    width: 200px;
+    font: 15px sans-serif;
+    background-color: #111170;
+    padding: 10px;
+    border-radius: 4px;
 
 }
 
 .button1:hover {
-background-color: #1111a0;
+    background-color: #1111a0;
 }
 
 /*nav*/
-.button2 { 
-width: 200px;
-padding: 8px;
-font-family: sans-serif;
-font-size: .95vw;
-border-radius: 4px;
-/* background-color: #009900;  */
-background-color: rgb(85, 85, 155); 
-color: "white";
-margin-right: 10px;
+.button2 {
+    width: 200px;
+    padding: 8px;
+    font-family: sans-serif;
+    font-size: .95vw;
+    border-radius: 4px;
+    /* background-color: #009900;  */
+    background-color: rgb(85, 85, 155);
+    color: "white";
+    margin-right: 10px;
 }
 
 a.button2:link {
-  color: #ffffff;
+    color: #ffffff;
 }
+
 a.button2:visited {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .button2:hover {
-background-color: rgba(22, 255, 22, 0.35);
+    background-color: rgba(22, 255, 22, 0.35);
 
 }
 
@@ -534,31 +552,32 @@ a.buttonsmall {
 }
 
 a.buttonsmall:hover {
-background-color: #eeee00;   
-border: 1px solid #3232bb;
+    background-color: #eeee00;
+    border: 1px solid #3232bb;
 }
 
 
 div.nav {
 
-	padding-bottom: 25px;
+    padding-bottom: 25px;
     padding-top: 10px;
 }
 
 table.smallnav {
     background: #3f3f3f;
-    position: absolute; 
+    position: absolute;
     width: auto;
-    top: 70vh;  
+    top: 70vh;
     left: 65vw;
     margin: 0px;
 
 }
 
 .smallnav td {
-font-family: "Monospace";
-padding: 4px;
+    font-family: "Consolas", "Courier New", monospace !important;
+    padding: 4px;
 }
+
 
 
 div.canvasback {
@@ -569,33 +588,38 @@ div.canvasback {
 }
 
 div.chart-container {
-    style="position: relative;
+    position: relative;
     background-color: #ff000000;
     border-radius: 2px;
     padding: 3px;
-    width:18vw;
-    height:23vh;
+    width: 18vw;
+    height: 23vh;
     z-index: -1;
 }
 
+div.divavgchart {
+    background: #00ffff;
+    width: 70vw;
+}
+
 div.chart-container2 {
-width:19.1vw;
-height:31vh;
+    width: 19.1vw;
+    height: 31vh;
 }
 
 div.chart-container3 {
-width:17.9vw;
-height:30vh;
-z-index: 0;
+    width: 17.8vw;
+    height: 11vh;
+    z-index: 0;
 }
 
 div.returncharts {
-width:23vw;
-height:350px;
+    width: 23vw;
+    height: 350px;
 }
 
 div.checkboxes {
-    background-color: #ffffff;  
+    background-color: #ffffff;
     width: 900px;
     margin-bottom: 10px;
     margin-left: auto;
@@ -603,20 +627,46 @@ div.checkboxes {
 }
 
 div.star {
- color: #00ffff;   
+    color: #00ffff;
 }
 
 
 span.smallnav {
     border-radius: 4px;
     line-height: 190%;
-    background-color: #ffffff;  
+    background-color: #ffffff;
     font-family: "EurostileMonoEF";
     font-size: 16px;
-    position:absolute; 
+    position: absolute;
     padding: 5px;
-    top:650px; 
+    top: 650px;
     right: 10vw;
-/*         height: 300px; */
+    /*         height: 300px; */
 }
 
+.winbox {
+    background: linear-gradient(90deg, #024e22e2, #110010d1);
+    border-radius: 12px 12px 0 0;
+    box-shadow: none;
+}
+
+.grid-container2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-gap: 4px;
+    position: absolute;
+    top: 47px;
+    left: 160px;
+    width: 85%;
+
+}
+
+.chart-canvas {
+     /* width: 100%;
+    height: 100%;  */
+}
+
+.chart-container99 {
+    width: 100%;
+    background-color: #ffffff;
+}

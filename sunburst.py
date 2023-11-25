@@ -29,3 +29,8 @@ fig.update_traces(root_color="lightgrey")
 fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
 
 fig.write_html("visualizations/marketcaptree.html")
+
+fig = px.sunburst(df, path=["market_cap", "symbol"], values="value")
+
+fig.write_html("visualizations/marketcap_sunburst.html")
+

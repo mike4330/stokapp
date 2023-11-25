@@ -1,7 +1,6 @@
 <!-- Copyright (C) 2022 Mike Roetto <mike@roetto.org>
  SPDX-License-Identifier: GPL-3.0-or-later-->
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,29 +13,28 @@
     <script type="text/javascript" src="/js/luxon.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
     <script src="/js/node_modules/chartjs-plugin-annotation/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="winbox.bundle.min.js"></script>
 </head>
 
 <body>
+    <?php
+    include_once "nav.php";
 
-  <?php
-include_once "nav.php";
+    $c = [
+        'Buy' => "#11cc11",
+        'Div' => "#eefb0b",
+        'Sell' => "#dd3333"
+    ];
 
-$c = [
-    'Buy' => "#11cc11",
-    'Div' => "#eefb0b",
-    'Sell' => "#dd3333"
-];
+    try {
+        $dir = 'sqlite:portfolio.sqlite';
+        $dbh = new PDO($dir);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
 
-try {
-    $dir = 'sqlite:portfolio.sqlite';
-    $dbh = new PDO($dir);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-
-$query = "SELECT symbol FROM prices";
-
+    $query = "SELECT symbol FROM prices";
 
     foreach ($dbh->query($query) as $row) {
         $symbol = $row['symbol'];
@@ -47,7 +45,7 @@ $query = "SELECT symbol FROM prices";
 
     //echo "db ok<br>";
 
-    $query = "SELECT *,(price*units) as ccost from transactions order by date_new desc,id desc";
+    $query = "SELECT *,(price*units) as ccost from transactions order by date_new desc,id desc limit 2000";
 
     if (!empty($_GET['symfilter'])) :
         $filterterm = $_GET['symfilter'];
@@ -55,6 +53,11 @@ $query = "SELECT symbol FROM prices";
         $query = "SELECT *,(price*units) as ccost from transactions where symbol = '$filterterm' order by id desc";
         echo '<a href="/portfolio" class="button1">🗑 reset filter</a><br>';
         echo '<div class="minichart" ><canvas id="chart" ></canvas></div>';
+        echo '<div id="returnContainer" style="width: 100%;display: hidden;">
+        <canvas id="returnchart"></canvas>
+      </div>';
+
+
         echo '<table class=smallnav>';
         $subquery = "select symbol from prices where class IS NOT NULL order by symbol";
         echo "<tr>";
@@ -62,7 +65,7 @@ $query = "SELECT symbol FROM prices";
             $symbol = $row['symbol'];
             $i++;
 
-            echo  "<td><a href=\"/portfolio/?symfilter=$symbol\" class=\"buttonsmall\">$symbol</a></td>";
+            echo "<td><a href=\"/portfolio/?symfilter=$symbol\" class=\"buttonsmall\">$symbol</a></td>";
             if ($i > 7) {
                 echo "</tr>";
                 $i = 0;
@@ -149,55 +152,57 @@ $query = "SELECT symbol FROM prices";
         <span class="toggle" onClick="$('.Div').toggle();">Div</span>
     </div>
 
-   <?php
-// create an array to store the table headers
-$headers = array(
-    "id",
-    "acct.",
-    "date",
-    "type",
-    "symbol",
-    "price",
-    "units",
-    "cost"
-);
 
-// output table headers using a foreach loop
-echo "<table class='transactions'>";
-echo "<tr>";
 
-foreach ($headers as $header) {
-    echo "<th>$header</th>";
-}
+    <?php
+    // create an array to store the table headers
+    $headers = array(
+        "id",
+        "acct.",
+        "date",
+        "type",
+        "symbol",
+        "price",
+        "units",
+        "cost"
+    );
 
-echo "</tr>";
+    // output table headers using a foreach loop
+    echo "<table class='transactions'>";
+    echo "<tr>";
 
-// loop through query results and output corresponding data in table format
-foreach ($dbh->query($query) as $row) {
-    $x = $row['xtype'];
-    $g = $c[$x];
-    $sym = $row['symbol'];
-    $symbolcolor = $sc[$sym];
-    $textcolor = $tc[$sym];
-    $cost = round($row['ccost'], 4);
-    $units = round($row['units'], 3);
+    foreach ($headers as $header) {
+        echo "<th>$header</th>";
+    }
 
-    // output table row
-    echo "<tr class='$x'>";
-    echo "<td style='padding-right: 2vw;'>{$row['id']}</td>";
-    echo "<td>{$row['acct']}</td>";
-    echo "<td>{$row['date_new']}</td>";
-    echo "<td class='cntr' style='background: $g; color:#000000;'>$row[xtype]</td>";
-    echo "<td class='cntr' style='text-align: center;background: $symbolcolor;'>";
-    echo "<a href='?symfilter={$row['symbol']}' style='color: $textcolor;'>{$row['symbol']}</a>";
-    echo "</td>";
-    echo "<td>{$row['price']}</td>";
-    echo "<td>$units</td>";
-    echo "<td style='padding-left: 2vw;'>\${$cost}</td>";
     echo "</tr>";
-}
 
-echo "</table>";
+    // loop through query results and output corresponding data in table format
+    foreach ($dbh->query($query) as $row) {
+        $x = $row['xtype'];
+        $g = $c[$x];
+        $sym = $row['symbol'];
+        $symbolcolor = $sc[$sym];
+        $textcolor = $tc[$sym];
+        $cost = round($row['ccost'], 4);
+        $units = round($row['units'], 3);
+
+        // output table row
+        echo "<tr class='$x'>";
+        echo "<td style='padding-right: 2vw;'>{$row['id']}</td>";
+        echo "<td>{$row['acct']}</td>";
+        echo "<td>{$row['date_new']}</td>";
+        echo "<td class='cntr' style='background: $g; color:#000000;'>$row[xtype]</td>";
+        echo "<td class='cntr' style='text-align: center;background: $symbolcolor;'>";
+        echo "<a href='?symfilter={$row['symbol']}' style='color: $textcolor;'>{$row['symbol']}</a>";
+        echo "</td>";
+        echo "<td>{$row['price']}</td>";
+        echo "<td>$units</td>";
+        echo "<td style='padding-left: 2vw;'>\${$cost}</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
 
 
     if (!empty($_GET['symfilter'])) :
@@ -217,13 +222,30 @@ echo "</table>";
         $stmt = $dbh->prepare($query);
         $stmt->execute();
         $zrow = $stmt->fetch();
-        $price = $zrow['price'];
+        $price = round($zrow['price'], 2);
         $value = round(($price * $netunits), 2);
 
-        echo "<div class=status2>bought $buyunits sold $sellunits<br>";
-        echo "net units $netunits<br>";
-        echo "current price \$$price<br>";
-        echo "$sym position value \$$value</div>";
+        $query = "select * from MPT where symbol = '$sym'";
+        $stmt = $dbh->prepare($query);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $overamt = $zrow['overamt'];
+        $target = round($zrow['target_alloc'],4);
+
+        $pv=gpv();
+
+        $poswgt=round(($value/$pv),4);
+
+
+        echo "<table class=status2>
+        <tr><td>bought</td><td colspan=2> $buyunits</td></tr>
+        <tr> <td>sold</td><td colspan=2> $sellunits</td></tr>";
+        echo "<tr><td>net units</td><td colspan=2> $netunits</td></tr>";
+        echo "<tr><td>current price</td><td colspan=2> \$$price</td></tr>";
+        echo "<tr><td>$sym pos. value</td><td colspan=2> \$$value</td></tr>
+        <tr><td>wgt. diff</td><td colspan=2>\$$overamt </td></tr>
+        <tr><td>tgt/curr wgt.</td><td>$target</td><td>$poswgt</td></tr>
+        </table>";
     endif;
 
     ?>
@@ -432,7 +454,44 @@ echo "</table>";
 
         }); //end ajax object
 
+        fetch('datacsv.php?symreturn=' + x + '&tf=180')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('returnchart').getContext('2d');
 
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(item => item.date),
+                        datasets: [{
+                                label: 'Return',
+                                data: data.map(item => item.rtn),
+                                borderColor: 'rgb(75, 75, 255)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                radius: 1,
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Zero Line',
+                                data: Array(data.length).fill(0),
+                                borderColor: 'rgb(255, 0, 0)',
+                                backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                                borderWidth: 3,
+                                radius: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        maintainAspectRatio: true,
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+            });
 
         function getStandardDeviation(array) {
             const n = array.length
@@ -440,6 +499,35 @@ echo "</table>";
             return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
         }
     </script>
+
+    <script>
+        const returnContainer = document.getElementById("returnContainer");
+
+        if (returnContainer) {
+            console.log("returncontainer element found:", returnContainer);
+
+            const winbox = new WinBox({
+                class: "white",
+                title: "Return for " + x,
+                mount: returnContainer,
+                // x: "left",
+                y: "bottom",
+                width: "700px",
+                height: "400px"
+
+            });
+
+            winbox.on("close", function() {
+                // Cleanup code or any other actions when the window is closed
+                console.log("WinBox closed");
+            });
+        } else {
+            console.log("returncontainer element not found");
+        }
+    </script>
+
+
+
 </body>
 
 </html>

@@ -50,14 +50,16 @@ foreach ($dbh->query($query) as $row) {
     $a_diff = abs($wgt_diff)*$width_mult;
     
     $wstr = $a_diff . "vw";
+
+    $fs='1.1vh';
     
     echo "<tr>
-    <td style=\"font-size: .8vw\">$row[sector]</td>
-    <td style=\"font-size: .8vw\">$tgt_weight</td>
-    <td style=\"font-size: .8vw\">$cur_sector_wgt</td>
-    <td style=\"font-size: .8vw;text-align:right; \">
+    <td style=\"font-size: $fs\">$row[sector]</td>
+    <td style=\"font-size: $fs\">$tgt_weight</td>
+    <td style=\"font-size: $fs\">$cur_sector_wgt</td>
+    <td style=\"font-size: $fs ;text-align:right; \">
     <td style=\"font-size: .9vw;text-align:right; \">$symbol</td>
-    <td style=\"font-size: .8vw;text-align:right; \"> $wgt_diff</td>
+    <td style=\"font-size: $fs;text-align:right; \"> $wgt_diff</td>
     <td>
     <svg width=\"$wstr\" height=1vw>
 
@@ -75,7 +77,7 @@ echo "</table>";
 
 echo '<div style="position: absolute;top: 53vh;width: 40vw; height: 36vh; background: white;"><canvas id="sectors"></canvas></div>';
 
-echo '<table style="position: relative;left:22vw;top: 2vh;">
+echo '<table style="position: relative;left:21vw;top: 2vh;">
 <tr>
   <td><div class="sectorchart"><canvas id="comd"></canvas></div></td>
   <td><div  class="sectorchart"><canvas id="cdisc"></canvas></div></td>
@@ -103,6 +105,7 @@ echo '<table style="position: relative;left:22vw;top: 2vh;">
 
 <tr>
   <td><div  class="sectorchart"><canvas id="utilities"></canvas></div></td>
+  <td><div  class="sectorchart"><canvas id="commsvc"></canvas></div></td>
 </tr>
 </table>';
 
@@ -111,9 +114,13 @@ echo '<table style="position: relative;left:22vw;top: 2vh;">
 
 <script>
 Chart.defaults.plugins.legend.display = false;
-
+Chart.defaults.datasets.line.borderWidth = 1.8
+Chart.defaults.datasets.line.tension = .3;
+Chart.defaults.datasets.line.pointRadius = 0;
+Chart.defaults.font.size = 9;
+var tfval = 185;
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -131,8 +138,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Commodities',
-                backgroundColor: 'rgb(32, 210, 32)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(235, 220, 16)',
                 data:comd
                 
               }
@@ -153,8 +159,7 @@ $.ajax({
                             borderColor: 'rgb(255, 16, 16)',
                             borderWidth:  1.75,
                             yMin: 2.5,
-                            yMax: 2.5
-                              
+                            yMax: 2.5                           
                       }
                     }
                   }
@@ -163,12 +168,11 @@ $.ajax({
                 responsive: true}
         });
       },
-
     });
 
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -186,8 +190,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Energy',
-                backgroundColor: 'rgb(32, 45, 255)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(32, 45, 255)',
                 data:energy
               }
             ] 
@@ -206,8 +209,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 16, 16)',
                             borderWidth:  1.75,
-                            yMin: 4.45,
-                            yMax: 4.45     
+                            yMin: 4.07,
+                            yMax: 4.07     
                       }
                     }
                   }
@@ -216,11 +219,10 @@ $.ajax({
                 responsive: true}
         });
       },
-
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -238,8 +240,7 @@ $.ajax({
             datasets: [
               {
                 label: 'tech',
-                backgroundColor: 'rgb(120, 120, 12)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(120, 120, 12)',
                 data:tech
               }
             ] 
@@ -257,8 +258,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 16, 16)',
                             borderWidth:  1.75,
-                            yMin: 8.44,
-                            yMax: 8.44
+                            yMin: 8.21,
+                            yMax: 8.21
                       }
                     }
                   }
@@ -271,7 +272,7 @@ $.ajax({
 
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -289,8 +290,7 @@ $.ajax({
             datasets: [
               {
                 label: 'utilities',
-                backgroundColor: 'rgb(120, 120, 12)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(148, 84, 0)',
                 data:utilities
               }
             ] 
@@ -307,10 +307,10 @@ $.ajax({
                     annotations: {
                       line2: {
                             type: 'line',
-                            borderColor: 'rgb(64, 16, 200)',
+                            borderColor: 'rgb(25, 25, 0)',
                             borderWidth:  1.75,
-                            yMin: 4.76,
-                            yMax: 4.76
+                            yMin: 4.82,
+                            yMax: 4.82
                       }
                     }
                   }
@@ -322,7 +322,7 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -340,8 +340,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Healthcare',
-                backgroundColor: 'rgb(120, 120, 12)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(12, 205, 12)',
                 data:healthcare
               }
             ] 
@@ -360,8 +359,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(64, 16, 200)',
                             borderWidth:  1.75,
-                            yMin: 5.54,
-                            yMax: 5.54
+                            yMin: 5.57,
+                            yMax: 5.57
                               
                       }
                     }
@@ -376,7 +375,7 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -394,8 +393,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Financials',
-                backgroundColor: 'rgb(120, 120, 12)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(255, 12, 12)',
                 data:financials
               }
             ] 
@@ -413,8 +411,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 255, 64)',
                             borderWidth:  1.75,
-                            yMin: 5.52,
-                            yMax: 5.52
+                            yMin: 5.56,
+                            yMax: 5.56
                       }
                     }
                   }
@@ -426,7 +424,7 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -444,7 +442,7 @@ $.ajax({
             datasets: [
               {
                 label: 'CStaples',
-                backgroundColor: 'rgb(120, 120, 255)',
+                backgroundColor: 'rgba(64, 64, 255,1)',
                 pointRadius: 1.5,
                 data:cstaples
               }
@@ -463,8 +461,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(200, 200, 200)',
                             borderWidth:  1.75,
-                            yMin: 5.53,
-                            yMax: 5.53
+                            yMin: 5.57,
+                            yMax: 5.57
                       }
                     }
                   }
@@ -477,7 +475,7 @@ $.ajax({
 
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -495,8 +493,7 @@ $.ajax({
             datasets: [
               {
                 label: 'Cdisc',
-                backgroundColor: 'rgb(255, 120, 64)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(245, 120, 34)',
                 data:cdisc
               }
             ] 
@@ -514,8 +511,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(20, 255, 10)',
                             borderWidth:  1.75,
-                            yMin: 5.55,
-                            yMax: 5.55
+                            yMin: 5.57,
+                            yMax: 5.57
                       }
                     }
                   }
@@ -527,7 +524,7 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -545,8 +542,7 @@ $.ajax({
             datasets: [
               {
                 label: 'industrials',
-                backgroundColor: 'rgb(255, 120, 64)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(129, 120, 240)',
                 data:industrials
               }
             ] 
@@ -564,8 +560,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(255, 12, 12)',
                             borderWidth:  1.75,
-                            yMin: 5.54,
-                            yMax: 5.54
+                            yMin: 5.57,
+                            yMax: 5.57
                       }
                     }
                   }
@@ -577,7 +573,7 @@ $.ajax({
     });
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=180',
+      url: 'datacsv.php?verb=sectorpct&tf='+tfval,
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -595,8 +591,7 @@ $.ajax({
             datasets: [
               {
                 label: 'materials',
-                backgroundColor: 'rgb(50, 255, 50)',
-                pointRadius: 1.5,
+                borderColor: 'rgb(128, 128, 190)',
                 data:materials
               }
             ] 
@@ -613,9 +608,9 @@ $.ajax({
                       line2: {
                             type: 'line',
                             borderColor: 'rgb(255, 12, 12)',
-                            borderWidth:  1.75,
-                            yMin: 5.54,
-                            yMax: 5.54
+                            borderWidth:  1,
+                            yMin: 5.57,
+                            yMax: 5.57
                       }
                     }
                   }
@@ -628,7 +623,7 @@ $.ajax({
 
 
 $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=170',
+      url: 'datacsv.php?verb=sectorpct&tf=120',
       type: 'GET',
       dataType: 'json',
       success:function(data){
@@ -665,8 +660,8 @@ $.ajax({
                             type: 'line',
                             borderColor: 'rgb(12, 240, 25)',
                             borderWidth:  2,
-                            yMin: 5,
-                            yMax: 5
+                            yMin: 7,
+                            yMax: 7
                       }
                     }
                   }
@@ -676,6 +671,58 @@ $.ajax({
         });
       },
     });
+
+
+    $.ajax({
+      url: 'datacsv.php?verb=sectorpct&tf=120',
+      type: 'GET',
+      dataType: 'json',
+      success:function(data){
+
+        var date = [];
+        var commsvc = [];
+
+        for(var i in data){
+          date.push(data[i].date);
+          commsvc.push(data[i].commsvc);
+        }
+
+        var chartdata = {
+            labels: date,
+            datasets: [
+              {
+                label: 'commsvc',
+                borderColor: 'rgb(50, 50, 50)',
+                data:commsvc
+              }
+            ] 
+        };
+
+        var ctx = $('#commsvc');
+        var barGraph = new Chart(ctx, {
+            type:'line',
+            data: chartdata,  
+            options: {
+                plugins: {title: {text: "commsvc",display: true},
+                            annotation: {
+                    annotations: {
+                      line2: {
+                            type: 'line',
+                            borderColor: 'rgb(32, 32, 32)',
+                            borderWidth:  2,
+                            yMin: 5.15,
+                            yMax: 5.15
+                      }
+                    }
+                  }
+                },
+                maintainAspectRatio: false,
+                responsive: true}
+        });
+      },
+    });
+
+
 
 //stacked timeseries
 $.ajax({
