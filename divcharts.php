@@ -38,7 +38,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX','EMB','EVC',
 'EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR','IPAR',
-'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','PLD','PNM','REM','SCI','SSNC','TAIT','VALE','VCSH','VMC'];
+'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','OTIS','PBR','PLD','PNM','REM','SCI','SJNK','SSNC','TAIT','VALE','VCSH','VMC'];
 ?>
 
 
@@ -67,7 +67,7 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
 
     const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH','BG', 'BRT', 'BSIG','CARR', 'C','D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF', 
     'FAGIX',  'FDGFX','FNBGX', 'FPE', 'FTS', 'GILD','HPK','HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW', 
-    'NHC', 'NXST', 'OTIS', 'PBR', 'PLD', 'PNM', 'REM', 'SCI', 'SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
+    'NHC', 'NXST', 'OTIS', 'PBR', 'PLD', 'PNM', 'REM', 'SCI', 'SJNK','SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
     ];
 
     $.ajaxSetup({

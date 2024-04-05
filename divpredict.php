@@ -66,6 +66,7 @@ $tickers = array(
     'REM',
     'SCI',
     'SSNC',
+    'SJNK',
     'TAIT',
     'VALE',
     'VMC',
@@ -78,7 +79,7 @@ foreach ($tickers as $ticker) {
         $table .= "<tr>"; // start new row
     }
 
-    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'VCSH'];
+    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'SJNK','VCSH'];
     if (in_array($ticker, $monthlies)) {
         $table .= "<td><div style='padding: .5vw;'>" . monthpredict($ticker) . "</div></td>";
         $count++;
@@ -146,7 +147,7 @@ function qtrpredict($symbol)
     // echo $lastDataDate;
 
     // Generate 12-quarter forecast
-    $period=48; //how far out in quarters
+    $period=46; //how far out in quarters
     $forecast = array();
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (3 * $i) . ' months'));
@@ -236,7 +237,7 @@ function monthpredict($symbol)
 
     // Generate 12-quarter forecast
     $forecast = array();
-    $period=143;
+    $period=139;
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
