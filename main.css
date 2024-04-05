@@ -23,7 +23,7 @@ table {
     margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    background: #404040;
+    background: #292929;
     border-collapse: collapse;
     border-radius: 5px;
     overflow: hidden;
@@ -187,7 +187,7 @@ div.clock {
 div.sectorchart {
     background: #ffffff;
     width: 27.5vw;
-    height: 15.2vh;
+    height: 17vh;
 }
 
 table.chart {
@@ -198,7 +198,7 @@ table.chart {
 
     position: absolute;
     top: 5.1vh;
-    left: 4vw;
+    left: 2vw;
     #right: .5vw;
     #width: 98vw;
     #border-collapse: collapse;
@@ -291,7 +291,7 @@ div.minichart {
     top: 150px;
     right: .75vw;
     z-index: 1;
-    height: 48vh;
+    height: 25vh;
     width: 33vw;
     border-radius: 4px;
 }
@@ -405,7 +405,7 @@ span.toggle {
 }
 
 td {
-    font-family: "Hack Regular", monospace;
+    font-family:  monospace;
     vertical-align: bottom;
     font-size: 1.2vw;
     text-align: bottom;
@@ -449,7 +449,8 @@ td.a {
 
 td.cntr {
     /*font: 15px monospace;*/
-    border-left: 3px dotted black;
+    border-left: 2px solid rgb(110, 110, 110);
+    border-bottom: 2px solid rgb(110, 110, 110);
     text-align: right;
 }
 
@@ -464,8 +465,8 @@ td.summaryline {
 }
 
 th {
-    font-family: "monospace";
-    font-size: 1.3vh;
+    font-family: monospace;
+    font-size: 1.1vh;
     text-align: center;
     padding-left: .2vw;
     padding-right: .2vw;
@@ -592,8 +593,8 @@ div.chart-container {
     background-color: #ff000000;
     border-radius: 2px;
     padding: 3px;
-    width: 18vw;
-    height: 23vh;
+    width: 18.2vw;
+    height: 16vh;
     z-index: -1;
 }
 

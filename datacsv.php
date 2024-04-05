@@ -144,17 +144,21 @@ foreach ($dbh->query($query) as $row) {
     $dollarreturn=round(($posvalue - $netcost),3);
     
     $array[] = array('symbol'=> "$row[symbol]",'dollarreturn'=>"$dollarreturn" );
-    asort($array, SORT_NUMERIC);
+    uasort($array, function($a, $b) {
+    return $a['dollarreturn'] - $b['dollarreturn'];
+});
+
     }
 }
 
 //returns 2 years of dividends
 if (!empty($_GET['symquery'])) {
     $symbol = $_GET['symquery'];
+    if ($symbol == 'ANGL') {$period = 30;} else {$period = 24;}
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions 
     where symbol = '$symbol' 
-    AND date_new >= Date('now', '-24 months')
+    AND date_new >= Date('now', '-$period months')
     and xtype = 'Div' group by month order by date_new ";    
     foreach ($dbh->query($query) as $row) {       
         $array[] = array(
