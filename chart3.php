@@ -32,13 +32,13 @@
             <td>
                 <div class="chart-container"><canvas id="AVGO"></canvas></div>
             </td>
-            <td>
-                <div class="chart-container"><canvas id="BG"></canvas></div>
-            </td>
 
 
         </tr>
         <tr>
+            <td>
+                <div class="chart-container"><canvas id="BG"></canvas></div>
+            </td>
             <td>
                 <div class="chart-container"><canvas id="BRKB"></canvas></div>
             </td>
@@ -48,21 +48,24 @@
             <td>
                 <div class="chart-container"><canvas id="CARR"></canvas></div>
             </td>
+
+        </tr>
+        <tr>
             <td>
                 <div class="chart-container"><canvas id="D"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="DBB"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="DGX"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="EMB"></canvas></div>
             </td>
+
+        </tr>
+        <tr>
             <td>
                 <div class="chart-container"><canvas id="EVC"></canvas></div>
             </td>
@@ -72,12 +75,12 @@
             <td>
                 <div class="chart-container"><canvas id="F"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="FAGIX"></canvas></div>
             </td>
+        </tr>
+
+        <tr>
                     <td>
                 <div class="chart-container"><canvas id="FDGFX"></canvas></div>
             </td>
@@ -91,8 +94,8 @@
             <td>
                 <div class="chart-container"><canvas id="GILD"></canvas></div>
             </td>
-        </tr>
 
+        </tr>
         <tr>
             <td>
                 <div class="chart-container"><canvas id="HUN"></canvas></div>
@@ -106,12 +109,11 @@
             <td>
                 <div class="chart-container"><canvas id="JPIB"></canvas></div>
             </td>
+        </tr>
+        <tr>
             <td>
                 <div class="chart-container"><canvas id="KMB"></canvas></div>
             </td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container"><canvas id="LYB"></canvas></div>
             </td>
@@ -120,29 +122,6 @@
             </td>
             <td>
                 <div class="chart-container"><canvas id="MPW"></canvas></div>
-            </td>
-            <td>
-                <div class="chart-container"><canvas id="NHC"></canvas></div>
-            </td>
-            <td>
-                <div class="chart-container"><canvas id="NICE"></canvas></div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="chart-container"><canvas id="NXST"></canvas></div>
-            </td>
-            <td>
-                <div class="chart-container"><canvas id="NVS"></canvas></div>
-            </td>
-            <td>
-                <div class="chart-container"><canvas id="OTIS"></canvas></div>
-            </td>
-                     <td>
-                <div class="chart-container"><canvas id="PANW"></canvas></div>
-            </td>
-            <td>
-                <div class="chart-container"><canvas id="PBR"></canvas></div>
             </td>
 
 
@@ -161,14 +140,42 @@
             <td>
                 <div class="chart-container"><canvas id="REM"></canvas></div>
             </td>
-            <td>
-                <div class="chart-container"><canvas id="SCI"></canvas></div>
-            </td>
 
 
 
         </tr>
         <tr>
+            <td>
+                <div class="chart-container"><canvas id="SCI"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="NHC"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="NICE"></canvas></div>
+            </td>
+   
+
+            <td>
+                <div class="chart-container"><canvas id="NXST"></canvas></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="chart-container"><canvas id="NVS"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="OTIS"></canvas></div>
+            </td>
+                     <td>
+                <div class="chart-container"><canvas id="PANW"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="PBR"></canvas></div>
+            </td>
+        </tr>
+<tr>
+
                         <td>
                 <div class="chart-container"><canvas id="SGOL"></canvas></div>
             </td>
@@ -180,14 +187,11 @@
             </td>
             <td>
                 <div class="chart-container"><canvas id="TAIT"></canvas></div>
-            </td>
+            </td></tr>
+<tr>
             <td>
                 <div class="chart-container"><canvas id="TSLA"></canvas></div>
             </td>
-   
-
-        </tr>
-        <tr>
                      <td>
                 <div class="chart-container"><canvas id="TGS"></canvas></div>
             </td>
@@ -196,15 +200,16 @@
             </td>
             <td>
                 <div class="chart-container"><canvas id="VALE"></canvas></div>
-            </td>
+            </td></tr>
+<tr>
+    
             <td>
                 <div class="chart-container"><canvas id="VCSH"></canvas></div>
             </td>
             <td>
                 <div class="chart-container"><canvas id="VMC"></canvas></div>
-            </td>
-        </tr>
-    </table>
+            </td></tr>
+</table>
 
     <script>
 

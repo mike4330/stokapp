@@ -87,7 +87,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                 <th></th>
                 <th class="pos" colspan=3>SELLING</th>
                 <th class="neg" colspan=3 style='border-left: 5px solid black;'>BUYING</th>
-                <th></th>
+                <th></th> <th rowspan=2>Recommendations</th>
             </tr>
             <tr>
                 <th>Sector</th>
@@ -97,8 +97,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                 <th class="pos">HLR</th>
                 <th class="neg" style='border-left: 5px solid black;'>Symbol</th>
                 <th class="neg">Underweight</th>
-                <th class="neg">HLR</th>
-                <th>Recommendations</th>
+                <th class="neg">HLR</th><th></th>
+               
             </tr>
 
             <?php
@@ -125,21 +125,23 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                 $prose .= ". Buy $" . $row['positive_overamt'] . " of " . $row['negative_symbol'] . "";
             }
 
-
                 $count[$row['positive_symbol']]++;
 
                 if ($count[$row['positive_symbol']] > 1) {continue;}
+                $spread = ($row['positive_hlr'] - $row['negative_hlr'])*100;
+                $spread=round($spread,2);
+
+                if ($spread < 0) {continue;}
 
                 echo "<tr>";
                 echo "<td>" . $row['sector'] . "</td>";
                 echo '<td class="pos">' . $row['positive_symbol'] . ' ' .  '</td>';
-
-
                 echo "<td class=\"pos\">" . number_format($row['positive_overamt'], 2) . "</td>";
                 echo "<td class=\"pos\">" . $row['positive_hlr'] . "</td>";
                 echo "<td class=\"neg\" style='border-left: 5px solid black;'>" . $row['negative_symbol'] . "</td>";
                 echo "<td class=\"neg\">" . number_format($row['negative_overamt'], 2) . "</td>";
                 echo "<td class=\"neg\">" . $row['negative_hlr'] . "</td>";
+                echo "<td>spread $spread</td>";
                 echo "<td style='border-left: 1px solid black; font-family: serif;'>$prose</td>";
 
 

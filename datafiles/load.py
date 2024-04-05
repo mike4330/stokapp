@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/home/mike/.pyenv/shims/python3
 
 import sqlite3
 import json
@@ -37,3 +37,23 @@ for result in data['results']:
 
 # Close the connection
 conn.close()
+
+import yfinance as yf
+import requests_cache
+session = requests_cache.CachedSession('yfinanceinfo3.cache')
+
+print("symbol is",symbol)
+
+ticker = yf.Ticker(symbol)
+dy=ticker.info["dividendYield"]
+
+print("dy for",symbol,"is",dy)
+
+conn = sqlite3.connect('../portfolio.sqlite')
+c = conn.cursor()
+c.execute(f"UPDATE prices SET divyield = {dy} WHERE symbol = '{symbol}'")
+conn.commit()
+conn.close()
+
+
+

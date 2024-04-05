@@ -6,7 +6,7 @@
     <style>
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
             grid-gap: 20px;
             position: absolute;
             top: 47px;
@@ -39,9 +39,10 @@
             'ANGL',
             'ASML',
             'AVGO',
-	    'BAH',
+            'BAH',
             'BG',
             'BRT',
+            'BRKB',
             'BSIG',
             'CARR',
             'C',
@@ -52,7 +53,9 @@
             'EVC',
             'EWJ',
             'F',
+            'FAF',
             'FAGIX',
+            'FDGFX',
             'FNBGX',
             'FPE',
             'FTS',
@@ -73,6 +76,8 @@
             'NXST',
             'NVS',
             'OTIS',
+            'PANW',
+            'PBR',
             'PDBC',
             'PLD',
             'PNM',
@@ -84,6 +89,7 @@
             'TAIT',
             'TGS',
             'TSLA',
+            'ULTA',
             'VCSH',
             'VMC'
         ];

@@ -50,4 +50,6 @@ c.execute(f"UPDATE MPT SET div_growth_rate = {avg_growth_rate} WHERE symbol = '{
 conn.commit()
 conn.close()
 
-print (ticker, avg_growth_rate)
+gr_disp = round((avg_growth_rate*100),4)
+
+print (ticker, gr_disp, "%")

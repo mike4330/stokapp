@@ -24,10 +24,11 @@ include("nav.php");
 
 $table = "<table style='position: relative; top: 40px;'>";
 $tickers = array(
-    'ANGL',
     'AMX',
+    'ANGL',
     'ASML',
     'AVGO',
+    'BAH',
     'BG',
     'BRT',
     'BSIG',
@@ -38,13 +39,15 @@ $tickers = array(
     'EMB',
     'EVC',
     'F',
-    'FPE',
     'FAF',
     'FAGIX',
+    'FDGFX',
     'FNBGX',
+    'FPE', 
     'FTS',
     'GILD',
     'HPK',
+    'HTLD',
     'HUN',
     'INGR',
     'IPAR',
@@ -62,6 +65,8 @@ $tickers = array(
     'PLD',
     'REM',
     'SCI',
+    'SSNC',
+    'TAIT',
     'VALE',
     'VMC',
     'VCSH'
@@ -141,8 +146,9 @@ function qtrpredict($symbol)
     // echo $lastDataDate;
 
     // Generate 12-quarter forecast
+    $period=48; //how far out in quarters
     $forecast = array();
-    for ($i = 0; $i < 49; $i++) {
+    for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (3 * $i) . ' months'));
         $forecast[] = array(
             'date' => $forecastMonth,
@@ -230,7 +236,8 @@ function monthpredict($symbol)
 
     // Generate 12-quarter forecast
     $forecast = array();
-    for ($i = 0; $i < 144; $i++) {
+    $period=143;
+    for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
             'date' => $forecastMonth,

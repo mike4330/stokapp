@@ -30,7 +30,7 @@ if ($_GET['q'] == "weightcomp") {
 
 
 if ($_GET['q'] == "cumshares") {
-    $isym = $_GET[symbol]; 
+    $isym = $_GET['symbol']; 
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
 //     
@@ -55,7 +55,7 @@ if ($_GET['q'] == "cumshares2") {
     if ($isym == "BRKB") {$isym ="BRK.B";}
     
     $query= "select timestamp,shares from security_values where symbol = '$isym' 
-    AND  timestamp > date('now','-21 months') order by timestamp";
+    AND  timestamp > date('now','-24 months') order by timestamp";
     
     #echo "date,symbol,shares\n";
     foreach ($dbh->query($query) as $row) {
@@ -65,7 +65,7 @@ if ($_GET['q'] == "cumshares2") {
  
     
 if ($_GET['q'] == "cumvalue") {
-    $isym = $_GET[symbol]; 
+    $isym = $_GET['symbol']; 
     
     $query= "select date_new,symbol,units,xtype 
     from transactions 
@@ -88,7 +88,7 @@ if ($_GET['q'] == "posvalues") {
     
     $isym = $_GET['symbol'];
     if ($isym == "BRKB") {$isym ="BRK.B";}
-    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-365  days') order by timestamp";
+    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-730  days') order by timestamp";
 //     echo $query;
     foreach ($dbh->query($query) as $row) {
 //         echo "$row[pval]\n";
@@ -206,11 +206,17 @@ if ( $_GET['verb'] == "sectorpct") {
         filter (where \"symbol\" IN (select symbol from sectors where sector = 'Tech')) as tech,
 
         sum(close*shares/historical.value*100) 
-        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Communication Services')) as commsvc
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Communication Services')) as commsvc,
+
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Bonds')) as bonds,
+
+        sum(close*shares/historical.value*100) 
+        filter (where \"symbol\" IN (select symbol from sectors where sector = 'Real Estate')) as re
     
 	from security_values,historical
     
-    where security_values.timestamp > DATE('now','-$tf day') and security_values.timestamp <= DATE('now','-1 day')
+    where security_values.timestamp > DATE('now','-$tf day') and security_values.timestamp <= DATE('now')
     and security_values.timestamp = historical.date
 
     group by timestamp
@@ -220,11 +226,11 @@ if ( $_GET['verb'] == "sectorpct") {
     foreach ($dbh->query($query) as $row) {
     $array[] = array('date'=> "$row[timestamp]",'materials'=>"$row[materials]", 'financials'=>"$row[financials]",'comd'=> "$row[comd]",
     'healthcare'=>"$row[healthcare]",'industrials'=>"$row[industrials]",'tech'=> "$row[tech]",'energy'=>"$row[energy]", 
-    'utilities'=>"$row[utilities]",'pm'=>"$row[pm]",'cdisc'=>"$row[cdisc]",'cstaples'=>"$row[cstaples]" ,'commsvc'=>"$row[commsvc]" );
+    'utilities'=>"$row[utilities]",'pm'=>"$row[pm]",'re'=>"$row[re]",'cdisc'=>"$row[cdisc]",'cstaples'=>"$row[cstaples]" ,'commsvc'=>"$row[commsvc]", 'bonds'=>"$row[bonds]" );
     }
 }
 
-
+// where security_values.timestamp > DATE('now','-$tf day') and security_values.timestamp <= DATE('now','-1 day')
 
 if ( $_SERVER['QUERY_STRING'] == "catpct") {
     $tf=370;
