@@ -65,6 +65,8 @@ do
 # 	echo "insert into security_values (symbol,timestamp,close,shares) values('$f','${arrIN[0]}','${arrIN[4]}', '$nu')" ;
 	
  	$CMD "$q";
+
+    sleep .5;
 	
 	done;
 
