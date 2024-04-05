@@ -12,38 +12,43 @@ import numpy as np
 from pypfopt import objective_functions
 from pypfopt import CLA, plotting
 
-
-
 with open("tickers.txt", "r") as f:
     tickers = f.read().splitlines()
-
 
 with open('sectormap.txt', 'r') as f:
     sector_mapper = dict(line.strip().split(',') for line in f)
 
+bonds_total = .3
+dbonds_lower = bonds_total * .695
+fbonds_lower = bonds_total * .305
+
+dbonds_upper = dbonds_lower + .01
+fbonds_upper = fbonds_lower + .01
+
 
 
 sector_lower = {
-"Bonds":0.2981,
+"DBonds":dbonds_lower,
+"FBonds":fbonds_lower,
 "Commodities":0.025,
 "Misc":0.0125,
-"Communication Services":0.0515,
-"Consumer Discretionary":0.0559,
-"Consumer Staples":0.0559,
-"Energy":0.0418,
-"Financials":0.0559,
-"Healthcare":0.0558,
-"Industrials":0.0558,
-"Materials":0.0558,
-"Tech":0.0821,
+"Communication Services":0.0524,
+"Consumer Discretionary":0.0557,
+"Consumer Staples":0.0557,
+"Energy":0.043,
+"Financials":0.0557,
+"Healthcare":0.0557,
+"Industrials":0.0557,
+"Materials":0.0557,
+"Tech":0.0784,
 "Real Estate":0.0557,
 "Precious Metals":0.05,
-"Utilities":0.0482,
-
+"Utilities":0.0488,
 }
 
 sector_upper = {
-    "Bonds": 0.47,
+    "DBonds": dbonds_upper,
+    "FBonds": fbonds_upper,
     "Commodities": 0.061,
     "Communication Services": 0.061818,
     "Consumer Discretionary": 0.061818,
@@ -140,7 +145,7 @@ today = date.today()
 
 with open("weights.log", "a") as f:
     for key, value in weights.items():
-       f.write("%s %s %s\n" % (today, key, value))
+        f.write("%s %s %s\n" % (today, key, value))
 
 import sqlite3
  
