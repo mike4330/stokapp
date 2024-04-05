@@ -62,18 +62,20 @@
          datasets: [
             {
                data: [<?php echo implode(", ", $data['allocs']); ?>],
-               borderWidth: 1,
+               borderWidth: 0,
                borderColor: "#000000",
                backgroundColor: [
-                  "#ee1111",
-                  "#2222Ee",
-                  "#e9e911",
-                  "#9c119c",
+                  "#ff5656",
+                  "#00cc00",
+                  "#0000ff",
+                  "#bbaa00",
                   "#006400",
-                  "#800000",
+                  "#700000",
                   "#555555",
                   "#CD853F",
-                  "#00CED1"
+                  "#00CED1",
+                  "#dd2233",
+                  "#e0e0e0"
                ],
                hoverBackgroundColor: [
                   "#FF5555",
