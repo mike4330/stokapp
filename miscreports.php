@@ -92,7 +92,7 @@ while ($row = $results->fetchArray()) {
     // Connect to the database and fetch data
     $db = new SQLite3('portfolio.sqlite');
     $results = $db->query('SELECT symbol, div_growth_rate 
-    FROM MPT where div_growth_rate  !=0 and symbol IS NOT \'PDBC\' order by div_growth_rate');
+    FROM MPT where div_growth_rate  !=0 and symbol IS NOT \'PDBC\' and symbol IS NOT \'DBB\' order by div_growth_rate');
 
     $symbols = [];
     $div_growth_rates = [];

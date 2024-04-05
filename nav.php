@@ -29,12 +29,13 @@ echo ' <div class="navbar">
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <button><a href="/portfolio/div.php">Value Trends</a></button>
-      <button><a href="/portfolio/divcharts.php">Dividend Charts</a></button>
-      <button><a href="/portfolio/chart3.php">Pos. Size Charts</a></button>
-      <button><a href="/portfolio/posvalues.php">Pos. Value Charts</a></button>
-      <button><a href="/portfolio/reports/sectoralloc.php">Model Sector Allocations</a></button>
-      <button><a href="/portfolio/reports/symbolweights.php">Model Target Tracking</a></button>
+    <button><a href="/portfolio/divcharts.php">⤇ Dividends</a></button>
+    <button><a href="/portfolio/reports/sectoralloc.php">⤇ Model Sector Allocations</a></button>
+    <button><a href="/portfolio/reports/symbolweights.php">⤇ Model Target Tracking</a></button>
+      <button><a href="/portfolio/chart3.php">⤇ Position Sizes</a></button>
+      <button><a href="/portfolio/posvalues.php">⤇ Positions Values</a></button>
+      <button><a href="/portfolio/returns.php">⤇ Returns</a></button>
+      <button><a href="/portfolio/div.php">⤇ Value Trends</a></button>
     </div>
   </div>
   <a href="/portfolio/holdings.php">Holdings</a>
