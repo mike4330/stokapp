@@ -388,38 +388,37 @@ $.ajax({
             } 
             ]     
     }
-    
-        var barGraph = new Chart(ctx, {
-        type:'line',
-        data: chartdata,  
-        options: {
+var barGraph = new Chart(ctx, {
+    type: 'line',
+    data: chartdata,
+    options: {
         scales: {
-            x:{
-                
-                ticks:{
+            x: {
+                ticks: {
                     color: 'rgb(255, 255, 255)'
                 }
-                
             },
-            y:{
+            y: {
                 stacked: true,
                 grid: {color: 'rgb(90,90,90)'},
-                ticks:{
-                    color: 'rgb(255,255,255)'
+                ticks: {
+                    color: 'rgb(255,255,255)',
+                    max: 100
                 }
             }
-            
         },
         maintainAspectRatio: false,
         animation: false,
         responsive: true,
-        plugins: {legend: {
-                    position: 'right',
-                    labels: {color: 'rgb(255,255,255)'}
-                        }
-                    }
-        }    
-    }); 
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {color: 'rgb(255,255,255)'}
+            }
+        }
+    }
+});
+
     
         
         
