@@ -335,28 +335,60 @@ echo "<div class=\"statusmessage\" style=\"position: fixed;\">Portfolio Value: \
 
 </div>";
 
-function get_portfolio_value() {
-//     echo "executing function<br>";
+function get_portfolio_value()
+{
+    chdir('/var/www/html/portfolio');
     $dir = 'sqlite:portfolio.sqlite';
-    $dbh  = new PDO($dir) or die("cannot open the database");
-    $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
-    foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow['symbol'];
-        $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
-        $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
-        $netunits = ($buyunits-$sellunits);
-        $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
-        
-        if ($netunits == 0) continue;
-        
-        $value = round(($netunits * $cprice),3);
-        $ttotal = ($ttotal + $value);
-//      echo "total $ttotal <br>";
+    $total_value = 0;
+    $curdate = date("Y-m-d");
+
+    $dbh = new PDO($dir) or die("cannot open the database");
+
+    $query = "SELECT DISTINCT symbol FROM transactions where symbol <> 'SNP' order by symbol";
+    foreach ($dbh->query($query) as $row) {
+        $sym = $row['symbol'];
+
+        $nuquery = "SELECT SUM(result) AS buyunits
+        FROM (
+        SELECT CASE
+            WHEN units_remaining IS NULL THEN units
+            ELSE units_remaining
+        END AS result
+        FROM transactions
+        WHERE xtype = 'Buy'
+        AND symbol = '$sym'
+        AND disposition IS NULL
+        ) subquery;";
+
+        $stmt = $dbh->prepare($nuquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $netunits = $zrow['buyunits'];
+
+        // $netunits = ($buyunits - $sellunits);
+        if ($netunits <= 0)
+            continue;
+
+        $subquery = "select price from prices where symbol = '$sym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $cprice = round($zrow['price'], 4);
+
+        $position_value = ($netunits * $cprice);
+
+        $subquery = "SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$sym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $buycost = round($zrow['buytotal'], 3);
+
+        // echo "$sym,NU $netunits,CP $cprice,PV $position_value,CB $netcost,UGL $unrealized_pl,RGL $realized_gain,DIVS $total_dividends\n";
+
+        $total_value = round(($total_value + $position_value), 2);
+
     }
-return $ttotal;
+    return $total_value;
 }
 
 ?>

@@ -134,7 +134,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     var tfval = 185;
     var dashcolor = 'rgb(128,128,128)';
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 210,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 220,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -228,8 +228,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     type: 'line',
                     borderColor: 'rgb(255, 16, 16)',
                     borderWidth: 1.75,
-                    yMin: 4.3,
-                    yMax: 4.3
+                    yMin: 4.33,
+                    yMax: 4.33
                   }
                 }
               }
@@ -242,7 +242,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     });
 
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 285,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 300,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -281,8 +281,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderDash: [6, 2],
                     borderWidth: 2,
-                    yMin: 7.84,
-                    yMax: 7.84
+                    yMin: 7.75,
+                    yMax: 7.75
                   }
                 }
               }
@@ -350,7 +350,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     //healthcare
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 240,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 365,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -407,7 +407,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     });
 
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 300,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 365,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -516,7 +516,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 //cdisc
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 230,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 365,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -570,7 +570,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     // industrials
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 295,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 365,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -624,7 +624,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
    //materials
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=' + 215,
+      url: 'datacsv.php?verb=sectorpct&tf=' + 365,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -773,8 +773,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderWidth: 2,
                     borderDash: [6, 2],
-                    yMin: 5.22,
-                    yMax: 5.22
+                    yMin: 5.27,
+                    yMax: 5.27
                   }
                 }
               }
@@ -842,7 +842,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     // real estate
     $.ajax({
-      url: 'datacsv.php?verb=sectorpct&tf=220',
+      url: 'datacsv.php?verb=sectorpct&tf=365',
       type: 'GET',
       dataType: 'json',
       success: function(data) {

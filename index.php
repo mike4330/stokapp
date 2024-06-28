@@ -44,18 +44,22 @@
     }
 
     //echo "db ok<br>";
-
+    
     $query = "SELECT *,(price*units) as ccost from transactions order by date_new desc,id desc limit 2000";
 
-    if (!empty($_GET['symfilter'])) :
+    if (!empty($_GET['symfilter'])):
         $filterterm = $_GET['symfilter'];
         // echo "title filter $filterterm<br>"; 
         $query = "SELECT *,(price*units) as ccost from transactions where symbol = '$filterterm' order by id desc";
         echo '<a href="/portfolio" class="button1">🗑 reset filter</a><br>';
         echo '<div class="minichart" ><canvas id="chart" ></canvas></div>';
         echo '<div id="returnContainer" style="width: 100%;display: hidden;">
-        <canvas id="returnchart"></canvas>
-      </div>';
+            <canvas id="returnchart"></canvas>
+        </div>
+        <div id="yieldContainer" style="width: 100%;display: hidden;">
+            <canvas id="yieldchart"></canvas>
+        </div>'
+        ;
 
 
         echo '<table class=smallnav>';
@@ -66,7 +70,7 @@
             $i++;
 
             echo "<td><a href=\"/portfolio/?symfilter=$symbol\" class=\"buttonsmall\">$symbol</a></td>";
-            if ($i > 7) {
+            if ($i > 4) {
                 echo "</tr>";
                 $i = 0;
             }
@@ -118,8 +122,8 @@
     echo "</form>";
 
     //input processing
-
-    if (!empty($_POST)) :
+    
+    if (!empty($_POST)):
         $date = $_POST["date"];
         $acct = $_POST["acct"];
         $type = $_POST["type"];
@@ -127,7 +131,7 @@
         $price = $_POST["price"];
         $symbol = $_POST["symbol"];
         // echo "post triggered<br>";
-
+    
         // echo "<pre>"; print_r($_POST) ;  echo "</pre>";
         $q = "INSERT into transactions (date_new,acct,xtype,units,price,symbol) VALUES ('$date','$acct','$type','$units','$price','$symbol')";
         echo "query is $q<br>";
@@ -205,7 +209,7 @@
     echo "</table>";
 
 
-    if (!empty($_GET['symfilter'])) :
+    if (!empty($_GET['symfilter'])):
         $sym = $_GET['symfilter'];
         $query = "select sum(units) as buyunits from transactions where symbol = '$sym' and xtype = 'Buy'";
         $stmt = $dbh->prepare($query);
@@ -230,11 +234,11 @@
         $stmt->execute();
         $zrow = $stmt->fetch();
         $overamt = $zrow['overamt'];
-        $target = round($zrow['target_alloc'],4);
+        $target = round($zrow['target_alloc'], 4);
 
-        $pv=gpv();
+        $pv = gpv();
 
-        $poswgt=round(($value/$pv),4);
+        $poswgt = round(($value / $pv), 4);
 
 
         echo "<table class=status2>
@@ -257,7 +261,7 @@
             type: 'GET',
             dataType: 'json',
 
-            success: function(data) {
+            success: function (data) {
                 const rvalue = Math.floor(Math.random() * 235);
                 const gvalue = Math.floor(Math.random() * 235);
                 var bvalue = Math.floor(Math.random() * 235);
@@ -360,7 +364,7 @@
                                         value: std1,
                                         label: {
                                             backgroundColor: 'rgba(255,0,0,.5)',
-                                            content: '1x stdev',
+                                            content: '+1σ',
                                             padding: 2,
                                             position: 'start',
                                             enabled: true,
@@ -376,9 +380,11 @@
                                         value: std1L,
                                         label: {
                                             backgroundColor: 'rgba(255,0,0,.5)',
-                                            content: '1x stdev',
+                                            content: '-1σ',
+                                            padding: 1,
                                             position: 'start',
-                                            enabled: true
+                                            enabled: true,
+                                            borderRadius: 2
                                         },
                                     },
                                     line5: {
@@ -389,8 +395,9 @@
                                         scaleID: 'y',
                                         value: std2L,
                                         label: {
-                                            backgroundColor: 'rgba(24, 240, 24,.5)',
-                                            content: '2x stdev',
+                                            backgroundColor: 'rgba(24, 140, 24,.5)',
+                                            content: '-2σ',
+                                            padding: 1,
                                             position: 'start',
                                             enabled: true
                                         },
@@ -405,7 +412,7 @@
                                         value: std3L,
                                         label: {
                                             backgroundColor: 'rgba(64, 64, 128,.5)',
-                                            content: '3x stdev',
+                                            content: '-3σ',
                                             position: 'start',
                                             enabled: true
                                         },
@@ -416,13 +423,15 @@
                                         display: h2,
                                         borderColor: 'rgb(64, 64, 192)',
                                         borderWidth: 1,
+                                        padding: 1,
                                         enabled: h2,
                                         scaleID: 'y',
                                         value: std2H,
                                         label: {
-                                            backgroundColor: 'rgba(64, 64, 128,.5)',
-                                            content: '2x stdev',
+                                            backgroundColor: 'rgba(24, 140, 24,.5)',
+                                            content: '+2σ',
                                             position: 'start',
+                                            padding: 1,
                                             enabled: true
                                         },
                                     },
@@ -464,24 +473,25 @@
                     data: {
                         labels: data.map(item => item.date),
                         datasets: [{
-                                label: 'Return',
-                                data: data.map(item => item.rtn),
-                                borderColor: 'rgb(75, 75, 255)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                                radius: 1,
-                                borderWidth: 2
-                            },
-                            {
-                                label: 'Zero Line',
-                                data: Array(data.length).fill(0),
-                                borderColor: 'rgb(255, 0, 0)',
-                                backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                                borderWidth: 3,
-                                radius: 0
-                            }
+                            label: 'Return',
+                            data: data.map(item => item.rtn),
+                            borderColor: 'rgb(75, 75, 255)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            radius: 1,
+                            borderWidth: 1.25
+                        },
+                        {
+                            label: 'Zero Line',
+                            data: Array(data.length).fill(0),
+                            borderColor: 'rgb(255, 0, 0)',
+                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            borderWidth: 3,
+                            radius: 0
+                        }
                         ]
                     },
                     options: {
+
                         maintainAspectRatio: true,
                         responsive: true,
                         scales: {
@@ -492,6 +502,42 @@
                     }
                 });
             });
+
+        fetch('utils/api2.php?symbol=' + x )
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('yieldchart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(item => item.declare_date),
+                        datasets: [{
+                            label: 'Yield',
+                            data: data.map(item => item.yield),
+                            borderColor: 'rgb(16, 128, 16)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            radius: 1.95,
+                            borderWidth: 1.5
+                        }
+      
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                        legend: {
+                        display: false,}},
+                        maintainAspectRatio: true,
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+
+            });
+ 
 
         function getStandardDeviation(array) {
             const n = array.length
@@ -504,26 +550,57 @@
         const returnContainer = document.getElementById("returnContainer");
 
         if (returnContainer) {
-            console.log("returncontainer element found:", returnContainer);
+            // console.log("returncontainer element found:", returnContainer);
 
             const winbox = new WinBox({
                 class: "white",
+                header: 25,
                 title: "Return for " + x,
                 mount: returnContainer,
                 // x: "left",
                 y: "bottom",
-                width: "700px",
-                height: "400px"
+                width: "500px",
+                height: "280px"
 
             });
 
-            winbox.on("close", function() {
+            winbox.on("close", function () {
                 // Cleanup code or any other actions when the window is closed
                 console.log("WinBox closed");
             });
         } else {
             console.log("returncontainer element not found");
         }
+        </script>
+<script>
+        
+        const yieldContainer = document.getElementById("yieldContainer");
+
+        if (yieldContainer) {
+            console.log("yieldcontainer element found:", yieldContainer);
+
+            const winbox = new WinBox({
+                class: "white",
+                // background: "#00ff00",
+                header: 25,
+                title: "Yield for " + x,
+                mount: yieldContainer,
+                // x: "left",
+                y: 725,
+                
+                width: "500px",
+                height: "280px"
+
+            });
+
+            winbox.on("close", function () {
+                // Cleanup code or any other actions when the window is closed
+                console.log("WinBox closed");
+            });
+        } else {
+            console.log("yieldcontainer element not found");
+        }
+
     </script>
 
 

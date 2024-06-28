@@ -46,6 +46,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
         }
       }
     }
+
     function sortTable(n) {
       var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
       table = document.getElementById("myTable2");
@@ -116,8 +117,11 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     <th>flag</th>
     <?php
 
-    // overweight by n dollars
-    $overfilter=4;
+
+    // tuning params
+    $profit_low_thresh = 0.1;
+    $lot_low_thresh = 1;
+    $overweight_min_thresh = 7.5;
 
     $hcolor[0] = "#ffffff";
     $hcolor[1] = "#009900";
@@ -129,7 +133,9 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     include("nav.php");
     $dbh = new PDO($dir) or die("cannot open the database");
 
-    $query = "SELECT  symbol,flag,overamt FROM MPT where flag = 'O' order by symbol";
+    $query = "SELECT  symbol,flag,overamt 
+      FROM MPT where flag = 'O' and overamt > $overweight_min_thresh
+      order by symbol";
     foreach ($dbh->query($query) as $row) {
       $symbol = $row['symbol'];
       $flag = $row['flag'];
@@ -140,16 +146,18 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       $zrow = $stmt->fetch();
       $cprice = round($zrow['price'], 4);
 
-      if ($row['overamt'] < $overfilter) {
-        continue;
-      }
+      // if ($row['overamt'] < $overfilter) {
+      //   continue;
+      // }
       echo "<tr><td colspan=9 style=\"background: black;\"></td></tr>";
 
       $subquery = "select * from transactions 
     where symbol = '$symbol' and xtype='Buy' and disposition IS NULL ";
 
       foreach ($dbh->query($subquery) as $rowb) {
-        if ($rowb['price'] == 0 ) {continue;}
+        if ($rowb['price'] == 0) {
+          continue;
+        }
         if ($rowb['price'] < $cprice) {
           if ($rowb['units_remaining']) {
             $units = $rowb['units_remaining'];
@@ -238,23 +246,25 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               $ptxt = "black";
               $fs = 104;
               continue;
-            case $profit_pct > 5:
+            case $profit_pct > 4:
               $pclr = $hmcolors[0];
               $ptxt = "white";
               $fs = 102;
               continue;
           }
 
+
+
           #discard trash
-          if ($profit < .003) {
+          if ($profit < $profit_low_thresh) {
             continue;
           }
-          if ($curval < 1) {
+          if ($curval < $lot_low_thresh) {
             continue;
           }
 
           if ((strtotime('now') - strtotime($rowb['date_new'])) / (60 * 60 * 24) > 365) {
-            $lsymbol = "⭐️";
+            $lsymbol = "✔";
           } else {
             $lsymbol = " ";
           }

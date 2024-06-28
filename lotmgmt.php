@@ -42,7 +42,7 @@
         div.buttons {
             border-radius: 8px;
             background-color: #232323;
-            width: fit-content;
+            width: 12vw;
             position: fixed;
             top: 33vh;
         }
@@ -57,6 +57,11 @@
             color: #0000ff;
             text-shadow: 0 0 10px rgba(0, 0, 255, .9);
             padding: 5px;
+        }
+
+        div.maintable {
+            position: absolute;
+            left: 12vw;
         }
 
 
@@ -143,7 +148,7 @@ $database->close();
 <body>
     <h1>Open Lots</h1>
     <div class="buttons">
-        <table>
+        <table width=100%>
             <th>PL</th>
             <th>LB</th>
             <tr>
@@ -234,7 +239,7 @@ $database->close();
     }
 
     if ($result && $result->numColumns() > 0) {
-        echo '<table id="sortedtable">';
+        echo '<div class="maintable"><table id="sortedtable">';
         echo '<tr>';
         echo '<th>acct</th><th>ID</th>';
         echo '<th>Term</th>';
@@ -359,7 +364,7 @@ $database->close();
             echo '</tr>';
         }
 
-        echo '</table>';
+        echo '</table></div>';
     } else {
         echo 'No open lots found.';
     }

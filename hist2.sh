@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright (C) 2022 Mike Roetto <mike@roetto.org>
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+#
 # updates historical cumulative position values into security_values
 # takes last updated price from prices table
 

@@ -51,14 +51,15 @@ $query = "select date_new,(price*units) as cost,symbol,xtype from transactions o
 
 echo '<div class="main">';
 
-echo "<table style=\"position:absolute; top:100px; left: 50vw; z-index:1;\">
+echo "<table style=\"position:absolute; top:100px; left: 66vw; z-index:1;\">
 <th colspan=4>Top Ten Transactions by cost</th>";
 foreach ($dbh->query($query) as $row) {
+	$cost=round($row['cost'],2);
     echo "<tr>
     <td >$row[date_new]</td>
     <td >$row[symbol]</td>
     <td >$row[xtype]</td>
-    <td >$row[cost]</td>
+    <td >$cost</td>
     </tr>";
 }
 echo "</table>";
@@ -77,6 +78,18 @@ foreach ($dbh->query($query) as $row) {
 }
 echo "</table>";
 
+echo "<table style=\"position:absolute; top:100px; left:33vw; z-index:1;\">
+<th colspan=4>Top Ten Realized Gain</th>";
+$query = "select date_new,gain,symbol,xtype from transactions where xtype = 'Sell' order by gain desc limit 10";
+foreach ($dbh->query($query) as $row) {
+    $gain=round($row['gain'],2);
+    echo "<tr>
+    <td >$row[date_new]</td>
+    <td >$row[symbol]</td>
+    <td >$gain</td>
+    </tr>";
+}
+echo "</table>";
 echo '</div>';
 
 $db = new SQLite3('portfolio.sqlite');

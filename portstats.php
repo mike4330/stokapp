@@ -6,128 +6,202 @@ chdir('/var/www/html/portfolio');
 
 $dir = 'sqlite:portfolio.sqlite';
 
-$pvalue=@get_portfolio_value();
-$pcost=@get_porfolio_cost();
+$pvalue = @get_portfolio_value();
+$pcost = @get_porfolio_cost();
 
-$curdate=date("Y-m-d");
+$curdate = date("Y-m-d");
 
 $dollarreturn = ($pvalue - $pcost);
 
-$return = round((($dollarreturn/$pcost)*100),3);
+$return = round((($dollarreturn / $pcost) * 100), 3);
 
-$dbh  = new PDO($dir) or die("cannot open the database");
+$dbh = new PDO($dir) or die("cannot open the database");
 
 echo "query 1\n";
 $subquery = "select avg(return) as wma8 from historical where date >= date('now','-35 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma8 = round($zrow['wma8'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma8 = round($zrow['wma8'], 3);
 echo "query 2\n";
 $subquery = "select avg(return) as wma48 from historical where date >= date('now','-336 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma48 = round($zrow['wma48'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma48 = round($zrow['wma48'], 3);
 echo "query 3\n";
 $subquery = "select avg(return) as wma28 from historical where date >= date('now','-196 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma28 = round($zrow['wma28'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma28 = round($zrow['wma28'], 3);
 
 $subquery = "select avg(return) as wma24 from historical where date >= date('now','-168 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma24 = round($zrow['wma24'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma24 = round($zrow['wma24'], 3);
 
 $subquery = "select avg(return) as wma41 from historical where date >= date('now','-287 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma41 = round($zrow['wma41'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma41 = round($zrow['wma41'], 3);
 
 $subquery = "select avg(return) as wma55 from historical where date >= date('now','-385 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma55 = round($zrow['wma55'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma55 = round($zrow['wma55'], 3);
 
 $subquery = "select avg(return) as wma36 from historical where date >= date('now','-252 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma36 = round($zrow['wma36'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma36 = round($zrow['wma36'], 3);
 
 $subquery = "select avg(return) as wma64 from historical where date >= date('now','-448 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma64 = round($zrow['wma64'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma64 = round($zrow['wma64'], 3);
 
 $subquery = "select avg(return) as wma72 from historical where date >= date('now','-504 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma72 = round($zrow['wma72'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma72 = round($zrow['wma72'], 3);
 
 $subquery = "select avg(return) as wma88 from historical where date >= date('now','-616 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma88 = round($zrow['wma88'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma88 = round($zrow['wma88'], 3);
 
 $subquery = "select avg(return) as wma110 from historical where date >= date('now','-770 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma110 = round($zrow['wma110'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma110 = round($zrow['wma110'], 3);
 
 $subquery = "select avg(return) as wma135 from historical where date >= date('now','-945 days')";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $wma135 = round($zrow['wma135'],3);
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma135 = round($zrow['wma135'], 3);
+
+$subquery = "select avg(return) as wma160 from historical where date >= date('now','-1120 days')";
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch();
+$wma160 = round($zrow['wma160'], 3);
 
 
-$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA36,WMA64,WMA72,WMA88,WMA110,WMA135) 
+$q = "INSERT into historical (date,value,cost,dret,return,WMA8,WMA24,WMA28,WMA41,WMA48,WMA36,WMA64,WMA72,WMA88,WMA110,WMA135,WMA160) 
 VALUES('$curdate','$pvalue','$pcost','$dollarreturn','$return', 
-'$wma8','$wma24', '$wma28','$wma41', '$wma48',  '$wma36','$wma64', '$wma72', '$wma88', '$wma110', $wma135)";
+'$wma8','$wma24', '$wma28','$wma41', '$wma48',  '$wma36','$wma64', '$wma72', '$wma88', '$wma110', $wma135,$wma160)";
 
 echo "query is $q\n";
 
-$stmt = $dbh->prepare($q);$stmt->execute();
+// $stmt = $dbh->prepare($q);
+// $stmt->execute();
 
 
 // exit;
 
 
 
-function get_portfolio_value() {
-//     echo "executing function<br>";
-    $ttotal=0;
+function get_portfolio_value()
+{
+    //     echo "executing function<br>";
+    $ttotal = 0;
     $dir = 'sqlite:portfolio.sqlite';
-    $dbh  = new PDO($dir) or die("cannot open the database");
+    $dbh = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
-        $tsym=$trow['symbol'];
-        
+        $tsym = $trow['symbol'];
+
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
-        
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $buyunits = $zrow['buyunits'];
+
         $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
-        
-        $netunits = ($buyunits-$sellunits);
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $sellunits = $zrow['sellunits'];
+
+        $netunits = ($buyunits - $sellunits);
         $subquery = "select price from prices where symbol = '$tsym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = $zrow['price'];
-        
-        if ($netunits == 0) continue;
-        
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $cprice = $zrow['price'];
+
+        if ($netunits == 0)
+            continue;
+
         $value = ($netunits * $cprice);
         $ttotal = ($ttotal + $value);
-        
-        
-//      echo "value $ttotal\n";
+
+
+        //      echo "value $ttotal\n";
     }
-return $ttotal;
+    return $ttotal;
 }
 
-function get_porfolio_cost() {
-        $dir = 'sqlite:portfolio.sqlite';
-        $dbh  = new PDO($dir) or die("cannot open the database");
-        $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
-        foreach ($dbh->query($q) as $trow) {
-            $tsym=$trow['symbol'];
-            
-            $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
+function get_porfolio_cost()
+{
+    $dir = 'sqlite:portfolio.sqlite';
+    $dbh = new PDO($dir) or die("cannot open the database");
+    $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
+    foreach ($dbh->query($q) as $trow) {
+        $tsym = $trow['symbol'];
+
+        $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $buyunits = $zrow['buyunits'];
+
+        $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $sellunits = $zrow['sellunits'];
+
+        $netunits = ($buyunits - $sellunits);
+        if ($netunits == 0)
+            continue;
+
+        $subquery = "SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$tsym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $buytotal = $zrow['buytotal'];
+
+        $subquery = "SELECT sum(units*price) AS selltotal,sum(gain) as gain FROM transactions WHERE xtype = 'Sell' AND symbol = '$tsym'";
+        $stmt = $dbh->prepare($subquery);
+        $stmt->execute();
+        $zrow = $stmt->fetch();
+        $selltotal = $zrow['selltotal'];
+        $gain = $zrow['gain'];
+
+
+        $netcost = round(($buytotal - $selltotal), 3) + $gain;
         
-            $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
         
-            $netunits = ($buyunits-$sellunits);
-            if ($netunits == 0) continue;
-            
-            $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = $zrow['buytotal'];
-            
-            $subquery="SELECT sum(units*price) AS selltotal,sum(gain) as gain FROM transactions WHERE xtype = 'Sell' AND symbol = '$tsym'";
-            $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = $zrow['selltotal'];$gain=$zrow['gain'];
-            
-            
-            $netcost = round(($buytotal - $selltotal),3)+$gain;
-            $tnetcost = ($netcost + $tnetcost);
-            
-            //echo "$tsym\t\t$gain\t$netcost\t$tnetcost\n";
-         
-            }
-        return $tnetcost;
+
+        $tnetcost = ($netcost + $tnetcost);
+
+        
+
+        echo "$tsym\t\t$gain\t$netcost\t$tnetcost\n";
+
+    }
+    return $tnetcost;
 }
- 
+
 ?>

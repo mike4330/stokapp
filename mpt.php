@@ -180,7 +180,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   $portfolio_value = get_portfolio_value();
 
   echo "portfolio_value = $portfolio_value";
-  $query = "SELECT DISTINCT symbol,target_alloc,sector,logo_file FROM MPT order by symbol";
+  $query = "SELECT DISTINCT symbol,target_alloc,sector FROM MPT order by symbol";
 
   echo "<table class=\"mpt\" id=\"myTable2\" >";
   echo "
@@ -208,7 +208,13 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     $talloc = round($row['target_alloc'], 4);
     $talloc_display = round(($row['target_alloc'] * 100), 2);
+    
+    
     $tvalue = round($talloc * $portfolio_value, 2);
+    // echo "symbol $sym tvalue $tvalue<br>";
+
+    if ($tvalue == 0) {continue;}
+
 
     $tdiff = round(($pos_val - $tvalue), 2);
 
@@ -322,8 +328,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   where prices.symbol = MPT.symbol
   and overamt < -5.6 
   order by z limit 15";
-
-
+  
+  
   foreach ($dbh->query($query) as $trow) {
     $symbol = $trow['symbol'];
     $sectorshort = $trow['sectorshort'];

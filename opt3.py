@@ -12,38 +12,39 @@ import numpy as np
 from pypfopt import objective_functions
 from pypfopt import CLA, plotting
 
+# yf.enable_debug_mode()
+
 with open("tickers.txt", "r") as f:
-    tickers = f.read().splitlines()
+    tickers = [line.strip() for line in f if not line.startswith("#")]
 
-with open('sectormap.txt', 'r') as f:
-    sector_mapper = dict(line.strip().split(',') for line in f)
+with open("sectormap.txt", "r") as f:
+    sector_mapper = dict(line.strip().split(",") for line in f)
 
-bonds_total = .3
-dbonds_lower = bonds_total * .695
-fbonds_lower = bonds_total * .305
+bonds_total = 0.3
+dbonds_lower = bonds_total * 0.695
+fbonds_lower = bonds_total * 0.305
 
-dbonds_upper = dbonds_lower + .01
-fbonds_upper = fbonds_lower + .01
-
+dbonds_upper = dbonds_lower + 0.01
+fbonds_upper = fbonds_lower + 0.01
 
 
 sector_lower = {
-"DBonds":dbonds_lower,
-"FBonds":fbonds_lower,
-"Commodities":0.025,
-"Misc":0.0125,
-"Communication Services":0.0524,
-"Consumer Discretionary":0.0557,
-"Consumer Staples":0.0557,
-"Energy":0.043,
-"Financials":0.0557,
-"Healthcare":0.0557,
-"Industrials":0.0557,
-"Materials":0.0557,
-"Tech":0.0784,
-"Real Estate":0.0557,
-"Precious Metals":0.05,
-"Utilities":0.0488,
+    "DBonds": dbonds_lower,
+    "FBonds": fbonds_lower,
+    "Commodities": 0.025,
+    "Misc": 0.0125,
+    "Communication Services": 0.0527,
+    "Consumer Discretionary": 0.0557,
+    "Consumer Staples": 0.0557,
+    "Energy": 0.0433,
+    "Financials": 0.0557,
+    "Healthcare": 0.0557,
+    "Industrials": 0.0557,
+    "Materials": 0.0557,
+    "Tech": 0.0775,
+    "Real Estate": 0.0557,
+    "Precious Metals": 0.05,
+    "Utilities": 0.0491,
 }
 
 sector_upper = {
@@ -63,8 +64,20 @@ sector_upper = {
     "Tech": 1,
     "Utilities": 0.061818,
 }
+import requests_cache
 
-ohlc = yf.download(tickers, period="10y",interval="1d",ignore_tz=True)
+session = requests_cache.CachedSession("yfinance.cache")
+
+
+from datetime import date, timedelta
+from datetime import datetime
+
+today = date.today()
+now = datetime.now()
+# Calculate date 10 years ago from today
+ten_years_ago = today - timedelta(days=365 * 10)
+
+ohlc = yf.download(tickers, start=ten_years_ago,end=today,interval="1d",ignore_tz=True,session=session)
 prices = ohlc["Adj Close"].dropna(how="all")
 prices.to_csv("pricedataset.csv", index=True)
 
@@ -76,6 +89,9 @@ lb = float(sys.argv[3])
 ub = float(sys.argv[4])
 
 prices = pd.read_csv("pricedataset.csv", parse_dates=True, index_col="Date")
+
+prices = prices[prices.columns.intersection(tickers)]
+
 # print(prices)
 
 #### semivariance
@@ -147,17 +163,28 @@ with open("weights.log", "a") as f:
     for key, value in weights.items():
         f.write("%s %s %s\n" % (today, key, value))
 
+# model perfm log
+expected_return, volatility, sharpe_ratio, *_ = ef.portfolio_performance(verbose=False)
+expected_return = round(expected_return,6)
+sharpe_ratio = round(sharpe_ratio,6)
+
+with open("modelrun.log", "a") as w:
+    w.write(
+        "%s,upper %s,lower %s,gamma %s,maxvolat %s," % (now, ub, lb, gammainput, rgoal)
+    )
+    w.write("%s,%s,%s\n" % (expected_return, volatility, sharpe_ratio))
+
 import sqlite3
- 
+
 conn = sqlite3.connect('portfolio.sqlite')
 cursor = conn.cursor()
- 
+
 for key, value in weights.items():
     if (key == 'BRK-B') :
         key = 'BRK.B'
 
     cursor.execute("INSERT INTO weights (timestamp, symbol, weight) VALUES (?, ?, ?)",
                    (today, key, value))
- 
+
 conn.commit()
 conn.close()

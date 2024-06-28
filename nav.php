@@ -94,7 +94,7 @@ function gpv() {
 $colors = [];
 
 // Use a while loop to generate and add colors to the array until it has 61 elements
-while (count($colors) < 61) {
+while (count($colors) < 62) {
   // Generate a random hexadecimal color value
   $color = dechex(mt_rand(0x000000, 0xFFFFFF));
   // Pad the color value with leading zeros if it is less than 6 characters long
