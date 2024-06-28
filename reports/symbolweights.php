@@ -93,6 +93,7 @@
             'TSLA',
             'ULTA',
             'VCSH',
+            'VALE',
             'VMC'
         ];
 
@@ -117,7 +118,6 @@
             </div>
 
             <script>
-
 
                 function generateDivergentColors(numColors) {
                     var colors = [];

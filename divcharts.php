@@ -38,9 +38,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX','EMB','EVC',
 'EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR','IPAR',
-'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','OTIS','PBR','PLD','PNM','REM','SCI','SJNK','SSNC','TAIT','VALE','VCSH','VMC'];
+'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','OTIS','PBR','PGHY','PLD','PNM','REM','SCI','SJNK','SSNC','TAIT','VALE','VCSH','VMC'];
 ?>
-
 
 <div class="grid-container2"> 
 
@@ -52,8 +51,6 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
   ?>
 </div>
 
- 
-
   <script>
     Chart.defaults.plugins.legend.display = false;
     Chart.defaults.datasets.line.fill = true;
@@ -64,10 +61,9 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
 
     c1 = 'rgb(224, 224, 32)'
 
-
     const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH','BG', 'BRT', 'BSIG','CARR', 'C','D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF', 
     'FAGIX',  'FDGFX','FNBGX', 'FPE', 'FTS', 'GILD','HPK','HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW', 
-    'NHC', 'NXST', 'OTIS', 'PBR', 'PLD', 'PNM', 'REM', 'SCI', 'SJNK','SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
+    'NHC', 'NXST', 'OTIS', 'PBR', 'PGHY','PLD', 'PNM', 'REM', 'SCI', 'SJNK','SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
     ];
 
     $.ajaxSetup({
@@ -77,7 +73,6 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
     for (let i = 0; i < chartDataList.length; i++) {
       loadChartData(chartDataList[i]);
     }
-
 
     function loadChartData(item) {
       $.ajax({

@@ -11,11 +11,9 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 </head>
 
-
-
 <?php
 
-include("nav.php");
+include ("nav.php");
 
 // Example usage
 // $symbol = "BG";
@@ -43,7 +41,7 @@ $tickers = array(
     'FAGIX',
     'FDGFX',
     'FNBGX',
-    'FPE', 
+    'FPE',
     'FTS',
     'GILD',
     'HPK',
@@ -61,6 +59,7 @@ $tickers = array(
     'NXST',
     'OTIS',
     'PBR',
+    'PGHY',
     'PNM',
     'PLD',
     'REM',
@@ -79,7 +78,7 @@ foreach ($tickers as $ticker) {
         $table .= "<tr>"; // start new row
     }
 
-    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'SJNK','VCSH'];
+    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'PGHY', 'SJNK', 'VCSH'];
     if (in_array($ticker, $monthlies)) {
         $table .= "<td><div style='padding: .5vw;'>" . monthpredict($ticker) . "</div></td>";
         $count++;
@@ -94,7 +93,22 @@ foreach ($tickers as $ticker) {
     }
 }
 
+$total_monthly = round($total_monthly,2);
+$total_quarterly = round($total_quarterly,2);
+$total_yearly = ($total_monthly*12) + ($total_quarterly*4);
+
+$table .= "<tr bgcolor=\"white\">
+    <td colspan=3>Expected Monthly Income at retirement</td>
+    <td>\$$total_monthly</td></tr>
+    <tr bgcolor=\"white\"><td colspan=3>Expected Quarterly Income at retirement</td>
+    <td>\$$total_quarterly</td>
+    </tr>
+    <tr bgcolor=\"white\"><td colspan=3>Expected Yearly Income at retirement</td>
+    <td>\$$total_yearly</td>
+    </tr>"
+    ;
 $table .= "</table>";
+
 echo $table;
 
 function qtrpredict($symbol)
@@ -147,7 +161,7 @@ function qtrpredict($symbol)
     // echo $lastDataDate;
 
     // Generate 12-quarter forecast
-    $period=46; //how far out in quarters
+    $period = 46; //how far out in quarters
     $forecast = array();
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (3 * $i) . ' months'));
@@ -160,6 +174,10 @@ function qtrpredict($symbol)
 
     // Get the last three entries from the forecast
     $lastThreeEntries = array_slice($forecast, -3);
+    $testb = end($forecast);
+
+    global $total_quarterly;
+    $total_quarterly = $total_quarterly + $testb['cost'];
 
     // Output the last three entries as an HTML table
     $html = '<table class="forecast">';
@@ -177,9 +195,7 @@ function qtrpredict($symbol)
 
         $html .= '<td style="width: 3.5vw; background: ' . getbgstring($cost) . ';">' . $cost . '</td>';
 
-
-
-        $html .= '</tr>';
+        $html .= "</tr>\n";
     }
     $html .= '</table>';
 
@@ -237,7 +253,7 @@ function monthpredict($symbol)
 
     // Generate 12-quarter forecast
     $forecast = array();
-    $period=139;
+    $period = 137;
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
@@ -249,10 +265,16 @@ function monthpredict($symbol)
 
     // Get the last three entries from the forecast
     $lastThreeEntries = array_slice($forecast, -3);
+    $testa = end($forecast);
+    
+    global $total_monthly;
+    $total_monthly = $total_monthly + $testa['cost'];
+
+    echo "<span color=\"white\">$symbol $testa[cost]</span>\n";
 
     // Output the last three entries as an HTML table
     $html = '<table class="forecast">';
-    $html .= "<tr><th colspan=3>$symbol</th></tr><tr><th>Date</th><th>Cost</th></tr>";
+    $html .= "\n<tr><th colspan=3>$symbol</th></tr><tr><th>Date</th><th>Cost</th></tr>";
     foreach ($lastThreeEntries as $entry) {
         if ($entry['cost'] < 0) {
             $entry['cost'] = 0;
@@ -266,10 +288,14 @@ function monthpredict($symbol)
 
         $html .= '<td style="width: 3.5vw; background: ' . getbgstring($cost) . ';">' . $cost . '</td>';
 
+        global $total_monthly;
+
 
         $html .= '</tr>';
     }
+
     $html .= '</table>';
+
 
     return $html;
 }
@@ -280,26 +306,25 @@ function getbgstring($cost)
         $bgstring = '#006600';
     } else if ($cost > 50) {
         $bgstring = '#00ff00';
-    } 
-    else if ($cost > 30) {
+    } else if ($cost > 30) {
         $bgstring = '#84ff84';
-    } 
-    else if ($cost > 10) {
+    } else if ($cost > 10) {
         $bgstring = '#a4ffa4';
-    }
-    else if ($cost > 5) {
+    } else if ($cost > 5) {
         $bgstring = '#cdffcd';
-    }
-    else if ($cost == 0) {
+    } else if ($cost == 0) {
         $bgstring = '#1c1c1c';
-    }
-    else {
+    } else {
         $bgstring = 'transparent'; // Use default background color for other values
     }
 
     return $bgstring;
 }
 
+// echo "total $total_monthly";
+
+
 ?>
 </body>
+
 </html>

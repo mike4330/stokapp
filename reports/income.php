@@ -21,7 +21,7 @@ $sql = "SELECT
   SUM(CASE WHEN xtype = 'Div' THEN units * price ELSE 0 END) AS d,
   SUM(CASE WHEN xtype = 'Sell' THEN gain WHEN xtype = 'Div' THEN units * price ELSE 0 END) AS inc
 FROM transactions
-WHERE date_new >= date('now','-365 days')
+WHERE date_new >= date('now','-36 months')
 GROUP BY m
 ORDER BY m";
 

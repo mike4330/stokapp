@@ -22,18 +22,17 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   ?>
   <table class="chart2">
     <tr class="chart">
-      <td><canvas id="mychart" style="width:46vw;height:44vh;">"</canvas></td>
-      <td><canvas id="valuechart" style="width:46vw;height:44vh;"></canvas></td>
+      <td><canvas id="mychart" style="width:47vw;height:44vh;">"</canvas></td>
+      <td><canvas id="valuechart" style="width:47vw;height:44vh;"></canvas></td>
     </tr>
 
     <tr>
-      <td><canvas id="quarterdivs" style="width:46vw;height:44vh;"></canvas></td>
-      <td><canvas id="averageschart" style="width: 46vw;height:44vh;"></canvas></td>
+      <td><canvas id="quarterdivs" style="width:47vw;height:44vh;"></canvas></td>
+      <td><canvas id="averageschart" style="width: 47vw;height:44vh;"></canvas></td>
     </tr>
   </table>
 
   <script>
-
     $.ajax({
       url: 'data.php?q=divs',
       type: 'GET',
@@ -115,7 +114,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     });
 
     $.ajax({
-
       url: 'data.php?q=averages',
       type: 'GET',
       dataType: 'json',
@@ -186,23 +184,19 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
           ]
         };
 
-
         var ctx = $('#averageschart');
         var barGraph = new Chart(ctx, {
           type: 'line',
           data: chartdata,
           options: {
             responsive: false,
-
           }
         });
       }
 
     });
 
-
     $.ajax({
-
       url: 'data.php?q=quarterdivs',
       type: 'GET',
       dataType: 'json',
@@ -228,15 +222,17 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
           ]
         };
 
-
         var ctx = $('#quarterdivs');
-
-
         var barGraph = new Chart(ctx, {
           type: 'bar',
           data: chartdata,
           options: {
             responsive: false,
+            scales: {
+              y: {
+                min: 20,
+              }
+    }
           }
         });
       }
@@ -245,5 +241,4 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
   </script>
 </body>
-
 </html>
