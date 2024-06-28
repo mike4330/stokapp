@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# Copyright (C) 2024 Mike Roetto <mike@roetto.org>
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import csv
 import plotly.express as px

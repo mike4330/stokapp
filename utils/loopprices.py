@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+# SPDX-License-Identifier: GPL-3.0-or-later
 import sqlite3
 import syslog
 import yfinance as yf
@@ -46,7 +48,6 @@ tickers = [
     "FNBGX",
     "FDGFX",
     "FPE",
-    "FRG",
     "FTS",
     "GILD",
     "HTLD",
@@ -65,6 +66,8 @@ tickers = [
     "NVS",
     "NXST",
     "OTIS",
+    "PGHY",
+    "PANW",
     "PBR",
     "PDBC",
     "PLD",
@@ -73,13 +76,16 @@ tickers = [
     "SCI",
     "SGOL",
     "SIVR",
+    "SJNK",
     "SSNC",
     "TAIT",
     "TSLA",
+    "ULTA",
     "TGS",
     "VALE",
     "VCSH",
     "VMC",
+    "WDFC",
 ]
 
 hour = now.hour
@@ -105,7 +111,7 @@ while hour < 17:
 
         ts = time.time()
         print(ts, ticker, price)
-        msg = "[stockprice] update" + ticker + str(price)
+        msg = "[stockprice] update  " + ticker + ' ' + str(price)
         syslog.syslog(msg)
 
         if ticker == "BRK-B":
@@ -117,11 +123,12 @@ while hour < 17:
                 (price, ts, ticker),
             )
             con.commit()
+            
         except:
             print("temp fail")
 
         elapsed = round((ts - starttime), 1)
-        sleep(randint(2, 7))
+        sleep(randint(2, 9))
 
     print("elapsed cycle time ", elapsed)
 
@@ -129,7 +136,7 @@ while hour < 17:
 
     syslog.syslog(msg)
 
-    time.sleep(90)
+    time.sleep(89)
     now = datetime.datetime.now()
     hour = now.hour
 

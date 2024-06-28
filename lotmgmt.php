@@ -1,6 +1,7 @@
+<!-- Copyright (C) 2024 Mike Roetto <mike@roetto.org>
+SPDX-License-Identifier: GPL-3.0-or-later -->
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Open Lots</title>
     <script src="res/functions.js"></script>
