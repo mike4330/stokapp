@@ -184,11 +184,14 @@ if ($_GET['q'] == "gl") {
 //returns 2 years of dividends
 if (!empty($_GET['symquery'])) {
     $symbol = $_GET['symquery'];
-    if ($symbol == 'ANGL'  || $symbol == 'MLN' || $symbol == 'VMC' || $symbol == 'FPE') {
-        $period = 36;
-    } else {
-        $period = 24;
-    }
+    // if ($symbol == 'ANGL'  || $symbol == 'MLN' || $symbol == 'VMC' || $symbol == 'FPE') {
+    //     $period = 36;
+    // } else {
+    //     $period = 24;
+    // }
+    $symbolsToCheck = ['ANGL', 'ASML','FPE','GILD','LKOR','MLN', 'REM','VMC'];
+    $period = in_array($symbol, $symbolsToCheck) ? 36 : 24;
+
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions 
     where symbol = '$symbol' 
