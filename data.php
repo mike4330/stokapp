@@ -27,7 +27,6 @@ if ($_GET['q'] == "pv") {
     exit;
 }
 
-
 if ($_GET['q'] == "divs") {
     //     echo "ok\n";
 //     echo "ok2\n";
