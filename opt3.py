@@ -27,7 +27,6 @@ fbonds_lower = bonds_total * 0.305
 dbonds_upper = dbonds_lower + 0.01
 fbonds_upper = fbonds_lower + 0.01
 
-
 sector_lower = {
     "DBonds": dbonds_lower,
     "FBonds": fbonds_lower,
@@ -68,7 +67,6 @@ import requests_cache
 
 session = requests_cache.CachedSession("yfinance.cache")
 
-
 from datetime import date, timedelta
 from datetime import datetime
 
@@ -77,7 +75,7 @@ now = datetime.now()
 # Calculate date 10 years ago from today
 ten_years_ago = today - timedelta(days=365 * 10)
 
-ohlc = yf.download(tickers, start=ten_years_ago,end=today,interval="1d",ignore_tz=True,session=session)
+ohlc = yf.download(tickers, start=ten_years_ago,end=today,session=session)
 prices = ohlc["Adj Close"].dropna(how="all")
 prices.to_csv("pricedataset.csv", index=True)
 

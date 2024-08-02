@@ -7,8 +7,7 @@ set timefmt "%Y-%m-%d"
 
 #set term pngcairo dashed size 100,990 font "mono,9"
 
-set term svg size 1850,1600 font "mono,9" background rgb "white"
-
+set term svg size 1850,1600 font "mono,9" 
 set datafile sep "|"
 
 set grid lc rgb "#0000aa" lt -1 lw .4
@@ -144,21 +143,41 @@ plot "< ./getsymdata.sh PLD ".tf using 1:2 with l sm bez  t "PLD rtn",\
 
 unset y2tics
 unset multiplot
-set term svg size 1900,2600 font "mono,9" background rgb "#eeeeee"
+set term svg size 1900,4000 font "Consolas,9" background rgb "#050505"
 set output "rtnsingle.svg"
 unset title
 set size 1,1
 set origin 0,0
 
-set multiplot layout 11,4 title "Portfolio Returns generated at `date`" font "mono,12"
+# left,right,bottom,top
+set multiplot layout 15,3 title "Portfolio Returns generated at `date`" font "Consolas,12" tc rgb "white" \
+margins 0.011,0.98,0.05,0.985 spacing 0.016,0.015
+
+
 unset ylabel
-set key right
+set key right tc rgb "white"
+
+set colors classic
+set lt 1 lc rgb "#e69999" lw 3
+set lt 2 lc rgb "#99e699" lw 3
+set lt 3 lc rgb "#e699e6" lw 3
+set lt 4 lc rgb "#9999e6" lw 6
+set lt 5 lc rgb "#ffd1b3" lw 3
+set lt 6 lc rgb "#b3cceb" lw 3
+set lt 7 lc rgb "#aacc8c" lw 3
+set lt 8 lc rgb "#ddb39a" lw 3
 
 
 set format x "%y%m"
-do for [s in "AMX ANGL ASML AVGO BG BSIG C CARR BAH D DGX EMB EVC F FAF FAGIX FNBGX FRG FTS GILD HTLD HUN INGR IPAR JPIB LKOR LYB MLN MPW NHC NXST NVS OTIS PDBC PNM REM SGOL SCI SIVR SSNC TAIT VALE VCSH" ] {
+do for [s in "AMX ANGL ASML AVGO BG BSIG C CARR BAH D DGX EMB EVC F FAF FAGIX FNBGX \
+FRG FTS GILD HTLD HUN INGR IPAR JPIB LKOR LYB MLN MPW NHC NXST NVS \
+OTIS PDBC PNM REM SGOL SCI SIVR SSNC TAIT TSLA VALE VCSH" ] {
 zoo=(rand(0)*8)+1
-set title s . " return" font "sans,9" tc  rgb "black"
+set title s . " return" font "Consolas,13" tc  rgb "white" offset 0,-1
+set xtics tc rgb "white" font "Consolas,13"
+set ytics tc rgb "white" font "Consolas,13"
 set grid lc rgb "#cccccc"
+set border lc rgb "#888888"
+unset key
 plot "< ./getsymdata.sh ".s. " 240" using 1:2 with l sm bez ls zoo lw 1.4 t s." rtn",0 ls 10 t ""
 }

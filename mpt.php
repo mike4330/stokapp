@@ -1,12 +1,18 @@
-<!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+<!--Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
+<?php include ("nav.php"); ?>
+<?php include ("functions.php"); ?>
 
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="test.css">
-  <link rel="stylesheet" type="text/css" href="nav.css">
+
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+  </style>
+    <link rel="stylesheet" type="text/css" href="test.css">
+    <link rel="stylesheet" type="text/css" href="nav.css">
   <title>MPT Modeling</title>
   <script src="/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="/js/chart.js"></script>
@@ -174,12 +180,12 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   $icon['U'] = "⚡";
 
   $dir = 'sqlite:portfolio.sqlite';
-  include("nav.php");
-  $dbh  = new PDO($dir) or die("cannot open the database");
+
+  $dbh = new PDO($dir) or die("cannot open the database");
 
   $portfolio_value = get_portfolio_value();
 
-  echo "portfolio_value = $portfolio_value";
+  // echo "portfolio_value = $portfolio_value";
   $query = "SELECT DISTINCT symbol,target_alloc,sector FROM MPT order by symbol";
 
   echo "<table class=\"mpt\" id=\"myTable2\" >";
@@ -205,17 +211,20 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     $zrow = $stmt->fetch();
     $current_class = $zrow['asset_class'];
     //     $compidx2=round($zrow['compidx2'],1);
-
+  
     $talloc = round($row['target_alloc'], 4);
     $talloc_display = round(($row['target_alloc'] * 100), 2);
-    
-    
+
+
     $tvalue = round($talloc * $portfolio_value, 2);
     // echo "symbol $sym tvalue $tvalue<br>";
+  
+    if ($tvalue == 0) {
+      continue;
+    }
 
-    if ($tvalue == 0) {continue;}
-
-
+    $pos_val=posvalue($sym);
+    
     $tdiff = round(($pos_val - $tvalue), 2);
 
     if ($tdiff < -1) {
@@ -262,7 +271,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     echo "<tr class=\"main\">
     
-    <td><a href=\"/portfolio/?symfilter=$sym\">$sym</a></td><td>$talloc_display %</td>
+    <td><a href=\"/portfolio/?symfilter=$sym\" class=\"symclick\">$sym</a></td><td>$talloc_display %</td>
     <td>\$$pos_val</td><td>\$$tvalue</td>
     <td style=\"background: $color2;color: $tcolor2\">$tdiff</td><td style=\"background: $pbg;\">$diffpct %</td>
     <td>$current_class</td><td>$sector</td></tr>";
@@ -270,31 +279,31 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
   echo "</table>";
 
-  $cmp = $class_proposed_total['Commodities'];
-  $cmc = $class_total['Commodities'];
-  $cmpct_p = round(($cmp / $portfolio_value * 100), 2);
-  $cmpct_c = round(($cmc / $portfolio_value * 100), 2);
-
-  $dsp = $class_proposed_total['Domestic Stock'];
-  $dsc = $class_total['Domestic Stock'];
-  $dspct_p = round(($dsp / $portfolio_value * 100), 2);
-  $dspct_c = round(($dsc / $portfolio_value * 100), 2);
-
-  $fsp = $class_proposed_total['Foreign Stock'];
-  $fsc = $class_total['Foreign Stock'];
-  $fspct_p = round(($fsp / $portfolio_value * 100), 2);
-  $fspct_c = round(($fsc / $portfolio_value * 100), 2);
-
-  $dbp = $class_proposed_total['Domestic Bonds'];
-  $dbc = $class_total['Domestic Bonds'];
-  $dbpct_p = round(($dbp / $portfolio_value * 100), 2);
-  $dbpct_c = round(($dbc / $portfolio_value * 100), 2);
-
-  $fbp = $class_proposed_total['Foreign Bonds'];
-  $fbc = $class_total['Foreign Bonds'];
-  $fbpct_p = round(($fbp / $portfolio_value * 100), 2);
-  $fbpct_c = round(($fbc / $portfolio_value * 100), 2);
-
+  // $cmp = $class_proposed_total['Commodities'];
+  // $cmc = $class_total['Commodities'];
+  // $cmpct_p = round(($cmp / $portfolio_value * 100), 2);
+  // $cmpct_c = round(($cmc / $portfolio_value * 100), 2);
+  
+  // $dsp = $class_proposed_total['Domestic Stock'];
+  // $dsc = $class_total['Domestic Stock'];
+  // $dspct_p = round(($dsp / $portfolio_value * 100), 2);
+  // $dspct_c = round(($dsc / $portfolio_value * 100), 2);
+  
+  // $fsp = $class_proposed_total['Foreign Stock'];
+  // $fsc = $class_total['Foreign Stock'];
+  // $fspct_p = round(($fsp / $portfolio_value * 100), 2);
+  // $fspct_c = round(($fsc / $portfolio_value * 100), 2);
+  
+  // $dbp = $class_proposed_total['Domestic Bonds'];
+  // $dbc = $class_total['Domestic Bonds'];
+  // $dbpct_p = round(($dbp / $portfolio_value * 100), 2);
+  // $dbpct_c = round(($dbc / $portfolio_value * 100), 2);
+  
+  // $fbp = $class_proposed_total['Foreign Bonds'];
+  // $fbc = $class_total['Foreign Bonds'];
+  // $fbpct_p = round(($fbp / $portfolio_value * 100), 2);
+  // $fbpct_c = round(($fbc / $portfolio_value * 100), 2);
+  
   // echo "<table class=\"mpt2\">";
   // echo "<th></th><th>Current</th><th>Proposed</th><th>Cur. Alloc</th><th>Prop. Alloc</th>";
   // echo "<tr><td>Commodities</td><td>$class_total[Commodities]</td><td>$class_proposed_total[Commodities]</td><td>$cmpct_c</td><td>$cmpct_p</td></tr>";
@@ -305,31 +314,38 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   // $totalbonds=($dbpct_p+$fbpct_p);
   // echo "<tr><td>Total Bonds in Target</td><td>$totalbonds%</td></tr>";
   // echo "</table>\n";
-
+  
 
   // picker table
   echo "\n\n<table class=\"picker\">
-<tr><th colspan=7>Picker</th></tr>
+<tr><th colspan=8>Picker</th></tr>
   <tr><th>sc</th><th>symbol</th>
+  
   <th>Diff</th>
   <th>ζ val</th>
-  <th>chg</th><th>off200</th><th>52range</th><th>RSSI</th></tr>";
+  <th>chg</th><th>off200</th><th>52range</th><th>RSSI</th><th>PE diff</th></tr>";
 
-  // alternate algorithm
-//   $query = "select sectorshort,prices.symbol,hlr,overamt,volat,RSI,
-// ((price-mean50)/price) + ((price-mean200)/price) + volat - (prices.divyield/2) - (div_growth_rate/3)  as z
-// from prices,MPT
-// where prices.symbol = MPT.symbol
-// and overamt < -5 
-// order by z limit 15";
-  $query = "select sectorshort,prices.symbol,hlr,overamt,volat,RSI,
-  (RSI/100)+volat+((price-mean50)/price)+((price-mean200)/price)-(prices.divyield/2)- (div_growth_rate/3) as z
-  from prices,MPT
+  // chooser algorithm
+  
+  // $query = "select sectorshort,prices.symbol,hlr,overamt,volat,RSI,round((pe-average_pe),2) as diff,
+  // (RSI/100)+volat+((price-mean50)/price)+((price-mean200)/price)-(prices.divyield/2)- (div_growth_rate/3) as z
+  // from prices,MPT,sectors
+  // where prices.symbol = MPT.symbol
+  // and prices.symbol = sectors.symbol
+  // and overamt < -5.6 
+  // order by z limit 15";
+  
+  $overweight_min_thresh = -7.0;
+
+  $query = "select sectorshort,prices.symbol,hlr,overamt,volat,RSI,round((pe-average_pe),2) as diff,
+  (coalesce((pe-average_pe),0)/9)+(RSI/100)+volat+((price-mean50)/price)+((price-mean200)/price)-(prices.divyield/2)- (div_growth_rate/3) as z
+  from prices,MPT,sectors
   where prices.symbol = MPT.symbol
-  and overamt < -5.6 
+  and prices.symbol = sectors.symbol
+  and overamt < $overweight_min_thresh 
   order by z limit 15";
-  
-  
+
+
   foreach ($dbh->query($query) as $trow) {
     $symbol = $trow['symbol'];
     $sectorshort = $trow['sectorshort'];
@@ -361,16 +377,20 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     $range = round($trow['hlr'], 2);
     $zeta = round(($trow['z'] * 1000), 0);
+    $netunits = posvalue($symbol);
 
     echo "<tr>
   <td style=\"background: $iconcolor[$sectorshort];\"><span style=\"background: $iconcolor[$sectorshort];color: $icontc[$sectorshort];\" class=\"sectoricon\">$trow[sectorshort] <span style=\"filter: drop-shadow(2px 2px 2px #110000);\">$icon[$sectorshort]</span></span></td>
   <td><a href=\"/portfolio/?symfilter=$trow[symbol]\" class=\"symclick\">$trow[symbol]</a></td>
+
   <td style=\"background: $bgstring;color: $clrstring;\">$diffamt[$symbol]</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$zeta</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$pricediff</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$diff200%</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$range</td>
   <td style=\"background: $bgstring;color: $clrstring;\">$trow[RSI]</td>
+  <td style=\"background: $bgstring;color: $clrstring;\">$trow[diff]</td>
+  
   </tr>\n";
   }
 
@@ -404,7 +424,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       $clrstring = "#99ee99";
     }
 
-    $barwidth = $diffamt[$sym] * .04 . "vw";
+    $barwidth = $diffamt[$sym] * .03 . "vw";
     $gradwidth = 0;
     echo "<tr>
     <td style=\"background: $bgstring;color: $clrstring;\">$sym</td>
@@ -426,7 +446,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   {
     //     echo "executing function<br>";
     $dir = 'sqlite:portfolio.sqlite';
-    $dbh  = new PDO($dir) or die("cannot open the database");
+    $dbh = new PDO($dir) or die("cannot open the database");
     $q = "SELECT DISTINCT symbol FROM transactions order by symbol";
     foreach ($dbh->query($q) as $trow) {
       $tsym = $trow['symbol'];
@@ -447,7 +467,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       $zrow = $stmt->fetch();
       $cprice = $zrow['price'];
 
-      if ($netunits == 0) continue;
+      if ($netunits == 0)
+        continue;
 
       $value = round(($netunits * $cprice), 3);
       $ttotal = ($ttotal + $value);

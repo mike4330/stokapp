@@ -273,9 +273,34 @@ foreach ($dbh->query($query) as $row) {
                     
     $rquery = "UPDATE returns set returnpct = $returnpct where symbol = '$sym'";
     $stmt = $dbh->prepare($rquery);$stmt->execute();
-    
+
+// experimental flask code
+// $url = "http://localhost:5000/api/v1/stocks/" . $sym . "/position_size";
+
+// $curl = curl_init($url);
+// curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+// $response = curl_exec($curl);
+// $curl_error = curl_error($curl);
+
+// curl_close($curl);
+
+// if ($curl_error) {
+//   echo "Error: " . $curl_error;
+// } else {
+//   $data = json_decode($response, true);
+//   if (isset($data["position_size"])) {
+//     $netunits = $data["position_size"];
+//     //echo "<td class=\"cntr\">" . $netunits . "</td>";
+//   } else {
+//     echo "<td>No position found for symbol</td>";
+//   }
+// }
     //row output
     echo "<tr class=\"main\"><td><a href=\"/portfolio/?symfilter=$row[symbol]\" class=\"holdinglist\">$sym</a></td>  
+
+
+
     <td class=\"cntr\">$netunits</td>
     <td class=\"cntr\">\$$cprice</td><td>";
     

@@ -76,7 +76,7 @@ rm -f $tfile
 #./divdata.sh
 /usr/bin/dos2unix *.csv
 
-utils/snpdaily.sh
+# utils/snpdaily.sh
 ./movingaverages.sh
 
 # for f in `sqlite3 portfolio.sqlite "select distinct symbol from prices"`; 

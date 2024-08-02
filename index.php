@@ -43,6 +43,9 @@
         $x++;
     }
 
+    $sc['AMX'] = "#f0f000";$tc['AMX'] = "black";
+    $sc['INGR'] = "#007000";$tc['INGR'] = "white";
+
     //echo "db ok<br>";
     
     $query = "SELECT *,(price*units) as ccost from transactions order by date_new desc,id desc limit 2000";

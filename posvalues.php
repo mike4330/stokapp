@@ -1,4 +1,4 @@
-<!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+<!--Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 <html>
@@ -16,107 +16,219 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <body>
     <?php
-    include("nav.php");
+    include ("nav.php");
     $dir = 'sqlite:portfolio.sqlite';
     $dbh = new PDO($dir) or die("cannot open the database");
     ?>
 
     <table class="chart">
         <tr>
-            <td><div class="chart-container"><canvas id="AMX"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="ANGL"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="ASML"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="AVGO"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="BG"></canvas></div></td>
+            <td>
+                <div class="chart-container"><canvas id="AMX"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="ANGL"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="ASML"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="AVGO"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="BG"></canvas></div>
+            </td>
 
         </tr>
         <tr>
 
-            <td><div class="chart-container"><canvas id="BRKB"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="BRT"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="BSIG"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="C"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="CARR"></canvas></div></td>
+            <td>
+                <div class="chart-container"><canvas id="BRKB"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="BRT"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="BSIG"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="C"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="CARR"></canvas></div>
+            </td>
 
 
         </tr>
         <tr>
 
-            <td><div class="chart-container"><canvas id="BAH"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="D"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="DBB"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="DGX"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="EMB"></canvas></div></td>
+            <td>
+                <div class="chart-container"><canvas id="BAH"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="D"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="DBB"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="DGX"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="EMB"></canvas></div>
+            </td>
 
 
         </tr>
         <tr>
-            <td><div class="chart-container"><canvas id="EVC"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="EWJ"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="F"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="FAF"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="FAGIX"></canvas></div></td>       
+            <td>
+                <div class="chart-container"><canvas id="EVC"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="EWJ"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="FAF"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="FAGIX"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="FNBGX"></canvas></div>
+            </td>
         </tr>
 
         <tr>
-            <td><div class="chart-container"><canvas id="FNBGX"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="FDGFX"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="FTS"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="GILD"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="HPK"></canvas></div></td>       
+            <td>
+                <div class="chart-container"><canvas id="FDGFX"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="FTS"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="GILD"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="HPK"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="HUN"></canvas></div>
+            </td>
         </tr>
 
         <tr>
-            <td><div class="chart-container"><canvas id="HTLD"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="HUN"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="INGR"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="IPAR"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="JPIB"></canvas></div></td>
+            <td>
+                <div class="chart-container"><canvas id="INGR"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="IPAR"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="JPIB"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="KMB"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="LKOR"></canvas></div>
+            </td>
         </tr>
 
-        <tr>   
-            <td><div class="chart-container"><canvas id="KMB"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="LKOR"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="LYB"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="MLN"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="MPW"></canvas></div></td>   
+        <tr>
+            <td>
+                <div class="chart-container"><canvas id="LYB"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="MLN"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="MPW"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="NICE"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="NVS"></canvas></div>
+            </td>
         </tr>
         <tr>
-            <td><div class="chart-container"><canvas id="NICE"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="NVS"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="NXST"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="OTIS"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="PANW"></canvas></div></td>
+            <td>
+                <div class="chart-container"><canvas id="NXST"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="OTIS"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="PANW"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="PDBC"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="PGHY"></canvas></div>
+            </td>
         </tr>
         <tr>
-            <td><div class="chart-container"><canvas id="PDBC"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="PGHY"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="PLD"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="PNM"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="REM"></canvas></div></td>
-            
+            <td>
+                <div class="chart-container"><canvas id="PLD"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="PNM"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="REM"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="SCI"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="SGOL"></canvas></div>
+            </td>
         </tr>
         <tr>
-            <td><div class="chart-container"><canvas id="SCI"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="SGOL"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="SIVR"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="SJNK"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="SSNC"></canvas></div></td>
-            
+            <td>
+                <div class="chart-container"><canvas id="SIVR"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="SJNK"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="SSNC"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="TAIT"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="TGS"></canvas></div>
+            </td>
         </tr>
         <tr>
-            <td><div class="chart-container"><canvas id="TAIT"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="TGS"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="TSLA"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="ULTA"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="VALE"></canvas></div></td>
-            
-        
+
+            <td>
+                <div class="chart-container"><canvas id="TSLA"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="ULTA"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="VALE"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="VCSH"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="VMC"></canvas></div>
+            </td>
+
         </tr>
         <tr>
-        <td><div class="chart-container"><canvas id="VCSH"></canvas></div></td>
-        <td><div class="chart-container"><canvas id="VMC"></canvas></div></td>
-            <td><div class="chart-container"><canvas id="XAG"></canvas></div></td>
+
+            <td>
+                <div class="chart-container"><canvas id="WDFC"></canvas></div>
+            </td>
+            <td>
+                <div class="chart-container"><canvas id="XAG"></canvas></div>
+            </td>
         </tr>
     </table>
 
@@ -132,9 +244,11 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     Chart.defaults.datasets.line.pointRadius = 0;
 
     const array = ["AMX", "ASML", "ANGL", "AVGO", "BG", "BRKB", "BRT", "BSIG", "C", "CARR", "BAH",
-        "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAF", "FAGIX", "FDGFX", "FNBGX",  "FTS", "GILD", "HPK", "HTLD", "HUN", "INGR",
-        "IPAR", "JPIB", "KMB", "LKOR", "LYB", "MLN", "MPW", "NICE", "NVS", "NXST", "OTIS", "PANW","PDBC", "PGHY","PLD", "PNM", "REM",
-        "SCI", "SGOL", "SIVR", "SJNK","SOXX", "SSNC", "TAIT", "TGS", "TSLA","ULTA", "VALE", "VCSH","VMC", "XAG"];
+        "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "FAF", "FAGIX", "FDGFX", "FNBGX", "FTS", "GILD", "HPK", "HTLD", "HUN", "INGR",
+        "IPAR", "JPIB", "KMB", "LKOR", "LYB", "MLN", "MPW", "NICE",
+        "NVS", "NXST", "OTIS", "PANW", "PDBC", "PGHY", "PLD", "PNM", "REM",
+        "SCI", "SGOL", "SIVR", "SJNK", "SSNC",
+        "TAIT", "TGS", "TSLA", "ULTA", "VALE", "VCSH", "VMC", "WDFC", "XAG"];
 
     // const array = ["ASML", "ANGL", "BRKB"];
 

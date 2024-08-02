@@ -122,7 +122,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
         var WMA8 = []; var date = [];
         var WMA24 = []; var WMA28 = []; var WMA36 = []; var WMA41 = [];
         var WMA48 = []; var rtn = []; var WMA64 = []; var WMA72 = [];
-        var WMA88 = []; var WMA110 = []; var WMA135 = [];
+        var WMA88 = []; var WMA110 = []; var WMA135 = []; var YMA3=[]; var YMA2=[]; var YMA1=[];
 
         for (var i in data) {
           date.push(data[i].date);
@@ -131,7 +131,10 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
           WMA41.push(data[i].WMA41); WMA48.push(data[i].WMA48);
           WMA64.push(data[i].WMA64);
           WMA72.push(data[i].WMA72); WMA88.push(data[i].WMA88); WMA110.push(data[i].WMA110);
-          WMA135.push(data[i].WMA135);
+          WMA135.push(data[i].WMA135),
+          YMA3.push(data[i].YMA3);
+          YMA2.push(data[i].YMA2);
+          YMA1.push(data[i].YMA1);
           rtn.push(data[i].rtn);
         }
 
@@ -146,40 +149,33 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               data: rtn
             },
             {
-              label: '48WMA',
+              label: '24WMA',
+              radius: 0,
+              borderColor: 'rgb(0, 0, 128)',
+              borderWidth: 2.5,
+              data: WMA24
+            },
+            {
+              label: 'YMA1',
               radius: 0,
               borderColor: 'rgb(255, 0, 0)',
               borderWidth: 2.5,
-              data: WMA48
+              data: YMA1
             },
             {
-              label: '88WMA',
+              label: 'YMA2',
               radius: 0,
-              borderColor: 'rgb(32, 54, 240)',
+              borderColor: 'rgb(30,190,30)',
               borderWidth: 2.5,
-              data: WMA88
-            },
-            //       {
-            //   label: 'WMA36',
-            //   radius: 0,
-            //   borderColor: 'rgb(255,255,0)',
-            //   borderWidth: 2.5,
-            //   data: WMA36
-            // },
-            {
-              label: 'WMA110',
-              radius: 0,
-              borderColor: 'rgb(30,225,30)',
-              borderWidth: 2.5,
-              data: WMA110
+              data: YMA2
             },
 
             {
-              label: 'WMA135',
+              label: 'YMA3',
               radius: 0,
               borderColor: 'rgb(198,178,0)',
               borderWidth: 2.5,
-              data: WMA135
+              data: YMA3
             }
           ]
         };
@@ -232,7 +228,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               y: {
                 min: 20,
               }
-    }
+            }
           }
         });
       }
@@ -241,4 +237,5 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
   </script>
 </body>
+
 </html>

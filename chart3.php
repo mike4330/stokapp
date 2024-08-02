@@ -9,6 +9,8 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
     <title>Position Size Charts</title>
     <script src="/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="/js/chart.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script> -->
     <script type="text/javascript" src="/js/luxon.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
@@ -112,6 +114,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td><div class="chart-container4"><canvas id="VALE"></canvas></div><td>
 		<td><div class="chart-container4"><canvas id="VCSH"></canvas></div><td>
            	 <td><div class="chart-container4"><canvas id="VMC"></canvas></div><td>
+                <td><div class="chart-container4"><canvas id="WDFC"></canvas></div></td>
 	</tr>
     </table>
 
@@ -127,7 +130,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             "BSJN", "C", "CARR", "CNHI", "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "F", "FAF","FAGIX", "FDGFX", "FNBGX", "FPE","FTS",
             "GILD", "HUN", "INGR", "IPAR", "JPIB", "KMB", "LKOR","LYB", "MLN", "MPW", "NHC",
             "NICE", "NVS", "NXST", "OTIS", "PANW", "PBR", "PDBC", "PGHY","PLD", "PNM", "REM", "SCI", "SGOL", "SIVR", "SJNK", "SSNC", "TAIT",
-            "TGS", "TSLA", "ULTA", "VALE", "VCSH", "VMC"
+            "TGS", "TSLA", "ULTA", "VALE", "VCSH", "VMC", "WDFC"
         ];
 
         array.forEach(function(item, index) {
