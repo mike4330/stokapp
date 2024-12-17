@@ -1,26 +1,19 @@
-<!--Copyright (C) 2022-2023 Mike Roetto <mike@roetto.org>
+<!--Copyright (C) 2022-2023,2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
-
 <html>
-
 <head>
     <link rel="stylesheet" type="text/css" href="test.css">
     <link rel="stylesheet" type="text/css" href="nav.css">
     <title>Div Predictions</title>
-
 </head>
 
 <?php
 
-include ("nav.php");
+include "nav.php";
 
-// Example usage
-// $symbol = "BG";
-// $forecastTable = qtrpredict($symbol);
-// echo $forecastTable;
 
-$table = "<table style='position: relative; top: 40px;'>";
+$table = "<table style='position: relative; top: 40px;height: 50vh;'>";
 $tickers = array(
     'AMX',
     'ANGL',
@@ -29,18 +22,17 @@ $tickers = array(
     'BAH',
     'BRT',
     'CARR',
-    'C',
     'D',
     'DGX',
     'EMB',
     'EVC',
+    'EWJ',
     'FAF',
     'FAGIX',
     'FDGFX',
     'FNBGX',
     'FPE',
     'FTS',
-    'GILD',
     'HPK',
     'HUN',
     'INGR',
@@ -55,13 +47,14 @@ $tickers = array(
     'NXST',
     'PBR',
     'PGHY',
-    'PNM',
     'PLD',
     'REM',
     'SCI',
     'SSNC',
     'SJNK',
     'TAIT',
+    'TDTF',
+    'TXNM',
     'VALE',
     'VMC',
     'VCSH'
@@ -91,20 +84,27 @@ foreach ($tickers as $ticker) {
 $total_monthly = round($total_monthly,2);
 $total_quarterly = round($total_quarterly,2);
 $total_yearly = ($total_monthly*12) + ($total_quarterly*4);
+$total_yearly_fmt=number_format($total_yearly);
 
-$table .= "<tr bgcolor=\"white\">
-    <td colspan=3>Expected Monthly Income at retirement</td>
-    <td>\$$total_monthly</td></tr>
-    <tr bgcolor=\"white\"><td colspan=3>Expected Quarterly Income at retirement</td>
-    <td>\$$total_quarterly</td>
-    </tr>
-    <tr bgcolor=\"white\"><td colspan=3>Expected Yearly Income at retirement</td>
-    <td>\$$total_yearly</td>
-    </tr>"
-    ;
 $table .= "</table>";
 
 echo $table;
+
+$table2 .= "<table class=\"divsummary\">";
+
+//summary table
+$table2 .= "<tr>
+    <td>Expected Monthly Income at retirement</td>
+    <td>\$$total_monthly</td></tr>
+    <tr><td>Expected Quarterly Income at retirement</td>
+    <td>\$$total_quarterly</td>
+    </tr>
+    <tr><td>Expected Yearly Income at retirement</td>
+    <td>\$$total_yearly_fmt</td>
+    </tr>"
+    ;
+
+echo $table2;
 
 function qtrpredict($symbol)
 {
@@ -156,7 +156,7 @@ function qtrpredict($symbol)
     // echo $lastDataDate;
 
     // Generate 12-quarter forecast
-    $period = 46; //how far out in quarters
+    $period = 52; //how far out in quarters
     $forecast = array();
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (3 * $i) . ' months'));
@@ -246,9 +246,9 @@ function monthpredict($symbol)
 
     // echo $lastDataDate;
 
-    // Generate 12-quarter forecast
+    // Generate monthly forecast
     $forecast = array();
-    $period = 137;
+    $period = 139;
     for ($i = 0; $i < $period; $i++) {
         $forecastMonth = date('Y-m', strtotime($startMonth . ' + ' . (1 * $i) . ' months'));
         $forecast[] = array(
@@ -265,7 +265,7 @@ function monthpredict($symbol)
     global $total_monthly;
     $total_monthly = $total_monthly + $testa['cost'];
 
-    echo "<span color=\"white\">$symbol $testa[cost]</span>\n";
+    // echo "<span color=\"white\">$symbol $testa[cost]</span>\n";
 
     // Output the last three entries as an HTML table
     $html = '<table class="forecast">';
@@ -297,15 +297,19 @@ function monthpredict($symbol)
 
 function getbgstring($cost)
 {
-    if ($cost > 70) {
-        $bgstring = '#006600';
+    if ($cost >80) {
+        $bgstring = '#007700';
+    } else if ($cost > 70) {
+        $bgstring = '#00bb00';
+    } else if ($cost > 60) {
+        $bgstring = '#21ff21';
     } else if ($cost > 50) {
-        $bgstring = '#00ff00';
+        $bgstring = '#42ff42';
     } else if ($cost > 30) {
         $bgstring = '#84ff84';
-    } else if ($cost > 10) {
+    } else if ($cost > 20) {
         $bgstring = '#a4ffa4';
-    } else if ($cost > 5) {
+    } else if ($cost > 10) {
         $bgstring = '#cdffcd';
     } else if ($cost == 0) {
         $bgstring = '#1c1c1c';

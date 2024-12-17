@@ -3,11 +3,13 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Open Lots</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="nav.css">
+    <!-- <title>Open Lots</title> -->
     <script src="res/functions.js"></script>
     <style>
         body {
-            background: #aeaeae;
+            /* background: #aeaeae; */
         }
 
         @font-face {
@@ -25,6 +27,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             background: #cfcfcf;
             font: 1.1vw monospace;
             border: 1px solid #000000;
+            color: #000000;
             padding-left: .27vw;
             padding-right: .13vw;
         }
@@ -37,7 +40,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             padding: 8px;
             font: 1.1vw monospace;
             position: sticky;
-            top: 0;
+            top: 3.5vh;
         }
 
         div.buttons {
@@ -98,7 +101,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
 </head>
 
 <?php
-
+include ("nav.php");
 if (isset($_GET['lb'])) {
     $lb = $_GET['lb'];
     // echo "lb is $lb<br>";
@@ -254,7 +257,7 @@ $database->close();
         echo '<th>Cur Val</th>';
         echo '<th onclick=numericsort(10)>PL$</th>';
         echo '<th onclick=numericsort(11)>PL%</th>';
-        echo '<th colspan=3></th>';
+        echo '<th colspan=1></th>';
         echo '</tr>';
 
         while ($row = $result->fetchArray()) {
@@ -301,7 +304,7 @@ $database->close();
             $pl_pct = round(($profit_loss / $posval), 3) * 100;
 
             //bar graph
-            $width = round(($pl_pct * .28), 1) . "vw";
+            $width = round(($pl_pct * .27), 1) . "vw";
 
             //bar graph
             if ($pl_pct > 0) {
@@ -312,7 +315,9 @@ $database->close();
 
             if ($profit_loss < 0) {
                 $plcolor = '#ee9999';
-            } elseif ($profit_loss > 16) {
+            } 
+                elseif ($profit_loss > 32) {$pcolor = "#2222ff";}
+                elseif ($profit_loss > 16) {
                 $plcolor = '#048504';
             } elseif ($profit_loss > 8) {
                 $plcolor = '#00a500';
@@ -355,12 +360,12 @@ $database->close();
             echo '<td>' . $row['units'] . '</td>';
             echo '<td><input type="number" length=8 name="unitsRemaining" value="' . $row['units_remaining'] . '"></td>';
             echo '<input type="hidden" name="lotId" value="' . $row['id'] . '">';
-            echo "<td style=\"background: $color;\">" . $lot_basis . '</td>';
+            echo "<td style=\"background: $plcolor;\">" . $lot_basis . '</td>';
             echo "<td>$posval</td>\n";
             echo "<td style=\"background: $plcolor;\">$profit_loss</td><td style=\"background: $plcolor;\">$pl_pct</td>";
             echo "<td style=\"vertical-align: bottom;background: $plcolor;\">$svg_rect</td>\n";
-            echo '<td>sold: <input type="checkbox" name="disposition" value="sold"></td>';
-            echo '<td><input type="submit" value="Update"></td>';
+            // echo '<td>sold: <input type="checkbox" name="disposition" value="sold"></td>';
+            // echo '<td><input type="submit" value="Update"></td>';
             echo '</form>';
             echo '</tr>';
         }

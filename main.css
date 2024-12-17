@@ -42,7 +42,7 @@ table.transactions {
     position: absolute;
     top: 11vw;
     left: 27vw;
-    width: 33vw;
+    /*width: 33vw;*/
 }
 
 
@@ -56,6 +56,14 @@ table.lots {
 }
 
 td.lots {
+    font-family: monospace;
+    font-size: 1.6vh;
+    border-left: 1px solid #0a2222;
+    padding-left: 0.7vw;
+    padding-right: 0.7vw;
+}
+
+td.lots_b {
     font-family: monospace;
     font-size: 1.6vh;
     border-left: 1px solid #0a2222;
@@ -291,7 +299,7 @@ div.minichart {
     position: absolute;
     top: 150px;
     /* right: .75vw; */
-    left: 70vw;
+    left: 69vw;
     z-index: 1;
     height: 25vh;
     width: 30vw;
@@ -301,6 +309,32 @@ div.minichart {
 div.rangebar {
     margin: 0;
     padding: 0;
+}
+
+div.filter-controls {
+    position: fixed;
+    top: 40px;
+}
+
+.filter-controls button {
+    /* Styles for all buttons within .filter-controls */
+    background-color: #0939d6;
+    color: #ffffff;
+    border: none;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 2.1vh;
+    border-radius: 4px;
+}
+
+.filter-controls button:hover {
+    background-color: #3e72ff;
+}
+
+.filter-controls input[type="number"] {
+    /* Styles for the input field */
+    width: 50px;
+    text-align: center;
 }
 
 
@@ -326,10 +360,10 @@ div.statusmessage {
     margin: 0 auto;
     z-index=5;
     position: absolute;
-    right: 4vw;
+    right: 0vw;
     top: 10vh;
     font-family: "LCD";
-    font-size: 1.1vw;
+    font-size: 1.0vw;
     color: #eed;
     text-shadow:
         0 0 6px #1f3109,
@@ -407,7 +441,7 @@ span.toggle {
 }
 
 td {
-    font-family:  monospace;
+    font-family: monospace;
     vertical-align: bottom;
     font-size: 1.1vw;
     text-align: bottom;
@@ -606,7 +640,7 @@ div.chart-container4 {
     border-radius: 2px;
     padding: 3px;
     width: 23.15vw;
-    height: 16.6vh;
+    height: 27.6vh;
     z-index: -1;
 }
 
@@ -675,7 +709,7 @@ span.smallnav {
 }
 
 .chart-canvas {
-     /* width: 100%;
+    /* width: 100%;
     height: 100%;  */
 }
 

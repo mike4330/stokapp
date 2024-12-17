@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+// Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 header('Content-Type: application/json');
@@ -10,22 +10,24 @@ $dbh = new PDO($dir) or die("cannot open the database");
 
 if ($_GET['q'] == "weightcomp") {
     $isym = $_GET['symbol'];
+    // Get days parameter with default of 365 if not supplied
+    $days = isset($_GET['days']) ? intval($_GET['days']) : 365;
+    
     if ($isym == "BRKB") {
         $isym = "BRK.B";
     }
-
+    
     $query = "select security_values.timestamp,((close*shares)/value) as wgt ,
-    (select weight from weights where symbol = '$isym' and weights.timestamp = security_values.timestamp) as tgt
-    from security_values,historical
-    where symbol = '$isym' and tgt > 0
-    AND  security_values.timestamp > date('now','-365  days')
-    and security_values.timestamp = historical.date
-    order by security_values.timestamp";
-
+        (select weight from weights where symbol = '$isym' and weights.timestamp = security_values.timestamp) as tgt
+        from security_values,historical
+        where symbol = '$isym' and tgt > 0
+        AND security_values.timestamp > date('now','-$days days')
+        and security_values.timestamp = historical.date
+        order by security_values.timestamp";
+        
     foreach ($dbh->query($query) as $row) {
         $array[] = array('weight' => $row['wgt'], 'target' => $row['tgt'], 'date' => $row['timestamp']);
     }
-
 }
 
 if ($_GET['q'] == "cumshares") {
@@ -97,7 +99,7 @@ if ($_GET['q'] == "posvalues") {
     if ($isym == "BRKB") {
         $isym = "BRK.B";
     }
-    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-730  days') order by timestamp";
+    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-720  days') order by timestamp";
     //     echo $query;
     foreach ($dbh->query($query) as $row) {
         //         echo "$row[pval]\n";
@@ -184,13 +186,9 @@ if ($_GET['q'] == "gl") {
 //returns 2 years of dividends
 if (!empty($_GET['symquery'])) {
     $symbol = $_GET['symquery'];
-    // if ($symbol == 'ANGL'  || $symbol == 'MLN' || $symbol == 'VMC' || $symbol == 'FPE') {
-    //     $period = 36;
-    // } else {
-    //     $period = 24;
-    // }
+
     $symbolsToCheck = ['ANGL', 'ASML','FPE','GILD','LKOR','MLN', 'REM','VMC'];
-    $period = in_array($symbol, $symbolsToCheck) ? 36 : 24;
+    $period = in_array($symbol, $symbolsToCheck) ? 30 : 24;
 
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions 
@@ -398,6 +396,8 @@ if (!empty($_GET['symreturn'])) {
         );
     }
 }
+
+
 
 
 

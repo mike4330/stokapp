@@ -1,4 +1,4 @@
-<!--Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+<!--Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <body>
   <?php
-  include("nav.php");
+  include ("nav.php");
   $dir = 'sqlite:portfolio.sqlite';
   $dbh = new PDO($dir) or die("cannot open the database");
 
@@ -31,26 +31,68 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   echo "</div><br>";
   ?>
 
-<?php
-// $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BRKB','BSIG','CARR','C','D','DBB','DGX','EMB',
+  <?php
+  // $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BRKB','BSIG','CARR','C','D','DBB','DGX','EMB',
 // 'EVC','EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR',
 // 'IPAR','JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NICE','NXST','NVS','OTIS','PANW','PBR','PDBC','PLD',
 // 'PNM','REM','SCI','SGOL','SIVR','SSNC','TAIT','TGS','TSLA','ULTA','VCSH','VMC'];
-
-$symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX','EMB','EVC',
-'EWJ','F','FAF','FAGIX','FDGFX','FNBGX','FPE','FTS','GILD','HPK','HTLD','HUN','INGR','IPAR',
-'JPIB','KMB','LKOR','LYB','MLN','MPW','NHC','NXST','OTIS','PBR','PGHY','PLD','PNM','REM','SCI','SJNK','SSNC','TAIT','VALE','VCSH','VMC'];
-?>
-
-<div class="grid-container2"> 
-
-<?php
-   foreach ($symbols as $symbol) {
-  echo '<div  class="chart-container99" >';
-  echo "<canvas class=\"chart-canvas\" id=\"$symbol\"></canvas></div>";
-   }
+  
+  $symbols = [
+    'AMX',
+    'ANGL',
+    'ASML',
+    'AVGO',
+    'BAH',
+    'BRT',
+    'CARR',
+    'D',
+    'DGX',
+    'EMB',
+    'EVC',
+    'EWJ',
+    'FAF',
+    'FAGIX',
+    'FDGFX',
+    'FNBGX',
+    'FPE',
+    'FTS',
+    'HPK',
+    'HUN',
+    'INGR',
+    'IPAR',
+    'JPIB',
+    'KMB',
+    'LKOR',
+    'LYB',
+    'MLN',
+    'MPW',
+    'NHC',
+    'NXST',
+    'PBR',
+    'PGHY',
+    'PLD',
+    'TXNM',
+    'REM',
+    'SCI',
+    'SJNK',
+    'SSNC',
+    'TAIT',
+    'TDTF',
+    'VALE',
+    'VCSH',
+    'VMC'
+  ];
   ?>
-</div>
+
+  <div class="grid-container2">
+
+    <?php
+    foreach ($symbols as $symbol) {
+      echo '<div  class="chart-container99" >';
+      echo "<canvas class=\"chart-canvas\" id=\"$symbol\"></canvas></div>";
+    }
+    ?>
+  </div>
 
   <script>
     Chart.defaults.plugins.legend.display = false;
@@ -62,14 +104,14 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
 
     c1 = 'rgb(224, 224, 32)'
 
-    const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH','BG', 'BRT', 'BSIG','CARR', 'C','D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF', 
-    'FAGIX',  'FDGFX','FNBGX', 'FPE', 'FTS', 'GILD','HPK','HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW', 
-    'NHC', 'NXST', 'OTIS', 'PBR', 'PGHY','PLD', 'PNM', 'REM', 'SCI', 'SJNK','SSNC', 'VCSH', 'VMC', 'TAIT', 'VALE'
+    const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH', 'BRT', 'CARR', 'C', 'D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF',
+      'FAGIX', 'FDGFX', 'FNBGX', 'FPE', 'FTS', 'GILD', 'HPK', 'HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW',
+      'NHC', 'NXST', 'PBR', 'PGHY', 'PLD', 'TXNM', 'REM', 'SCI', 'SJNK', 'SSNC', 'VCSH', 'VMC', 'TAIT', 'TDTF','VALE'
     ];
 
     $.ajaxSetup({
-  pool: true
-});
+      pool: true
+    });
 
     for (let i = 0; i < chartDataList.length; i++) {
       loadChartData(chartDataList[i]);
@@ -80,7 +122,7 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
         url: `datacsv.php?symquery=${item}`,
         type: 'GET',
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           var cost = [];
           var date = [];
 
@@ -101,7 +143,18 @@ $symbols=['AMX','ANGL','ASML','AVGO','BAH','BG','BRT','BSIG','CARR','C','D','DGX
             labels: date,
             datasets: [{
               label: 'Div Amount',
-              backgroundColor: randomColor(),
+              // backgroundColor: randomColor(),
+              backgroundColor: (context) => {
+                const ctx = context.chart.ctx;
+                const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+                const r = Math.floor(Math.random() * 226);
+                const g = Math.floor(Math.random() * 226);
+                const b = Math.floor(Math.random() * 226);
+                gradient.addColorStop(0, "rgba(0,128,0,1)");
+                gradient.addColorStop(1, "rgba(0, 128, 32,0.2)");
+                return gradient;
+              },
+
               borderColor: 'rgb(65, 65, 65)',
               tension: 0.15,
               data: cost

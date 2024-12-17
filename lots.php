@@ -2,13 +2,16 @@
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 <html>
+<?php include ("nav.php"); ?>
+
 <head>
-  <meta http-equiv="refresh" content="120">
+  <meta http-equiv="refresh" content="300">
   <link rel="stylesheet" type="text/css" href="main.css">
   <link rel="stylesheet" type="text/css" href="nav.css">
   <title>Tax Lot Analysis</title>
   <script src="/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="/js/chart.js"></script>
+
   <script>
     function numericsort(n) {
       var table, rows, switching, i, x, y, shouldSwitch;
@@ -100,9 +103,19 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       }
     }
   </script>
+
 </head>
 
 <body>
+
+  <div class="filter-controls">
+    <button id="decrease">⬇</button>
+    <input type="number" id="threshold" value="10" length="5">
+    <button id="increase">⬆</button>
+  </div>
+
+
+
   <table class="lots">
     <th>Account</th>
     <th>symbol</th>
@@ -128,7 +141,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     $hcolor[4] = "#22ff22";
 
     $dir = 'sqlite:portfolio.sqlite';
-    include("nav.php");
+    // include("nav.php");
     $dbh = new PDO($dir) or die("cannot open the database");
 
     $query = "SELECT  symbol,flag,overamt 
@@ -172,23 +185,43 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
           $fs = 100;
 
           $hmcolors = array(
-            '#9e0142',
-            '#d53e4f',
-            '#f46d43',
-            '#fdae61',
-            '#fee08b',
-            '#ffffbf',
-            '#e6f598',
-            '#abdda4',
-            '#66c2a5',
-            '#3288bd',
-            '#5e4fa2',
-            '#a05195',
-            '#b09d93',
-            '#c8d5a4'
+            '#fde725',
+            '#d8e219',
+            '#addc30',
+            '#84d44b',
+            '#5ec962',
+            '#3fbc73',
+            '#28ae80',
+            '#1fa088',
+            '#21918c',
+            '#26828e',
+            '#2c728e',
+            '#33638d',
+            '#3b528b',
+            '#424086',
+            '#472d7b',
+            '#48186a',
+            '#440154'
           );
 
           switch ($profit_pct) {
+            case $profit_pct > 92.448:
+              $pclr = $hmcolors[16];
+              $fs = 126;
+              continue;
+            case $profit_pct > 77.04:
+              $pclr = $hmcolors[15];
+              $fs = 126;
+              continue;
+            case $profit_pct > 64.1952:
+              $pclr = $hmcolors[14];
+              $fs = 126;
+              continue;
+            case $profit_pct > 53.496:
+              $pclr = $hmcolors[13];
+              $fs = 126;
+              continue;
+
             case $profit_pct > 44.58:
               $pclr = $hmcolors[12];
               $fs = 126;
@@ -246,7 +279,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               continue;
             case $profit_pct > 4:
               $pclr = $hmcolors[0];
-              $ptxt = "white";
+              $ptxt = "black";
               $fs = 102;
               continue;
           }
@@ -272,7 +305,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               <td class=lots>$lsymbol $rowb[date_new]</td>
               <td class=lots>$units</td>
               <td class=lots>$cprice</td>
-              <td class=lots>$curval</td>
+              <td class=lots_b data-value='$curval'>$curval</td>
               <td class=lots><b>$profit</b></td>
 	            <td class=lots style=\"background: $pclr;\"><span style=\"font-size: $fs%;color: $ptxt\">$profit_pct%</span></td>
               </tr>";
@@ -300,6 +333,54 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     echo "<tr><td colspan=3>total avail profit $totalprofit</td></tr>";
     ?>
   </table>
+  <script>
+    const element = document.querySelector('.lots_b');
+
+    if (element) {
+      // Element found
+      console.log('Element with class "lots" found!', element);
+      const value = parseFloat(element.dataset.value);
+      console.log('value', value)
+    } else {
+      // No element found
+      console.log('No element with class "lots" found.');
+    }
+
+    function filterTable(threshold) {
+      const rows = document.querySelectorAll('table tr');
+      rows.forEach(row => {
+        // console.log('row', row);
+        const cell = row.querySelector('.lots_b'); // Assuming you meant '.lots'
+        if (cell) { // Check if cell exists before accessing its properties
+          // console.log("cell value", cell);
+          const value = parseFloat(cell.dataset.value);
+          if (!isNaN(value)) { // Check if value is a valid number
+            row.style.display = value >= threshold ? 'table-row' : 'none';
+          } else {
+            console.error('Invalid data-value:', cell.dataset.value); // Log error for invalid values
+          }
+        }
+      });
+    }
+
+  </script>
+  <script>
+
+
+    const thresholdInput = document.getElementById('threshold');
+    const decreaseButton = document.getElementById('decrease');
+    const increaseButton = document.getElementById('increase');
+
+    let threshold = parseInt(thresholdInput.value);
+
+    function updateThreshold(value) {
+      threshold += value;
+      thresholdInput.value = threshold;
+      filterTable(threshold);
+    }
+
+    decreaseButton.addEventListener('click', () => updateThreshold(-1));
+    increaseButton.addEventListener('click', () => updateThreshold(1));</script>
 </body>
 
 </html>

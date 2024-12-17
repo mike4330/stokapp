@@ -1,6 +1,6 @@
 <?php
 
-//Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+//Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 //SPDX-License-Identifier: GPL-3.0-or-later
 
 header('Content-Type: application/json');
@@ -13,7 +13,7 @@ $dbh = new PDO($dir) or die("cannot open the database");
 
 if ($_GET['q'] == "pv") {
     $v = get_portfolio_value();
-    $subquery = "select value from historical order by date desc limit 1";
+    $subquery = "select value from historical ORDER BY date desc limit 1";
     $stmt = $dbh->prepare($subquery);
     $stmt->execute();
     $zrow = $stmt->fetch();
@@ -30,7 +30,11 @@ if ($_GET['q'] == "pv") {
 if ($_GET['q'] == "divs") {
     //     echo "ok\n";
 //     echo "ok2\n";
-    $query = "select sum(price*units) as cost,substr(date_new,1,7) as p from transactions where xtype = 'Div' group by p order by p desc limit 24 ";
+    $query = "select sum(price*units) as cost,substr(date_new,1,7) as p from transactions 
+    where xtype = 'Div' AND
+    date_new > date('now','-730 days')
+    GROUP BY p 
+    ORDER BY p ";
 }
 
 if ($_GET['q'] == "valuetrend") {
@@ -43,17 +47,22 @@ if ($_GET['q'] == "averages") {
     from historical where date > date('now','-180 days')";
 }
 
+
+
 if ($_GET['q'] == "quarterdivs") {
     $query = "select sum(units*price) as total,(strftime('%Y', date_new)) || 'Q' || ((strftime('%m', date_new) + 2) / 3) as q 
-    from transactions where xtype = 'Div' group by q order by q desc limit 8";
+    from transactions 
+    where xtype = 'Div' AND
+    date_new > date('now','-730 days')
+    GROUP BY q 
+    ORDER BY q ";
 }
-
 
 if ($_GET['q'] == "portpct") {
 
     $v = get_portfolio_value();
     // echo $v;
-    $query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+    $query = "SELECT DISTINCT symbol FROM transactions ORDER BY symbol";
     foreach ($dbh->query($query) as $row) {
         $sym = $row['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
@@ -121,7 +130,7 @@ function get_portfolio_value()
     $ttotal = 0;
     $dir = 'sqlite:portfolio.sqlite';
     $dbh = new PDO($dir) or die("cannot open the database");
-    $q = "SELECT DISTINCT symbol FROM prices order by symbol";
+    $q = "SELECT DISTINCT symbol FROM prices ORDER BY symbol";
     foreach ($dbh->query($q) as $trow) {
         $tsym = $trow['symbol'];
         $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$tsym'";

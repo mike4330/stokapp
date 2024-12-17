@@ -145,7 +145,8 @@ $green3= "#11ca11";
 $green4= "#11c011";
 $green5= "#11aa11";
 
-$query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+// $query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+$query = "SELECT DISTINCT symbol FROM prices order by symbol";
 
 $ttotal=get_portfolio_value();
 //echo "total is $ttotal<br>";
@@ -241,6 +242,8 @@ foreach ($dbh->query($query) as $row) {
         $costbasis = round(($netcost / $netunits),2);
         
         $returnpct=round((($gain+$dollarreturn+$total_dividends)/$netcost)*100,2);
+
+        $tcolor2="white";
         
         if ($returnpct < -5) {$color2="$red2";$tcolor2="black";} 
             elseif ($returnpct > -5 && $returnpct < 0) {$color2="$red1";}
@@ -266,36 +269,18 @@ foreach ($dbh->query($query) as $row) {
         
         $target_value = ($ttotal * ($alloc_target/100));
         $target_diff = round(($value - $target_value),2);
+
+        $result = calculateTargetDiff($sym);
+        $target_diff = $result['target_diff'];
         
         if ($target_diff < 0) {
-            $tcellcolor = "#2222ee" ;$targetcolor="black";}
+            $tcellcolor = "#3434ee" ;$targetcolor="black";}
             else {$tcellcolor = "";$targetcolor="";}
                     
     $rquery = "UPDATE returns set returnpct = $returnpct where symbol = '$sym'";
     $stmt = $dbh->prepare($rquery);$stmt->execute();
 
-// experimental flask code
-// $url = "http://localhost:5000/api/v1/stocks/" . $sym . "/position_size";
 
-// $curl = curl_init($url);
-// curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-// $response = curl_exec($curl);
-// $curl_error = curl_error($curl);
-
-// curl_close($curl);
-
-// if ($curl_error) {
-//   echo "Error: " . $curl_error;
-// } else {
-//   $data = json_decode($response, true);
-//   if (isset($data["position_size"])) {
-//     $netunits = $data["position_size"];
-//     //echo "<td class=\"cntr\">" . $netunits . "</td>";
-//   } else {
-//     echo "<td>No position found for symbol</td>";
-//   }
-// }
     //row output
     echo "<tr class=\"main\"><td><a href=\"/portfolio/?symfilter=$row[symbol]\" class=\"holdinglist\">$sym</a></td>  
 
@@ -351,14 +336,14 @@ $subquery = "select value from historical order by date desc limit 1";
 $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevvalue = $zrow['value'];
 
 $daychange = round(($ttotal - $prevvalue),2);
+$ttotal_fmt=number_format($ttotal);
+$profitable_position_fmt=number_format($profitable_position);
 
-
-
-echo "<div class=\"statusmessage\" style=\"position: fixed;\">Portfolio Value: \$$ttotal ($daychange)
+echo "<div class=\"statusmessage\" style=\"position: fixed;\">Portfolio Value: \$$ttotal_fmt ($daychange)
 <br>Dol. Rtn. \$$tdollarrtn
 <br>Pct. Rtn. $trtnpct %
-<br>Profit Skim $freecash
-<br>Profitable Pos. Val.: $profitable_position
+<br>Profit Skim \$$freecash
+<br>Profitable Pos. Val.: \$$profitable_position_fmt
 
 </div>";
 
