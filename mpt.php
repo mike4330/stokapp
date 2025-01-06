@@ -1,11 +1,11 @@
 <!--Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
-<?php include ("nav.php"); ?>
-<?php include ("functions.php"); ?>
 
 <html>
 
+<?php include ("nav.php"); ?>
+<?php include ("functions.php"); ?>
 <head>
 
   <style>
@@ -279,42 +279,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
   echo "</table>";
 
-  // $cmp = $class_proposed_total['Commodities'];
-  // $cmc = $class_total['Commodities'];
-  // $cmpct_p = round(($cmp / $portfolio_value * 100), 2);
-  // $cmpct_c = round(($cmc / $portfolio_value * 100), 2);
-  
-  // $dsp = $class_proposed_total['Domestic Stock'];
-  // $dsc = $class_total['Domestic Stock'];
-  // $dspct_p = round(($dsp / $portfolio_value * 100), 2);
-  // $dspct_c = round(($dsc / $portfolio_value * 100), 2);
-  
-  // $fsp = $class_proposed_total['Foreign Stock'];
-  // $fsc = $class_total['Foreign Stock'];
-  // $fspct_p = round(($fsp / $portfolio_value * 100), 2);
-  // $fspct_c = round(($fsc / $portfolio_value * 100), 2);
-  
-  // $dbp = $class_proposed_total['Domestic Bonds'];
-  // $dbc = $class_total['Domestic Bonds'];
-  // $dbpct_p = round(($dbp / $portfolio_value * 100), 2);
-  // $dbpct_c = round(($dbc / $portfolio_value * 100), 2);
-  
-  // $fbp = $class_proposed_total['Foreign Bonds'];
-  // $fbc = $class_total['Foreign Bonds'];
-  // $fbpct_p = round(($fbp / $portfolio_value * 100), 2);
-  // $fbpct_c = round(($fbc / $portfolio_value * 100), 2);
-  
-  // echo "<table class=\"mpt2\">";
-  // echo "<th></th><th>Current</th><th>Proposed</th><th>Cur. Alloc</th><th>Prop. Alloc</th>";
-  // echo "<tr><td>Commodities</td><td>$class_total[Commodities]</td><td>$class_proposed_total[Commodities]</td><td>$cmpct_c</td><td>$cmpct_p</td></tr>";
-  // echo "<tr><td>Domestic Stock</td><td>$dsc</td><td>$dsp</td><td>$dspct_c</td><td>$dspct_p</td></tr>";
-  // echo "<tr><td>Foreign Stock</td><td>$fsc</td><td>$fsp</td><td>$fspct_c</td><td>$fspct_p</td></tr>";
-  // echo "<tr><td>Domestic Bonds</td><td>$dbc</td><td>$dbp</td><td>$dbpct_c</td><td>$dbpct_p</td></tr>";
-  // echo "<tr><td>Foreign Bonds</td><td>$fbc</td><td>$fbp</td><td>$fbpct_c</td><td>$fbpct_p</td></tr>";
-  // $totalbonds=($dbpct_p+$fbpct_p);
-  // echo "<tr><td>Total Bonds in Target</td><td>$totalbonds%</td></tr>";
-  // echo "</table>\n";
-  
 
   // picker table
   echo "\n\n<table class=\"picker\">
@@ -338,15 +302,15 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   $overweight_min_thresh = -7.0;
 
   $query = "select sectorshort,prices.symbol,hlr,overamt,volat,RSI,round((pe-average_pe),2) as diff,
-  (coalesce((pe-average_pe),0)/9)+(RSI/100)+volat+((price-mean50)/price)+((price-mean200)/price)-(prices.divyield/2)- (div_growth_rate/3) as z
+  (coalesce((pe-average_pe),0)/9)+(RSI/100)+volat+((price-mean50)/price)+((price-mean200)/price)-(prices.divyield/2) - (div_growth_rate/3) - (fcf_ni_ratio/2) as z
   from prices,MPT,sectors
   where prices.symbol = MPT.symbol
   and prices.symbol = sectors.symbol
   and overamt < $overweight_min_thresh 
   order by z limit 15";
 
-
   foreach ($dbh->query($query) as $trow) {
+    
     $symbol = $trow['symbol'];
     $sectorshort = $trow['sectorshort'];
 

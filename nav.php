@@ -13,46 +13,44 @@ if (!isset($_SESSION['is_logged_in'])) {
 }
 
 $dir = 'sqlite:portfolio.sqlite';
-echo '<img class="logo" src="/portfolio/res/mpmlogo2.svg" width="50px" >';
+//echo '<img class="logo" src="/portfolio/res/mpmlogo2.svg" width="50px" >';
 
-echo ' <div class="navbar">
+echo '  <nav class="navbar">
+        <img class="logo" src="/portfolio/res/mpmlogo2.svg" alt="Logo">
+        <a href="/portfolio/alloc.php"><span>ALLOCATIONS</span></a>
+        
+        <div class="dropdown">
+            <button class="dropbtn"><span>CHARTS</span></button>
+            <div class="dropdown-content">
+                <button><a href="/portfolio/divcharts.php"><span>⤇ Dividends</span></a></button>
+                <button><a href="/portfolio/reports/income.php">⤇ Income</a></button>
+                <button><a href="/portfolio/reports/sectoralloc.php">⤇ Model Sector Allocations</a></button>
+                <button><a href="/portfolio/reports/symbolweights.php">⤇ Model Target Tracking</a></button>
+                <button><a href="/portfolio/chart3.php">⤇ Position Sizes</a></button>
+                <button><a href="/portfolio/posvalues.php">⤇ Positions Values</a></button>
+                <button><a href="/portfolio/returns.php">⤇ Returns</a></button>
+                <button><a href="/portfolio/div.php">⤇ Value Trends</a></button>
+            </div>
+        </div>
 
-  <a href="/portfolio/alloc.php">ALLOCATIONS</a>
-    <div class="dropdown">
-    <button class="dropbtn">CHARTS
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-    <button><a href="/portfolio/divcharts.php">⤇ Dividends</a></button>
-    <button><a href="/portfolio/reports/income.php">⤇ Income</a></button>
-    <button><a href="/portfolio/reports/sectoralloc.php">⤇ Model Sector Allocations</a></button>
-    <button><a href="/portfolio/reports/symbolweights.php">⤇ Model Target Tracking</a></button>
-      <button><a href="/portfolio/chart3.php">⤇ Position Sizes</a></button>
-      <button><a href="/portfolio/posvalues.php">⤇ Positions Values</a></button>
-      <button><a href="/portfolio/returns.php">⤇ Returns</a></button>
-      <button><a href="/portfolio/div.php">⤇ Value Trends</a></button>
-    </div>
-  </div>
-  <a href="/portfolio/holdings.php">HOLDINGS</a>
-  <a href="/portfolio/lots.php">LOTS</a>
-  <a href="/portfolio/mpt.php">MODELLING</a>
-  <a href="/portfolio/sectors.php">SECTORS</a>
-  <a href="/portfolio/">TRANSACTIONS</a>
-  <div class="dropdown">
-  <button class="dropbtn">ANALYSIS
-    <i class="fa fa-caret-down"></i>
-  </button>
-  <div class="dropdown-content">
-    <button><a href="/portfolio/divpredict.php">Dividend Prediction</a></button>
-    <button><a href="/portfolio/reports/pairs.php">Pair Analysis</a></button>
-    <button><a href="/portfolio/lotmgmt.php">Lot Management</a></button>
-  </div>
- 
-</div>
-  <a href="/portfolio/auth/">🔐 Login</a>
-   <a href="/portfolio/auth/logout.php">🚪 logout</a>
+        <a href="/portfolio/holdings.php"><span>HOLDINGS</span></a>
+        <a href="/portfolio/lots.php"><span>LOTS</span></a>
+        <a href="/portfolio/mpt.php"><span>MODELLING</span></a>
+        <a href="/portfolio/sectors.php"><span>SECTORS</span></a>
+        <a href="/portfolio/"><span>TRANSACTIONS</span></a>
 
-</div> ';
+        <div class="dropdown">
+            <button class="dropbtn"><span>ANALYSIS</span></button>
+            <div class="dropdown-content">
+                <button><a href="/portfolio/divpredict.php"><span>Dividend Prediction</span></a></button>
+                <button><a href="/portfolio/reports/pairs.php"><span>Pair Analysis</span></a></button>
+                <button><a href="/portfolio/lotmgmt.php"><span>Lot Management</span></a></button>
+            </div>
+        </div>
+
+        <a href="/portfolio/auth/"><span>🔐 Login</span></a>
+        <a href="/portfolio/auth/logout.php"><span>🚪 logout</span></a>
+    </nav>';
 
 function gpv()
 {

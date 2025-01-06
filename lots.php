@@ -2,7 +2,8 @@
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 <html>
-<?php include ("nav.php"); ?>
+<?php include("nav.php"); ?>
+<?php include("functions.php"); ?>
 
 <head>
   <meta http-equiv="refresh" content="300">
@@ -109,9 +110,15 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 <body>
 
   <div class="filter-controls">
+  <span style="background: white;width: 100%;font-family: font3;">Lot Basis</span><br>
     <button id="decrease">⬇</button>
-    <input type="number" id="threshold" value="10" length="5">
+    <input type="number" id="threshold" value="5" length="5">
     <button id="increase">⬆</button>
+    <br>
+    <span style="background: white;width: 100%;font-family: font3;">Return PCT</span><br>
+    <button id="returnincrease">+</button>
+    <input type="number" id="returnpct" value="5" length="2">
+    <button id="returndecrease">-</button>
   </div>
 
 
@@ -125,14 +132,14 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     <th>CPrice</th>
     <th>cur val</th>
     <th>profit</th>
-    <th>flag</th>
+    <th>pct</th>
     <?php
 
 
     // tuning params
-    $profit_low_thresh = 0.1;
+    $profit_low_thresh = 0.6;
     $lot_low_thresh = 1;
-    $overweight_min_thresh = 7.5;
+    $overweight_min_thresh = 8.6;
 
     $hcolor[0] = "#ffffff";
     $hcolor[1] = "#009900";
@@ -146,10 +153,14 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     $query = "SELECT  symbol,flag,overamt 
       FROM MPT where flag = 'O' and overamt > $overweight_min_thresh
-      order by symbol";
+      order by overamt DESC";
     foreach ($dbh->query($query) as $row) {
       $symbol = $row['symbol'];
       $flag = $row['flag'];
+      $result = calculateTargetDiff($symbol);
+      $target_diff = $result['target_diff'];
+
+	if ($target_diff < $overweight_min_thresh) {continue;}
 
       $pquery = "select price from prices where symbol = '$symbol'";
       $stmt = $dbh->prepare($pquery);
@@ -157,9 +168,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       $zrow = $stmt->fetch();
       $cprice = round($zrow['price'], 4);
 
-      // if ($row['overamt'] < $overfilter) {
-      //   continue;
-      // }
       echo "<tr><td colspan=9 style=\"background: black;\"></td></tr>";
 
       $subquery = "select * from transactions 
@@ -184,6 +192,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
           $ptxt = "";
           $fs = 100;
 
+          #matplotlib 'viridis'
           $hmcolors = array(
             '#fde725',
             '#d8e219',
@@ -201,10 +210,25 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
             '#424086',
             '#472d7b',
             '#48186a',
-            '#440154'
-          );
+            '#440154',
+            '#3f0446',
+            '#390039',
+            '#2e002c',
+            '#25001f',
+            '#1b0015'
+        );
 
           switch ($profit_pct) {
+            case $profit_pct > 133.1:
+              $pclr = $hmcolors[18];
+              $fs = 127;
+              continue;
+
+            case $profit_pct > 110.9376:
+              $pclr = $hmcolors[17];
+              $fs = 127;
+              continue;
+            
             case $profit_pct > 92.448:
               $pclr = $hmcolors[16];
               $fs = 126;
@@ -284,8 +308,6 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               continue;
           }
 
-
-
           #discard trash
           if ($profit < $profit_low_thresh) {
             continue;
@@ -307,9 +329,10 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
               <td class=lots>$cprice</td>
               <td class=lots_b data-value='$curval'>$curval</td>
               <td class=lots><b>$profit</b></td>
-	            <td class=lots style=\"background: $pclr;\"><span style=\"font-size: $fs%;color: $ptxt\">$profit_pct%</span></td>
+	            <td class=lots_c style=\"background: $pclr;\"><span style=\"font-size: $fs%;color: $ptxt\">$profit_pct%</span></td>
               </tr>";
-          $sum[$symbol] = $sum[$symbol] + $profit;
+          // $sum[$symbol] = $sum[$symbol] + $profit;
+          $sum[$symbol] += $profit;
         }
       }
       if ($sum[$symbol]) {
@@ -327,13 +350,25 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
         echo "<tr><td colspan=3 style=\"color: #a0a0a0;font-size: .85vw;\">profit for $symbol
        <b><span style=\"font-size: .85vw;background: $hcolor[$ci];color:#000000; padding-left: 2px; padding-right: 2px;\">\$$sum[$symbol]</b></span></td></tr>";
         $totalprofit = $totalprofit + $sum[$symbol];
-        echo "<tr><td colspan=3 style=\"font-size: .86vw;\">Total over weight \$$row[overamt]</td></tr>";
+
+        // echo "<tr><td colspan=3 style=\"font-size: .86vw;\">Total over weight \$$row[overamt]</td></tr>";
+        echo "<tr><td colspan=3 style=\"font-size: .86vw;\">Total over weight \$$target_diff</td></tr>";
       }
     }
     echo "<tr><td colspan=3>total avail profit $totalprofit</td></tr>";
     ?>
   </table>
   <script>
+    const thresholdInput = document.getElementById('threshold');
+    const decreaseButton = document.getElementById('decrease');
+    const increaseButton = document.getElementById('increase');
+
+    const returnpctInput = document.getElementById('returnpct');
+    const returnincreaseButton = document.getElementById('returnincrease');
+    const returndecreaseButton = document.getElementById('returndecrease');
+
+    let threshold = parseInt(thresholdInput.value);
+    let returnpct = parseFloat(returnpctInput.value);
     const element = document.querySelector('.lots_b');
 
     if (element) {
@@ -346,18 +381,19 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
       console.log('No element with class "lots" found.');
     }
 
-    function filterTable(threshold) {
+    function filterTable() {
       const rows = document.querySelectorAll('table tr');
       rows.forEach(row => {
-        // console.log('row', row);
-        const cell = row.querySelector('.lots_b'); // Assuming you meant '.lots'
-        if (cell) { // Check if cell exists before accessing its properties
-          // console.log("cell value", cell);
-          const value = parseFloat(cell.dataset.value);
-          if (!isNaN(value)) { // Check if value is a valid number
-            row.style.display = value >= threshold ? 'table-row' : 'none';
-          } else {
-            console.error('Invalid data-value:', cell.dataset.value); // Log error for invalid values
+        const valueCell = row.querySelector('.lots_b');
+        const pctCell = row.querySelector('.lots_c span');
+
+        if (valueCell && pctCell) {
+          const value = parseFloat(valueCell.dataset.value);
+          const pct = parseFloat(pctCell.textContent);
+
+          if (!isNaN(value) && !isNaN(pct)) {
+            const showRow = value >= threshold && pct >= returnpct;
+            row.style.display = showRow ? 'table-row' : 'none';
           }
         }
       });
@@ -367,20 +403,37 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
   <script>
 
 
-    const thresholdInput = document.getElementById('threshold');
-    const decreaseButton = document.getElementById('decrease');
-    const increaseButton = document.getElementById('increase');
+    // const thresholdInput = document.getElementById('threshold');
+    // const decreaseButton = document.getElementById('decrease');
+    // const increaseButton = document.getElementById('increase');
 
-    let threshold = parseInt(thresholdInput.value);
+    // const returnpctInput = document.getElementById('returnpct');
+    // const returnincreaseButton = document.getElementById('returnincrease');
+    // const returndecreaseButton = document.getElementById('returndecrease');
+
+    // let threshold = parseInt(thresholdInput.value);
 
     function updateThreshold(value) {
       threshold += value;
       thresholdInput.value = threshold;
-      filterTable(threshold);
+      filterTable();
+    }
+    decreaseButton.addEventListener('click', () => updateThreshold(-1));
+    increaseButton.addEventListener('click', () => updateThreshold(1));
+
+    function updateReturnPct(value) {
+      returnpct += value;
+      returnpctInput.value = returnpct.toFixed(1);
+      filterTable();
     }
 
-    decreaseButton.addEventListener('click', () => updateThreshold(-1));
-    increaseButton.addEventListener('click', () => updateThreshold(1));</script>
+    returndecreaseButton.addEventListener('click', () => updateReturnPct(-0.5));
+    returnincreaseButton.addEventListener('click', () => updateReturnPct(0.5));
+
+
+  </script>
+
+
 </body>
 
 </html>

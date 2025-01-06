@@ -1,4 +1,4 @@
-<!-- Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+<!-- Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
  SPDX-License-Identifier: GPL-3.0-or-later-->
 
 <!DOCTYPE html>
@@ -100,10 +100,11 @@
     echo "<tr>
 <td><select name=\"acct\">
 <option value=\"CB\">CB</option>
+<option value=\"FIDRI\" selected >FIDRI</option>
+<option value=\"FID\" >FID</option>
+<option value=\"ET\">CB</option>
 <option value=\"IB\">IB</option>
-<option value=\"RH\">RH</option>
-<option value=\"FIDRI\" >FIDRI</option>
-<option value=\"FID\" selected>FID</option>
+<option value=\"TT\">TT</option>
 
 </select>
 <td><input type=date size=8 id=\"date\" name=\"date\" value=$curdate></td>
@@ -520,6 +521,7 @@
                             borderColor: 'rgb(16, 128, 16)',
                             backgroundColor: 'rgba(75, 192, 192, 0.1)',
                             radius: 1.95,
+                            tension: .4,
                             borderWidth: 1.5
                         }
       
