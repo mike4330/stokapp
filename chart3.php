@@ -90,9 +90,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="FNBGX"></canvas></div>
             <td>
-            <td>
-                <div class="chart-container4"><canvas id="FPE"></canvas></div>
-            <td>
+         
             <td>
                 <div class="chart-container4"><canvas id="FTS"></canvas></div>
             <td>
@@ -135,9 +133,7 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
         <td>
                 <div class="chart-container4"><canvas id="LYB"></canvas></div>
             <td>
-            <td>
-                <div class="chart-container4"><canvas id="MLN"></canvas></div>
-            <td>
+        
             <td>
                 <div class="chart-container4"><canvas id="MPW"></canvas></div>
             <td>
