@@ -1,131 +1,176 @@
 <!-- Copyright (C) 2024 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later -->
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION["is_logged_in"]) || $_SESSION["is_logged_in"] !== true) {
+    header("Location: /portfolio/auth/index.php");
+    exit();
+}
+
+// Check session timeout (30 minutes)
+if (isset($_SESSION["last_activity"]) && (time() - $_SESSION["last_activity"] > 1800)) {
+    session_unset();
+    session_destroy();
+    header("Location: /portfolio/auth/index.php?error=session_expired");
+    exit();
+}
+$_SESSION["last_activity"] = time();
+
+// Add session security settings
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Strict');
+?>
 <!DOCTYPE html>
 <html>
 
 <head>
   <meta http-equiv="refresh" content="301">
-<title>portfolio holdings</title>
-
-
-<link rel="stylesheet" type="text/css" href="main.css">
-<link rel="stylesheet" type="text/css" href="nav.css">
-<style>
-</style>
-
-<script>
-function changeFontSize(increase) {
-  var tds = document.getElementsByTagName("td");
-
-  for (var i = 0; i < tds.length; i++) {
-    var currentFontSize = parseInt(window.getComputedStyle(tds[i]).fontSize);
-    var newFontSize;
-
-    if (increase) {
-      newFontSize = currentFontSize + 2;
-    } else {
-      newFontSize = currentFontSize - 2;
-    }
-
-    tds[i].style.fontSize = newFontSize + 'px';
+  <title>portfolio holdings</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="nav.css">
+  <style>
+  .loading {
+    opacity: 0.7;
+    pointer-events: none;
   }
-}
-</script>
+
+  .loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--neutral);
+    border-top-color: var(--profit-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Add sort indicator styles */
+  th[role="columnheader"] {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+  }
+
+  th.sort-asc::after {
+    content: "▲";
+    position: absolute;
+    right: 5px;
+    color: #08ac08;
+  }
+
+  th.sort-desc::after {
+    content: "▼";
+    position: absolute;
+    right: 5px;
+    color: #ff0000;
+  }
+  </style>
+
+  <script>
+  function changeFontSize(increase) {
+    var tds = document.getElementsByTagName("td");
+
+    for (var i = 0; i < tds.length; i++) {
+      var currentFontSize = parseInt(window.getComputedStyle(tds[i]).fontSize);
+      var newFontSize;
+
+      if (increase) {
+        newFontSize = currentFontSize + 2;
+      } else {
+        newFontSize = currentFontSize - 2;
+      }
+
+      tds[i].style.fontSize = newFontSize + 'px';
+    }
+  }
+  </script>
 
 
-<script>
-function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("myTable2");
-  switching = true;
-  // Set the sorting direction to ascending:
-  dir = "asc";
-  /* Make a loop that will continue until
-  no switching has been done: */
-  while (switching) {
-    // Start by saying: no switching is done:
-    switching = false;
-    rows = table.rows;
-    /* Loop through all table rows (except the
-    first, which contains table headers): */
-    for (i = 1; i < (rows.length - 1); i++) {
-      // Start by saying there should be no switching:
-      shouldSwitch = false;
-      /* Get the two elements you want to compare,
-      one from current row and one from the next: */
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      /* Check if the two rows should switch place,
-      based on the direction, asc or desc: */
-      if (dir == "asc") {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-          // If so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
-        }
-      } else if (dir == "desc") {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-          // If so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
+  <script>
+  function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable2");
+    switching = true;
+    
+    // Get current sort direction from header
+    var header = table.getElementsByTagName("th")[n];
+    var currentDir = header.getAttribute("data-sort-dir") || "asc";
+    var newDir = currentDir === "asc" ? "desc" : "asc";
+    
+    // Update sort direction in header
+    header.setAttribute("data-sort-dir", newDir);
+    
+    // Update sort indicator
+    updateSortIndicators(table, n, newDir);
+    
+    while (switching) {
+      switching = false;
+      rows = table.rows;
+      
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[n];
+        y = rows[i + 1].getElementsByTagName("TD")[n];
+        
+        // Handle alpha sorting for symbol column
+        if (n === 0) {
+          if (newDir === "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              shouldSwitch = true;
+              break;
+            }
+          } else {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              shouldSwitch = true;
+              break;
+            }
+          }
+        } else {
+          // Handle numeric sorting for other columns
+          var xVal = parseFloat(x.innerHTML.replace(/[^0-9.-]+/g,"")) || 0;
+          var yVal = parseFloat(y.innerHTML.replace(/[^0-9.-]+/g,"")) || 0;
+          
+          if (newDir === "asc") {
+            if (xVal > yVal) {
+              shouldSwitch = true;
+              break;
+            }
+          } else {
+            if (xVal < yVal) {
+              shouldSwitch = true;
+              break;
+            }
+          }
         }
       }
-    }
-    if (shouldSwitch) {
-      /* If a switch has been marked, make the switch
-      and mark that a switch has been done: */
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      // Each time a switch is done, increase this count by 1:
-      switchcount ++;
-    } else {
-      /* If no switching has been done AND the direction is "asc",
-      set the direction to "desc" and run the while loop again. */
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
+      
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
         switching = true;
       }
     }
   }
-}
-</script>
 
-<script>
-function numericsort(n) {
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("myTable2");
-  switching = true;
-  /*Make a loop that will continue until
-  no switching has been done:*/
-  while (switching) {
-    //start by saying: no switching is done:
-    switching = false;
-    rows = table.rows;
-    /*Loop through all table rows (except the
-    first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
-      //start by saying there should be no switching:
-      shouldSwitch = false;
-      /*Get the two elements you want to compare,
-      one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      //check if the two rows should switch place:
-      if (Number(x.innerHTML) > Number(y.innerHTML)) {
-        //if so, mark as a switch and break the loop:
-        shouldSwitch = true;
-        break;
-      }
+  function updateSortIndicators(table, activeColumn, direction) {
+    // Remove all sort indicators
+    var headers = table.getElementsByTagName("th");
+    for (var i = 0; i < headers.length; i++) {
+      headers[i].classList.remove("sort-asc", "sort-desc");
+      headers[i].setAttribute("data-sort-dir", "");
     }
-    if (shouldSwitch) {
-      /*If a switch has been marked, make the switch
-      and mark that a switch has been done:*/
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-    }
+    
+    // Add indicator to active column
+    headers[activeColumn].classList.add(direction === "asc" ? "sort-asc" : "sort-desc");
   }
-}
-</script>
+  </script>
 
 </head>
 
@@ -145,206 +190,247 @@ $green3= "#11ca11";
 $green4= "#11c011";
 $green5= "#11aa11";
 
-// $query = "SELECT DISTINCT symbol FROM transactions order by symbol";
+// Color constants for return percentage backgrounds
+$lightRedBg = "#ff2222";
+$darkRedBg = "#ee0000";
+$lightGreenBg = "#55ff55";
+$mediumGreenBg = "#11d311";
+$darkGreenBg1 = "#11ca11";
+$darkGreenBg2 = "#11c011";
+$darkGreenBg3 = "#11aa11";
+
 $query = "SELECT DISTINCT symbol FROM prices order by symbol";
 
-$ttotal=get_portfolio_value();
-//echo "total is $ttotal<br>";
+$totalPortfolioValue = get_portfolio_value();
+$totalNetCost = 0;
+$profitablePositionsValue = 0;
+$profitSkimTotal = 0;
 
-echo "<table class=\"holdings\" id=\"myTable2\">";
+echo "<table class=\"holdings\" id=\"myTable2\" role=\"grid\" aria-label=\"Portfolio Holdings\">";
 
+echo "<thead role=\"rowgroup\">
+    <tr role=\"row\">
+      <th role=\"columnheader\" data-sort=\"symbol\" onclick=\"sortTable(0)\">symbol</th>
+      <th role=\"columnheader\" data-sort=\"units\" onclick=\"sortTable(1)\">net units</th>
+      <th role=\"columnheader\" data-sort=\"price\" onclick=\"sortTable(2)\">last price</th>
+      <th role=\"columnheader\" data-sort=\"indicators\">indicators</th>
+      <th role=\"columnheader\" data-sort=\"value\" onclick=\"sortTable(4)\">pos. value</th>
+      <th role=\"columnheader\" data-sort=\"target\" onclick=\"sortTable(5)\">tgt. diff</th>
+      <th role=\"columnheader\" data-sort=\"percentage\" onclick=\"sortTable(6)\">port pct.</th>
+      <th role=\"columnheader\" data-sort=\"allocation\" onclick=\"sortTable(7)\">all. tgt.</th>
+      <th role=\"columnheader\" data-sort=\"cost\" onclick=\"sortTable(8)\">net cost</th>
+      <th role=\"columnheader\" data-sort=\"basis\" onclick=\"sortTable(9)\">cost basis</th>
+      <th role=\"columnheader\" data-sort=\"unrealized\" onclick=\"sortTable(10)\">UGL\$</th>
+      <th role=\"columnheader\" data-sort=\"return\" onclick=\"sortTable(11)\">return%</th>
+      <th role=\"columnheader\" data-sort=\"realized\" onclick=\"sortTable(12)\">RGL\$</th>
+      <th role=\"columnheader\" data-sort=\"dividends\" onclick=\"sortTable(13)\">Divs</th>
+      <th role=\"columnheader\" data-sort=\"pricechange\" onclick=\"sortTable(14)\">PriceChg</th>
+      <th role=\"columnheader\" data-sort=\"valuechange\" onclick=\"sortTable(15)\">PosValChg</th>
+    </tr>
+</thead>";
 
-echo "<th onclick=\"sortTable(0)\">symbol</th>
-
-	<th>net units</th>
-	<th colspan=2>last price</th>
-	<th onclick=\"numericsort(4)\">pos. value</th>
-	<th onclick=\"numericsort(5)\">tgt. diff \$</th>
-	<th onclick=\"numericsort(6)\">port pct.</th>
-	<th>all. tgt.</th>
-	
-
-	<th>net cost</th>
-	<th>cost basis</th>
-	
-	<th onclick=\"numericsort(10)\">UGL\$</th>
-	<th onclick=\"numericsort(11)\">return%</th>
-	<th onclick=\"numericsort(12)\">RGL\$</th>
-	
-	<th onclick=\"numericsort(13)\">Divs</th>
-	<th>PriceChg</th>
-	<th onclick=\"numericsort(15)\">PosValChg</th>
-	";
+echo "<tbody role=\"rowgroup\">";
 
 //main tabular output
 foreach ($dbh->query($query) as $row) {
-    $sym=$row['symbol'];
+    $symbol = $row['symbol'];
     
-        $subquery = "select sum(units) as buyunits from transactions where xtype = 'Buy' and symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buyunits = $zrow['buyunits'];
-        $subquery = "select sum(units) as sellunits from transactions where xtype = 'Sell' and symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $sellunits = $zrow['sellunits'];
-        
-        $netunits = round(($buyunits-$sellunits),4);
-
-        $nuquery ="SELECT SUM(result) AS total_sum
-        FROM (
+    // Get buy units
+    $buyUnitsQuery = "SELECT SUM(result) AS buyUnits
+    FROM (
         SELECT CASE
             WHEN units_remaining IS NULL THEN units
             ELSE units_remaining
         END AS result
         FROM transactions
         WHERE xtype = 'Buy'
-        AND symbol = '$sym'
+        AND symbol = '$symbol'
         AND disposition IS NULL
-        ) subquery;";
+    ) subquery;";
 
-        $stmt = $dbh->prepare($nuquery);$stmt->execute();$zrow = $stmt->fetch(); $nu = $zrow['total_sum'];
-        
-        $subquery = "select price from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $cprice = round($zrow['price'],4);
-
-        $netunits = $nu;
-        
-        if ($netunits <= 0) continue;
-                
-        $value = round(($netunits * $cprice),3);
-                
-        // silver premium
-        $premiumprice = $cprice + ($cprice * .2);
-        if ($sym == 'XAG') {$value = ($netunits*$premiumprice);}
-        
-        $total = ($total + $value);
-        
-        $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow['buytotal'],3);
-        
-        $subquery="SELECT sum(units*price) AS selltotal FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow['selltotal'],3);
-        
-        $subquery="SELECT sum(gain) as rgain FROM transactions WHERE xtype = 'Sell' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow['rgain'],2);
-        
-        $subquery="SELECT sum(units*price) as total_dividends FROM transactions WHERE xtype = 'Div' AND symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $total_dividends = round($zrow['total_dividends'],2);
-                
-//         echo "gain for $sym is $gain<br>";
-        
-        $netcost = round(($buytotal - $selltotal),2)+$gain;
-
-        $netcost = round(sym_costbasis($sym),2);
-
-        $tnetcost = ($netcost + $tnetcost);
-        $dollarreturn=round(($value - $netcost),2);
-        
-        if ($dollarreturn > 0) {$freecash=($freecash+$dollarreturn);}
-        
-        $costbasis = round(($netcost / $netunits),2);
-        
-        $returnpct=round((($gain+$dollarreturn+$total_dividends)/$netcost)*100,2);
-
-        $tcolor2="white";
-        
-        if ($returnpct < -5) {$color2="$red2";$tcolor2="black";} 
-            elseif ($returnpct > -5 && $returnpct < 0) {$color2="$red1";}
-            elseif ($returnpct > 0 && $returnpct < 5) {$color2="$green1";}
-            elseif ($returnpct > 5 && $returnpct < 10) {$color2="$green2";}
-            elseif ($returnpct > 10 && $returnpct < 15) {$color2="$green3";}
-            elseif ($returnpct > 15 && $returnpct < 20) {$color2="$green4";}
-            elseif ($returnpct > 20 ) {$color2="$green5";}
-            else {$color2 = "";
-                $tcolor2="";}
-                
-        if ($returnpct > 0) {$profitable_position = $profitable_position + $value;}
-                    
-        if ($dollarreturn < 0) {
-            $cellcolor = "$red1" ;$unrealtcolor="black";}
-            else {$cellcolor = "";$unrealtcolor="";}
-        
-        $portfolio_pct = round((($value / $ttotal)*100),2);
-        $subquery = "select alloc_target,compidx2,class as sclass,mean50,mean200 from prices where symbol = '$sym'";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $alloc_target = $zrow['alloc_target'];
-//         $compidx=round($zrow['compidx2'],2);
-        $sclass=$zrow['sclass'];
-        
-        $target_value = ($ttotal * ($alloc_target/100));
-        $target_diff = round(($value - $target_value),2);
-
-        $result = calculateTargetDiff($sym);
-        $target_diff = $result['target_diff'];
-        
-        if ($target_diff < 0) {
-            $tcellcolor = "#3434ee" ;$targetcolor="black";}
-            else {$tcellcolor = "";$targetcolor="";}
-                    
-    $rquery = "UPDATE returns set returnpct = $returnpct where symbol = '$sym'";
-    $stmt = $dbh->prepare($rquery);$stmt->execute();
-
-
-    //row output
-    echo "<tr class=\"main\"><td><a href=\"/portfolio/?symfilter=$row[symbol]\" class=\"holdinglist\">$sym</a></td>  
-
-
-
-    <td class=\"cntr\">$netunits</td>
-    <td class=\"cntr\">\$$cprice</td><td>";
+    $stmt = $dbh->prepare($buyUnitsQuery);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $netUnits = $result['buyUnits'];
     
-    if ($cprice < $costbasis) {echo '<span class=icon>CB</span>';}
-    if ($cprice < $zrow['mean50']) {echo '<span class=icon style="color: #ff0000;">▼50</span>';}
-    if ($cprice < $zrow['mean200']) {echo '<span class=icon style="color: #ff0000;">▼200</span>';}
-    if ($cprice > $zrow['mean50'] && $zrow['mean50'] > 1 ) {echo '<span class=icon style="color: #08ac08;" >▲50</span>';}
-    if ($cprice > $zrow['mean200'] && $zrow['mean200'] > 1) {echo '<span class=icon style="color: #08ac08;">▲200</span>';}
-   
- 
-    $subquery="SELECT close from security_values where symbol = '$sym' order by timestamp desc limit 1";
-        $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevclose = $zrow['close'];
-        
-        $pos_price_change = round(($cprice - $prevclose),2);
-        if ($sym == "ETHUSD" || $sym == "BTCUSD" || $sym == "XAG") {$pos_price_change=0;}
-        $pos_day_change = round((($pos_price_change)*$netunits),2);
-        
+    if ($netUnits <= 0) continue;
     
-//     ▲
+    // Get current price
+    $priceQuery = "select price from prices where symbol = '$symbol'";
+    $stmt = $dbh->prepare($priceQuery);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $currentPrice = round($result['price'], 4);
+
+    $positionValue = round(($netUnits * $currentPrice), 3);
+    
+    // Handle silver premium
+    if ($symbol == 'XAG') {
+        $premiumPrice = $currentPrice + ($currentPrice * 0.2);
+        $positionValue = ($netUnits * $premiumPrice);
+    }
+    
+    // Calculate costs and returns
+    $netCost = round(sym_costbasis($symbol), 2);
+    $totalNetCost += $netCost;
+    $dollarReturn = round(($positionValue - $netCost), 2);
+    
+    if ($dollarReturn > 0) {
+        $profitSkimTotal += $dollarReturn;
+    }
+    
+    $costBasis = round(($netCost / $netUnits), 2);
+    $returnPercent = round(($dollarReturn / $netCost) * 100, 2);
+
+    // Color coding logic
+    if ($returnPercent > 0) {
+        $profitablePositionsValue += $positionValue;
+    }
+
+    $total = ($total + $positionValue);
+    
+    $subquery="SELECT sum(units*price) AS buytotal FROM transactions WHERE xtype = 'Buy' AND symbol = '$symbol'";
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $buytotal = round($zrow['buytotal'],3);
+    
+    $subquery="SELECT sum(units*price) AS selltotal FROM transactions WHERE xtype = 'Sell' AND symbol = '$symbol'";
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $selltotal = round($zrow['selltotal'],3);
+    
+    $subquery="SELECT sum(gain) as rgain FROM transactions WHERE xtype = 'Sell' AND symbol = '$symbol'";
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $gain = round($zrow['rgain'],2);
+    
+    $subquery="SELECT sum(units*price) as total_dividends FROM transactions WHERE xtype = 'Div' AND symbol = '$symbol'";
+    $stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $total_dividends = round($zrow['total_dividends'],2);
+                
+    $netcost = round(($buytotal - $selltotal),2)+$gain;
+
+    $netcost = round(sym_costbasis($symbol),2);
+
+    $tnetcost = ($netcost + $tnetcost);
+    
+    if ($dollarReturn > 0) {$freecash=($freecash+$dollarReturn);}
+    
+    $portfolioPercent = round((($positionValue / $totalPortfolioValue) * 100), 2);
+    $targetQuery = "SELECT alloc_target, class as securityClass, mean50, mean200 
+                   FROM prices 
+                   WHERE symbol = :symbol";
+    $stmt = $dbh->prepare($targetQuery);
+    $stmt->bindParam(':symbol', $symbol);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    $allocationTarget = $result['alloc_target'];
+    $securityClass = $result['securityClass'];
+    $mean50 = floatval($result['mean50']);
+    $mean200 = floatval($result['mean200']);
+    
+    $targetValue = ($totalPortfolioValue * ($allocationTarget / 100));
+    $targetDiff = round(($positionValue - $targetValue), 2);
+    
+    // Get previous close and calculate changes
+    $prevCloseQuery = "SELECT close from security_values where symbol = '$symbol' order by timestamp desc limit 1";
+    $stmt = $dbh->prepare($prevCloseQuery);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $previousClose = $result['close'];
+    
+    $priceChange = round(($currentPrice - $previousClose), 2);
+    if ($symbol == "ETHUSD" || $symbol == "BTCUSD" || $symbol == "XAG") {
+        $priceChange = 0;
+    }
+    $positionDayChange = round(($priceChange * $netUnits), 2);
+
+    // Update return percentage in database
+    $updateReturnQuery = "UPDATE returns set returnpct = $returnPercent where symbol = '$symbol'";
+    $stmt = $dbh->prepare($updateReturnQuery);
+    $stmt->execute();
+
+    // Output row
+    echo "<tr role=\"row\" class=\"main\">
+        <td><a href=\"/portfolio/?symfilter=$symbol\" class=\"holdinglist\">$symbol</a></td>
+        <td class=\"cntr\">$netUnits</td>
+        <td class=\"cntr\">$currentPrice</td>
+        <td>";
+    
+    // Output technical indicators
+    if ($currentPrice < $costBasis) {
+        echo '<span class="icon">CB</span>';
+    }
+    
+    // 50-day moving average indicator
+    if ($mean50 > 0) {  // Only show if we have valid data
+        if ($currentPrice < $mean50) {
+            echo '<span class="icon" style="color: #ff0000; margin-left: 4px;">▼50</span>';
+        } else {
+            echo '<span class="icon" style="color: #08ac08; margin-left: 4px;">▲50</span>';
+        }
+    }
+    
+    // 200-day moving average indicator
+    if ($mean200 > 0) {  // Only show if we have valid data
+        if ($currentPrice < $mean200) {
+            echo '<span class="icon" style="color: #ff0000; margin-left: 4px;">▼200</span>';
+        } else {
+            echo '<span class="icon" style="color: #08ac08; margin-left: 4px;">▲200</span>';
+        }
+    }
+    
     echo "</td>
-    <td class=\"cntr\">$value</td>
-    <td class=\"cntr\" style=\"background: $tcellcolor;color: $targetcolor\">$target_diff</td>
-    <td class=\"cntr\">$portfolio_pct</td>
-    <td class=\"cntr\">$alloc_target</td>
-  
-    <td class=\"cntr\">\$$netcost</td>
-    <td class=\"cntr\">$costbasis</td>
-    <td class=\"cntr\" style=\"background: $cellcolor;color: $unrealtcolor\">$dollarreturn</td>
-    <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnpct</td>
-
-    <td>$gain</td>
-    
-    <td class=\"cntr\">$total_dividends</td>
-    <td class=\"cntr\">$pos_price_change</td>
-    <td class=\"cntr\">$pos_day_change</td>
+        <td class=\"cntr\">$positionValue</td>
+        <td class=\"cntr\" style=\"background: $tcellcolor;color: $targetcolor\">$targetDiff</td>
+        <td class=\"cntr\">$portfolioPercent</td>
+        <td class=\"cntr\">$allocationTarget</td>
+        <td class=\"cntr\">\$$netCost</td>
+        <td class=\"cntr\">$costBasis</td>
+        <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$dollarReturn</td>
+        <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnPercent%</td>
+        <td>$gain</td>
+        <td class=\"cntr\">$total_dividends</td>
+        <td class=\"cntr\">$priceChange</td>
+        <td class=\"cntr\">$positionDayChange</td>
     </tr>\n";
     
     
 }
 
-$tdollarrtn=round(($ttotal - $tnetcost),2);
+echo "</tbody></table>";
+
+$tdollarrtn=round(($totalPortfolioValue - $tnetcost),2);
 $trtnpct=round(($tdollarrtn / $tnetcost)*100,2);
 
-echo "</table>";
+// Format the values for display
+$totalPortfolioValue_fmt = number_format($totalPortfolioValue, 2);
+$profitablePositionsValue_fmt = number_format($profitablePositionsValue, 2);
 
-// bottom summary bar
+// Get the day change
 $subquery = "select value from historical order by date desc limit 1";
-$stmt = $dbh->prepare($subquery);$stmt->execute();$zrow = $stmt->fetch(); $prevvalue = $zrow['value'];
+$stmt = $dbh->prepare($subquery);
+$stmt->execute();
+$zrow = $stmt->fetch(); 
+$prevvalue = $zrow['value'];
+$daychange = round(($totalPortfolioValue - $prevvalue), 2);
 
-$daychange = round(($ttotal - $prevvalue),2);
-$ttotal_fmt=number_format($ttotal);
-$profitable_position_fmt=number_format($profitable_position);
-
-echo "<div class=\"statusmessage\" style=\"position: fixed;\">Portfolio Value: \$$ttotal_fmt ($daychange)
-<br>Dol. Rtn. \$$tdollarrtn
-<br>Pct. Rtn. $trtnpct %
-<br>Profit Skim \$$freecash
-<br>Profitable Pos. Val.: \$$profitable_position_fmt
-
+echo "<div class=\"statusmessage\">
+    <div class=\"status-item\">
+        <span class=\"status-label\">Portfolio Value:</span>
+        <span class=\"status-value\">\$$totalPortfolioValue_fmt</span>
+        <span class=\"status-value " . ($daychange >= 0 ? "positive" : "negative") . "\">($daychange)</span>
+    </div>
+    <div class=\"status-item\">
+        <span class=\"status-label\">Dollar Return:</span>
+        <span class=\"status-value " . ($tdollarrtn >= 0 ? "positive" : "negative") . "\">\$$tdollarrtn</span>
+    </div>
+    <div class=\"status-item\">
+        <span class=\"status-label\">Percent Return:</span>
+        <span class=\"status-value " . ($trtnpct >= 0 ? "positive" : "negative") . "\">$trtnpct%</span>
+    </div>
+    <div class=\"status-item\">
+        <span class=\"status-label\">Profit Skim:</span>
+        <span class=\"status-value " . ($freecash >= 0 ? "positive" : "negative") . "\">\$$freecash</span>
+    </div>
+    <div class=\"status-item\">
+        <span class=\"status-label\">Profitable Positions:</span>
+        <span class=\"status-value positive\">\$$profitablePositionsValue_fmt</span>
+    </div>
 </div>";
 
 function get_portfolio_value()
@@ -406,9 +492,9 @@ function get_portfolio_value()
 ?>
 
 
-<div style="position: fixed; right: 0; top: 50%; transform: translateY(-50%);">
-  <button onclick="changeFontSize(true)" style="font-size: 20px;">Aa &#8593;</button>
-  <button onclick="changeFontSize(false)" style="font-size: 20px;">Aa &#8595;</button>
+<div class="font-size-controls">
+  <button onclick="changeFontSize(true)">Aa &#8593;</button>
+  <button onclick="changeFontSize(false)">Aa &#8595;</button>
 </div>
 
 
