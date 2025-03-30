@@ -8,24 +8,46 @@
     <title>portfolio</title>
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" type="text/css" href="nav.css">
-    <script src="/js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="/js/chart.js"></script>
-    <script type="text/javascript" src="/js/luxon.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.1.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
-    <script src="/js/node_modules/chartjs-plugin-annotation/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
     <script src="winbox.bundle.min.js"></script>
+    <script src="js/portfolio-charts.js"></script>
 </head>
 
 <body>
     <?php
     include_once "nav.php";
 
-    $c = [
-        'Buy' => "#11cc11",
-        'Div' => "#eefb0b",
-        'Sell' => "#dd3333"
-    ];
+    /**
+     * Portfolio Transaction Management System
+     * 
+     * This file serves as the main interface for managing stock portfolio transactions.
+     * It provides functionality for viewing, filtering, and adding new transactions.
+     * 
+     * Key Features:
+     * 1. Transaction History Display
+     * 2. Transaction Entry Form
+     * 3. Symbol-based Filtering
+     * 4. Interactive Charts
+     * 5. Position Summary
+     * 
+     * Database Structure:
+     * - Uses SQLite database (portfolio.sqlite)
+     * - Main tables: transactions, prices, MPT
+     * 
+     * Dependencies:
+     * - jQuery 3.1.1
+     * - Chart.js
+     * - Luxon.js
+     * - ChartJS Adapter Luxon
+     * - ChartJS Plugin Annotation
+     * - WinBox.js
+     */
 
+    // Database Connection
     try {
         $dir = 'sqlite:portfolio.sqlite';
         $dbh = new PDO($dir);
@@ -34,8 +56,21 @@
         echo "Connection failed: " . $e->getMessage();
     }
 
-    $query = "SELECT symbol FROM prices";
+    /**
+     * Color Scheme Configuration
+     * Defines colors for different transaction types
+     */
+    $c = [
+        'Buy' => "#11cc11",  // Green for buy transactions
+        'Div' => "#eefb0b",  // Yellow for dividend transactions
+        'Sell' => "#dd3333"  // Red for sell transactions
+    ];
 
+    /**
+     * Symbol Color Mapping
+     * Assigns unique colors to each symbol for visual distinction
+     */
+    $query = "SELECT symbol FROM prices";
     foreach ($dbh->query($query) as $row) {
         $symbol = $row['symbol'];
         $sc[$symbol] = $colors[$x];
@@ -43,11 +78,17 @@
         $x++;
     }
 
-    $sc['AMX'] = "#f0f000";$tc['AMX'] = "black";
-    $sc['INGR'] = "#007000";$tc['INGR'] = "white";
+    // Special color cases
+    $sc['AMX'] = "#f0f000"; $tc['AMX'] = "black";
+    $sc['INGR'] = "#007000"; $tc['INGR'] = "white";
 
     //echo "db ok<br>";
     
+    /**
+     * Transaction Query Logic
+     * Default: Shows last 2000 transactions
+     * Filtered: Shows all transactions for a specific symbol
+     */
     $query = "SELECT *,(price*units) as ccost from transactions order by date_new desc,id desc limit 2000";
 
     if (!empty($_GET['symfilter'])):
@@ -257,358 +298,13 @@
     endif;
 
     ?>
+    <?php if (!empty($_GET['symfilter'])): ?>
     <script>
-        var x = "<?php echo "$filterterm" ?>";
-
-        $.ajax({
-            url: 'datacsv.php?q=secprices&symbol=' + x,
-            type: 'GET',
-            dataType: 'json',
-
-            success: function (data) {
-                const rvalue = Math.floor(Math.random() * 235);
-                const gvalue = Math.floor(Math.random() * 235);
-                var bvalue = Math.floor(Math.random() * 235);
-                var bgstring = 'rgba(' + rvalue + ',' + gvalue + ',' + bvalue + ',.5)';
-                Chart.defaults.datasets.line.borderWidth = .2;
-                Chart.defaults.animation.duration = 225;
-                Chart.overrides.line.tension = 0.1;
-
-                var close = [];
-                var date = [];
-
-                for (var i in data) {
-                    close.push(parseFloat(data[i].posvalue));
-                    date.push(data[i].date);
-                }
-
-                var totalSum = 0;
-                for (var z in close) {
-                    var v = parseFloat(close[z]);
-                    totalSum += v;
-                }
-
-                var std = getStandardDeviation(close);
-                var numsCnt = close.length;
-                var avg = (totalSum / numsCnt);
-                var std1 = (avg + (std * 1));
-                var std2H = (avg + (std * 2));
-                var std1L = (avg - (std * 1));
-                var std2L = (avg - (std * 2));
-                var std3L = (avg - (std * 3));
-
-                //         console.log(avg,std,std1);
-
-                var chartdata = {
-                    labels: date,
-                    datasets: [{
-                        label: 'Value',
-                        backgroundColor: bgstring,
-                        borderWidth: 1.1,
-                        borderColor: 'rgb(8, 8, 8)',
-                        radius: 0,
-                        spanGaps: true,
-                        data: close,
-                    }]
-                };
-
-                //         var ctx = $('#VMC');
-                // console.log(item, index);
-                var ctx = $(chart);
-                var dv = 0;
-                var h2;
-
-                var m = Math.min(...close);
-                var mx = Math.max(...close);
-                console.log("min", m, "std3L", std3L);
-                console.log("max", mx, "std2H", std2H);
-
-                if (m < std3L) {
-                    dv = 1;
-                    console.log("below std3", dv);
-                } else dv = 0;
-
-                if (mx > std2H) {
-                    h2 = 1;
-                    console.log("above std2H", h2);
-                }
-
-                var barGraph = new Chart(ctx, {
-                    type: 'line',
-                    data: chartdata,
-                    options: {
-                        fill: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            annotation: {
-                                annotations: {
-
-                                    line2: {
-                                        type: 'line',
-                                        borderColor: 'rgb(16, 16, 240)',
-                                        borderWidth: .75,
-                                        enabled: true,
-                                        scaleID: 'y',
-                                        value: avg,
-                                        label: {
-                                            backgroundColor: 'rgba(0,0,255,.9)',
-                                            padding: 2,
-                                            content: 'mean',
-                                            position: 'start',
-                                            enabled: true,
-                                            borderRadius: 2
-                                        },
-                                    },
-                                    line3: {
-                                        type: 'line',
-                                        borderColor: 'rgb(232, 32, 32)',
-                                        borderWidth: .75,
-                                        enabled: true,
-                                        scaleID: 'y',
-                                        value: std1,
-                                        label: {
-                                            backgroundColor: 'rgba(255,0,0,.5)',
-                                            content: '+1σ',
-                                            padding: 2,
-                                            position: 'start',
-                                            enabled: true,
-                                            borderRadius: 2
-                                        },
-                                    },
-                                    line4: {
-                                        type: 'line',
-                                        borderColor: 'rgb(232, 32, 32)',
-                                        borderWidth: .75,
-                                        enabled: true,
-                                        scaleID: 'y',
-                                        value: std1L,
-                                        label: {
-                                            backgroundColor: 'rgba(255,0,0,.5)',
-                                            content: '-1σ',
-                                            padding: 1,
-                                            position: 'start',
-                                            enabled: true,
-                                            borderRadius: 2
-                                        },
-                                    },
-                                    line5: {
-                                        type: 'line',
-                                        borderColor: 'rgb(24, 240, 24)',
-                                        borderWidth: .75,
-                                        enabled: true,
-                                        scaleID: 'y',
-                                        value: std2L,
-                                        label: {
-                                            backgroundColor: 'rgba(24, 140, 24,.5)',
-                                            content: '-2σ',
-                                            padding: 1,
-                                            position: 'start',
-                                            enabled: true
-                                        },
-                                    },
-                                    line6: {
-                                        type: 'line',
-                                        display: dv,
-                                        borderColor: 'rgb(64, 64, 192)',
-                                        borderWidth: 1,
-                                        enabled: dv,
-                                        scaleID: 'y',
-                                        value: std3L,
-                                        label: {
-                                            backgroundColor: 'rgba(64, 64, 128,.5)',
-                                            content: '-3σ',
-                                            position: 'start',
-                                            enabled: true
-                                        },
-                                    },
-
-                                    line7: {
-                                        type: 'line',
-                                        display: h2,
-                                        borderColor: 'rgb(64, 64, 192)',
-                                        borderWidth: 1,
-                                        padding: 1,
-                                        enabled: h2,
-                                        scaleID: 'y',
-                                        value: std2H,
-                                        label: {
-                                            backgroundColor: 'rgba(24, 140, 24,.5)',
-                                            content: '+2σ',
-                                            position: 'start',
-                                            padding: 1,
-                                            enabled: true
-                                        },
-                                    },
-
-
-                                }
-                            },
-                            title: {
-                                text: x,
-                                display: true
-                            },
-                            legend: {
-                                display: false
-                            },
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    type: 'time'
-                                },
-                                y: {
-                                    min: 0
-                                }
-                            }
-                        }
-                    }
-                });
-
-            } // end success func
-
-        }); //end ajax object
-
-        fetch('datacsv.php?symreturn=' + x + '&tf=180')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('returnchart').getContext('2d');
-
-                const chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.map(item => item.date),
-                        datasets: [{
-                            label: 'Return',
-                            data: data.map(item => item.rtn),
-                            borderColor: 'rgb(75, 75, 255)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                            radius: 1,
-                            borderWidth: 1.25
-                        },
-                        {
-                            label: 'Zero Line',
-                            data: Array(data.length).fill(0),
-                            borderColor: 'rgb(255, 0, 0)',
-                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                            borderWidth: 3,
-                            radius: 0
-                        }
-                        ]
-                    },
-                    options: {
-
-                        maintainAspectRatio: true,
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: false
-                            }
-                        }
-                    }
-                });
-            });
-
-        fetch('utils/api2.php?symbol=' + x )
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('yieldchart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.map(item => item.declare_date),
-                        datasets: [{
-                            label: 'Yield',
-                            data: data.map(item => item.yield),
-                            borderColor: 'rgb(16, 128, 16)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                            radius: 1.95,
-                            tension: .4,
-                            borderWidth: 1.5
-                        }
-      
-                        ]
-                    },
-                    options: {
-                        plugins: {
-                        legend: {
-                        display: false,}},
-                        maintainAspectRatio: true,
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: false
-                            }
-                        }
-                    }
-                });
-
-            });
- 
-
-        function getStandardDeviation(array) {
-            const n = array.length
-            const mean = array.reduce((a, b) => a + b) / n
-            return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-        }
+        const symbol = "<?php echo htmlspecialchars($_GET['symfilter']); ?>";
+        initializeCharts(symbol);
+        initializeWinBoxes(symbol);
     </script>
-
-    <script>
-        const returnContainer = document.getElementById("returnContainer");
-
-        if (returnContainer) {
-            // console.log("returncontainer element found:", returnContainer);
-
-            const winbox = new WinBox({
-                class: "white",
-                header: 25,
-                title: "Return for " + x,
-                mount: returnContainer,
-                // x: "left",
-                y: "bottom",
-                width: "500px",
-                height: "280px"
-
-            });
-
-            winbox.on("close", function () {
-                // Cleanup code or any other actions when the window is closed
-                console.log("WinBox closed");
-            });
-        } else {
-            console.log("returncontainer element not found");
-        }
-        </script>
-<script>
-        
-        const yieldContainer = document.getElementById("yieldContainer");
-
-        if (yieldContainer) {
-            console.log("yieldcontainer element found:", yieldContainer);
-
-            const winbox = new WinBox({
-                class: "white",
-                // background: "#00ff00",
-                header: 25,
-                title: "Yield for " + x,
-                mount: yieldContainer,
-                // x: "left",
-                y: 725,
-                
-                width: "500px",
-                height: "280px"
-
-            });
-
-            winbox.on("close", function () {
-                // Cleanup code or any other actions when the window is closed
-                console.log("WinBox closed");
-            });
-        } else {
-            console.log("yieldcontainer element not found");
-        }
-
-    </script>
-
-
+    <?php endif; ?>
 
 </body>
 
