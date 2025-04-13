@@ -219,89 +219,63 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
         );
 
           switch ($profit_pct) {
-            case $profit_pct > 133.1:
-              $pclr = $hmcolors[18];
-              $fs = 127;
-              continue;
-
-            case $profit_pct > 110.9376:
-              $pclr = $hmcolors[17];
-              $fs = 127;
-              continue;
             
-            case $profit_pct > 92.448:
-              $pclr = $hmcolors[16];
-              $fs = 126;
-              continue;
-            case $profit_pct > 77.04:
-              $pclr = $hmcolors[15];
-              $fs = 126;
-              continue;
-            case $profit_pct > 64.1952:
-              $pclr = $hmcolors[14];
-              $fs = 126;
-              continue;
-            case $profit_pct > 53.496:
-              $pclr = $hmcolors[13];
-              $fs = 126;
-              continue;
-
-            case $profit_pct > 44.58:
+            case $profit_pct > 116.5:
               $pclr = $hmcolors[12];
               $fs = 126;
               continue;
-            case $profit_pct > 37.15:
+            case $profit_pct > 89.6:
               $pclr = $hmcolors[11];
-              $fs = 125;
+              $fs = 126;
               continue;
-            case $profit_pct > 30.96:
+            case $profit_pct > 68.9:
               $pclr = $hmcolors[10];
-              $fs = 123;
+              $fs = 126;
               continue;
-            case $profit_pct > 25.8:
+            case $profit_pct > 53:
               $pclr = $hmcolors[9];
               $fs = 120;
               continue;
-            case $profit_pct > 21.5:
+            case $profit_pct > 40.8:
               $pclr = $hmcolors[8];
               $fs = 118;
               continue;
-            case $profit_pct > 17.92:
+            case $profit_pct > 31.4:
               $pclr = $hmcolors[7];
               $fs = 116;
               $ptxt = "black";
               continue;
-            case $profit_pct > 14.93:
+            case $profit_pct > 24.1:
               $pclr = $hmcolors[6];
               $fs = 114;
               $ptxt = "black";
               continue;
-            case $profit_pct > 12.44:
+            case $profit_pct > 18.6:
               $pclr = $hmcolors[5];
               $fs = 112;
               $ptxt = "black";
               continue;
-            case $profit_pct > 10.37:
+            case $profit_pct > 14.3:
               $pclr = $hmcolors[4];
               $ptxt = "black";
               $fs = 110;
               continue;
-            case $profit_pct > 8.64:
+            case $profit_pct > 11:
               $pclr = $hmcolors[3];
               $ptxt = "black";
               $fs = 108;
               continue;
-            case $profit_pct > 7.2:
+            case $profit_pct > 8.5:
               $pclr = $hmcolors[2];
               $ptxt = "black";
               $fs = 106;
               continue;
-            case $profit_pct > 6:
+            case $profit_pct > 6.5:
               $pclr = $hmcolors[1];
               $ptxt = "black";
               $fs = 104;
               continue;
-            case $profit_pct > 4:
+            case $profit_pct > 5:
               $pclr = $hmcolors[0];
               $ptxt = "black";
               $fs = 102;
