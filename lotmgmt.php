@@ -121,6 +121,12 @@ if (isset($_GET['term'])) {
 } else {
 }
 
+if (isset($_GET['plpct'])) {
+    $plpct = $_GET['plpct'];
+    // echo "lb is $lb<br>";
+} else {
+}
+
 
 // Connect to SQLite database
 $database = new SQLite3('portfolio.sqlite');
@@ -195,6 +201,22 @@ $database->close();
         <tr><td class="buttons"><a href="lotmgmt.php?term=Short" class="button">Short</td>
         <td class="buttons"><a href="lotmgmt.php?term=Long" class="button">Long</td>
     </tr>
+    <tr><th colspan=2>PL</th></tr>
+    <tr>
+    <td class="buttons"><a href="lotmgmt.php?plpct=5" class="button">5%</td>
+    <td class="buttons"><a href="lotmgmt.php?plpct=10" class="button">10%</td>
+    </tr>
+    <tr>
+    <td class="buttons"><a href="lotmgmt.php?plpct=12.5" class="button">12.5%</td>
+    <td class="buttons"><a href="lotmgmt.php?plpct=15" class="button">15%</td></tr>
+    <tr>
+    <td class="buttons"><a href="lotmgmt.php?plpct=17.5" class="button">17.5%</td>
+    <td class="buttons"><a href="lotmgmt.php?plpct=20" class="button">20%</td>
+    </tr>
+    <tr>
+    <td class="buttons"><a href="lotmgmt.php?plpct=22.5" class="button">22.5%</td>
+    <td class="buttons"><a href="lotmgmt.php?plpct=25" class="button">25%</td>
+    </tr>
         </table>
     </div>
 
@@ -202,33 +224,7 @@ $database->close();
 
     $database = new SQLite3('portfolio.sqlite');
 
-    // Function to update the lot with the provided quantity
-    function updateLot($lotId, $unitsRemaining)
-    {
-        // Assuming you have a database connection established
-        // Replace 'your_database_name' with the actual name of your database
-        $database = new SQLite3('portfolio.sqlite');
-
-        // Prepare the update statement
-        $query = "UPDATE transactions SET units_remaining = :unitsRemaining WHERE id = :lotId";
-        $statement = $database->prepare($query);
-        $statement->bindValue(':unitsRemaining', $unitsRemaining, SQLITE3_FLOAT);
-        $statement->bindValue(':lotId', $lotId, SQLITE3_INTEGER);
-
-        // Execute the update statement
-        $result = $statement->execute();
-
-        // Check if the update was successful
-        if ($result) {
-            echo 'Lot updated successfully.';
-        } else {
-            echo 'Failed to update the lot.';
-        }
-
-        // Close the statement and the database connection
-        $statement->close();
-        $database->close();
-    }
+ 
 
     // Fetch all open lots
     $query = "SELECT *
@@ -341,6 +337,8 @@ $database->close();
                 continue;
             }
 
+            if ($pl_pct < $plpct) {continue;}
+
             if ($pterm == "Short" && $term == "Long" ) {continue;}
             if ($pterm == "Long" && $term == "" ) {continue;}
 
@@ -358,14 +356,14 @@ $database->close();
             echo "<td style=\"background: $plcolor;\">" . $row['price'] . '</td>';
             // echo '<td>' . round($cprice[$symbol],2) . '</td>';
             echo '<td>' . $row['units'] . '</td>';
-            echo '<td><input type="number" length=8 name="unitsRemaining" value="' . $row['units_remaining'] . '"></td>';
+            //echo '<td><input type="number" length=8 name="unitsRemaining" value="' . $row['units_remaining'] . '"></td>';
+            echo "<td> $row[units_remaining] </td>";
             echo '<input type="hidden" name="lotId" value="' . $row['id'] . '">';
             echo "<td style=\"background: $plcolor;\">" . $lot_basis . '</td>';
             echo "<td>$posval</td>\n";
             echo "<td style=\"background: $plcolor;\">$profit_loss</td><td style=\"background: $plcolor;\">$pl_pct</td>";
             echo "<td style=\"vertical-align: bottom;background: $plcolor;\">$svg_rect</td>\n";
-            // echo '<td>sold: <input type="checkbox" name="disposition" value="sold"></td>';
-            // echo '<td><input type="submit" value="Update"></td>';
+ 
             echo '</form>';
             echo '</tr>';
         }
@@ -381,20 +379,7 @@ $database->close();
     // Close the database connection
     $database->close();
 
-    // Handle form submission
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $lotId = $_POST['lotId'];
-        $unitsRemaining = $_POST['unitsRemaining'];
-        $disposition = isset($_POST['disposition']) ? $_POST['disposition'] : '';
 
-        // Call the updateLot function to update the lot with the new units remaining and disposition
-        updateLot($lotId, $unitsRemaining, $disposition);
-
-        // Redirect back to the same page after updating the lot
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
-    }
     ?>
 </body>
 
