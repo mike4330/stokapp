@@ -1,7 +1,8 @@
 body {
-    background-color: #040404;
+    margin-top: 6vh;
+    background: #111111;
+    color: #ffffff;
     /* background-image: url("graylines.png");  */
-
 }
 
 @font-face {
@@ -10,21 +11,8 @@ body {
 }
 
 @font-face {
-    font-family: 'LCD';
-    src: url('res/pixelpointregular.ttf') format('truetype'),
-         url('res/VCR_OSD_MONO_1.001.ttf') format('truetype');
-    font-display: swap;
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* Fallback font stack for LCD */
-.lcd-text {
-    font-family: 'LCD', 'VCR OSD Mono', 'Courier New', monospace;
-    letter-spacing: 0.05em;
-    text-shadow: 0 0 6px #1f3109,
-                 0 0 9px #eee,
-                 0 0 20px #eee;
+    font-family: LCD;
+    src: url(res/pixelpointregular.ttf);
 }
 
 @font-face {
@@ -33,31 +21,26 @@ body {
 }
 
 
+/* Base table styles */
 table {
     margin-bottom: 5px;
-    margin-left: auto;
-    margin-right: auto;
     background: #151515;
     border-collapse: collapse;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 4px 4px 5px #111111;
-    position: absolute;
-    left: 4vw;
-    top: 5.9vh;
 }
 
 table.holdings {
     position: absolute;
     left: 1vw;
-    top: 15vh;
+    top: 11vh;
 }
 
 table.transactions {
     position: absolute;
-    top: 11vw;
-    left: 27vw;
-    /*width: 33vw;*/
+    top: 13vw;
+    left: 23vw;
 }
 
 
@@ -105,14 +88,14 @@ table.mpt {
 
 table.mpt th {
     background: #e0e0e0;
-    font-size: 1vw;
+    font-size: 1rem;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
 }
 
 table.mpt td {
-    font-size: .9vw;
+    font-size: 0.9rem;
     font-family: font3;
     padding-left: .3vw;
     padding-right: .3vw;
@@ -132,12 +115,12 @@ table.mpt2 {
 }
 
 table.mpt2 th {
-    font-size: 1.04vw;
+    font-size: 1rem;
     text-align: left;
 }
 
 table.mpt2 td {
-    font-size: .94vw;
+    font-size: 0.9rem;
     text-align: left;
 }
 
@@ -233,13 +216,9 @@ table.chart2 {
     margin-left: auto;
     margin-right: auto;
     background: #ffffff;
-
     position: absolute;
     top: 4vw;
     left: 3vw;
-    #right: .5vw;
-    #width: 98vw;
-    #border-collapse: collapse;
     overflow: hidden;
     z-index: -99;
 }
@@ -268,8 +247,7 @@ table.picker {
 }
 
 .picker td {
-    font: 1.1vw "monospace";
-    /* Changed order and added missing unit */
+    font-size: 1rem;
     font-family: font3;
     border-bottom: 1.4px solid #111181;
     border-right: 1.4px solid #111181;
@@ -280,7 +258,7 @@ table.picker {
 
 
 .picker th {
-    font-size: 1.1vh;
+    font-size: 1rem;
 }
 
 table.overs {
@@ -293,7 +271,7 @@ table.overs {
 }
 
 .overs td {
-    font-size: 1.1vw;
+    font-size: 1rem;
     font-family: font3;
     padding-left: .9vw;
     border-bottom: 1.5px solid #111181;
@@ -303,19 +281,38 @@ table.overs {
 }
 
 .overs th {
-    font-size: 1.3vh;
+    font-size: 1.1rem;
+}
+
+div.minichart,
+.returnchart,
+.yieldchart,
+.cbpschart {
+    background-color: #fefefe;
+    position: absolute;
+    right: 2.3vw;
+    width: 29vw;
+    height: 25vh;
+    margin: 0 0 1rem 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
 }
 
 div.minichart {
-    background-color: #fefefe;
-    position: absolute;
-    top: 150px;
-    /* right: .75vw; */
-    left: 69vw;
-    z-index: 1;
-    height: 25vh;
-    width: 30vw;
-    border-radius: 4px;
+    top: 11vw;
+}
+
+div.returnchart {
+    top: calc(11vw + 27vh);
+}
+
+div.yieldchart {
+    top: calc(11vw + 54vh);
+}
+
+div.cbpschart {
+    top: calc(11vw + 81vh);
 }
 
 div.rangebar {
@@ -357,13 +354,12 @@ div.filter-controls {
 
 
 div.divboard {
-
     background: #333333;
     position: absolute;
     left: .4vw;
     top: 4vw;
     width: fit-content;
-    z-index=5;
+    z-index: 5;
     font-family: "LCD";
     color: #eed;
     text-shadow:
@@ -373,90 +369,34 @@ div.divboard {
 }
 
 div.statusmessage {
-    background: linear-gradient(90deg, #222222 0%, #1a1a1a 100%);
+    background: #333333;
     width: fit-content;
-    padding: 0.75rem;
-    margin: 0;
-    position: fixed;
+    margin: 0 auto;
+    z-index: 5;
+    position: absolute;
     left: 1vw;
     top: 6vh;
-    z-index: 100;
-    font-family: 'LCD', 'VCR OSD Mono', 'Courier New', monospace;
-    font-size: 0.95rem;
-    color: #c8c8c8;
-    text-shadow: 0 0 2px rgba(31, 49, 9, 0.5),
-                 0 0 4px rgba(238, 238, 238, 0.3);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
-                inset 0 1px 1px rgba(255, 255, 255, 0.05);
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    gap: 0.5rem 1.5rem;
-    white-space: nowrap;
-    border: 1px solid #333;
-}
-
-.status-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.status-label {
-    color: #888;
-}
-
-.status-value {
-    font-weight: bold;
-    color: #ddd;
-}
-
-.status-value.positive {
-    color: #3d3;
-    text-shadow: 0 0 2px rgba(51, 221, 51, 0.3);
-}
-
-.status-value.negative {
-    color: #f55;
-    text-shadow: 0 0 2px rgba(255, 85, 85, 0.3);
-}
-
-@media (max-width: 1200px) {
-    div.statusmessage {
-        font-size: 0.85rem;
-        gap: 0.3rem 1rem;
-        grid-template-columns: repeat(2, auto);
-    }
-}
-
-@media (max-width: 768px) {
-    div.statusmessage {
-        position: relative;
-        left: 0;
-        top: 0;
-        margin: 1rem auto;
-        font-size: 0.8rem;
-        grid-template-columns: 1fr;
-        width: calc(100% - 2rem);
-    }
-    
-    table.holdings {
-        top: 18vh;
-    }
+    font-family: "LCD";
+    font-size: 1.0vw;
+    color: #eed;
+    text-shadow:
+        0 0 6px #1f3109,
+        0 0 9px #eee,
+        0 0 20px #eee;
 }
 
 div.toggles {
-    #background: white;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-    margin-top: 20px;
-    font-family: monospace;
-    font-size: 14px;
     position: absolute;
-    top: 9.25vw;
-    left: 7vw;
+    left: 1vw;
+    top: calc(11vw + 15rem);
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
+    width: 20vw;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    background: #171717;
+    border-radius: 4px;
 }
 
 span.icon {
@@ -484,34 +424,47 @@ span.navicon {}
 
 table.status2 {
     background: #171717;
+    width: 20vw;
     position: absolute;
-    top: 25vh;
-    left: 10px;
-    width: fit-content;
-
+    left: 1vw;
+    top: 11vw;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 table.status2 td {
     background: #2e2e2e;
-    font-family: "LCD";
+    font-family: "LCD", monospace;
     color: #c9c9fe;
-    font-size: 1.2vw;
+    font-size: 0.9vw;
     border-top: 3px solid #171717;
-
+    padding: 0.4rem 0.7rem;
+    line-height: 1.1;
+    white-space: nowrap;
 }
 
 
 
 span.toggle {
-    background: #a0a0ff;
-    padding: 6px;
+    background: #333;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+span.toggle:hover {
+    background: #444;
 }
 
 td {
     font-family: monospace;
     vertical-align: bottom;
-    font-size: 1.1vw;
+    font-size: 1rem;
     text-align: bottom;
     padding-left: .2vw;
     padding-right: .2vw;
@@ -524,14 +477,14 @@ td {
 }
 
 td.alloc {
-    font-size: 2.5vh;
+    font-size: 1.5rem;
     padding-right: 20px;
 }
 
 td.model {
     font-family: "PixelPoint";
     vertical-align: middle;
-    font-size: 1vw;
+    font-size: 1rem;
     padding-right: 36px;
     padding-left: 6px;
     padding-top: 1px;
@@ -552,20 +505,10 @@ td.a {
 }
 
 td.cntr {
+    /*font: 15px monospace;*/
     border-left: 2px solid rgb(110, 110, 110);
     border-bottom: 2px solid rgb(110, 110, 110);
     text-align: right;
-}
-
-/* Return percentage styling */
-td.cntr[style*="background: #094909"] {
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
-    font-weight: 500;
-}
-
-td.cntr[style*="background: #490909"] {
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
-    font-weight: 500;
 }
 
 td.summaryline {
@@ -580,7 +523,7 @@ td.summaryline {
 
 th {
     font-family: monospace;
-    font-size: 1.3vh;
+    font-size: 1.1rem;
     text-align: center;
     padding-left: .2vw;
     padding-right: .2vw;
@@ -614,16 +557,7 @@ a.holdinglist:visited {
 }
 
 .button1 {
-    width: 200px;
-    font: 15px sans-serif;
-    background-color: #111170;
-    padding: 10px;
-    border-radius: 4px;
-
-}
-
-.button1:hover {
-    background-color: #1111a0;
+    display: none;
 }
 
 /*nav*/
@@ -654,21 +588,22 @@ a.button2:visited {
 
 a.buttonsmall {
     background-color: #0c0cbb;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 3px 2px;
     border-radius: 3px;
     border: 1px solid #323299;
-    color: #000000;
-    display: inline-block;
-    width: 3vw;
-    text-align: center;
-    /* margin: 14px; */
     color: white;
+    display: inline-block;
+    width: 4.5vw;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.8rem;
 }
 
 a.buttonsmall:hover {
     background-color: #eeee00;
     border: 1px solid #3232bb;
+    color: #000000;
 }
 
 
@@ -680,17 +615,19 @@ div.nav {
 
 table.smallnav {
     background: #3f3f3f;
+    width: 20vw;
     position: absolute;
-    width: auto;
-    top: 65vh;
-    left: 75vw;
-    margin: 0px;
-
+    left: 1vw;
+    top: calc(11vw + 22rem);
+    border-radius: 4px;
+    overflow: hidden;
+    border-spacing: 2px;
+    border-collapse: separate;
 }
 
 .smallnav td {
-    font-family: "Consolas", "Courier New", monospace !important;
-    padding: 4px;
+    padding: 2px;
+    text-align: center;
 }
 
 
@@ -796,192 +733,302 @@ span.smallnav {
     background-color: #ffffff;
 }
 
-/* Modern dark theme for form */
-form {
-  background: linear-gradient(to bottom, #1a1a1a, #2d2d2d);
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  max-width: 1200px;
-  margin: 2rem auto;
+/* Transaction Container */
+.transaction-container {
+    position: absolute;
+    left: 23vw;
+    top: 7vh;
+    width: 45vw;
+    background: #222222;
+    padding: 0.8rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
 }
 
-select, input {
-  background-color: #333;
-  border: 1px solid #444;
-  color: #fff;
-  padding: 0.4rem 0.65rem;
-  border-radius: 4px;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+.transaction-container form {
+    width: 100%;
 }
 
-select:hover, input:hover {
-  background-color: #3a3a3a;
-  border-color: #555;
+.form-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
 }
 
-select:focus, input:focus {
-  outline: none;
-  border-color: #666;
-  box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.3);
-}
-
-input[type="submit"] {
-  background-color: #4a4a4a;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-}
-
-input[type="submit"]:hover {
-  background-color: #5a5a5a;
-}
-
-input[type="submit"]:active {
-  transform: translateY(1px);
-}
-
-/* Make the date input icon darker */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.8);
-}
-
-/* Loading animation */
-.loading {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--neutral);
-  border-top-color: var(--profit-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-/* Sort indicators */
-th[role="columnheader"] {
-  cursor: pointer;
-  position: relative;
-  padding-right: 20px;
-}
-
-th.sort-asc::after {
-  content: "▲";
-  position: absolute;
-  right: 5px;
-  color: #08ac08;
-}
-
-th.sort-desc::after {
-  content: "▼";
-  position: absolute;
-  right: 5px;
-  color: #ff0000;
-}
-
-/* Font size controls */
-.font-size-controls {
-  position: fixed;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: rgba(21, 21, 21, 0.9);
-  border-radius: 4px 0 0 4px;
-  z-index: 100;
-}
-
-.font-size-controls button {
-  font-size: 20px;
-  background: #444;
-  border: none;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.font-size-controls button:hover {
-  background: #666;
-}
-
-/* Responsive table adjustments */
-@media (max-width: 1200px) {
-  table.holdings {
-    position: relative;
-    left: 0;
-    top: 0;
-    margin: 1rem;
-    width: calc(100% - 2rem);
-    overflow-x: auto;
-  }
-  
-  td, th {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  table.holdings {
+.form-header {
+    color: #888;
     font-size: 0.8rem;
-  }
-  
-  td, th {
-    padding: 0.3rem;
-  }
-  
-  .font-size-controls {
-    top: auto;
-    bottom: 1rem;
-    transform: none;
-  }
+    font-weight: normal;
+    margin-bottom: 0.3rem;
 }
 
-/* Technical indicators styling */
-.icon {
-    display: inline-block;
-    font-weight: bold;
-    padding: 0 2px;
-    border-radius: 2px;
+.form-row > div {
+    flex: 1;
 }
 
-.icon[style*="color: #ff0000"] {
-    text-shadow: 0 0 2px rgba(255, 0, 0, 0.3);
+/* Make symbol field slightly wider */
+.form-row > div:nth-child(3) {
+    flex: 1.2;
 }
 
-.icon[style*="color: #08ac08"] {
-    text-shadow: 0 0 2px rgba(8, 172, 8, 0.3);
+/* Make units and price fields slightly wider */
+.form-row > div:nth-child(5),
+.form-row > div:nth-child(6) {
+    flex: 1.1;
 }
 
-/* Cost basis indicator */
-.icon:first-child {
+/* Make fee field narrower */
+.form-row > div:nth-child(7) {
+    flex: 0.8;
+}
+
+/* Make submit button container narrower */
+.form-row > div:last-child {
+    flex: 0.6;
+}
+
+.transaction-container select,
+.transaction-container input[type="text"],
+.transaction-container input[type="date"],
+.transaction-container input[type="number"] {
     background: #333;
+    border: 1px solid #444;
     color: #fff;
-    padding: 1px 3px;
-    margin-right: 4px;
+    padding: 0.4rem;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.transaction-container select {
+    cursor: pointer;
+    width: 100%;
+}
+
+.transaction-container input[type="submit"] {
+    background: #444;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 0.4rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+    width: auto;
+}
+
+.transaction-container input[type="submit"]:hover {
+    background: #555;
+}
+
+.transaction-container input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+}
+
+/* Remove the old transaction-entry styles */
+.transaction-entry {
+    display: none;
+}
+
+/* Grid Layout */
+.page-container,
+.column-left,
+.column-middle,
+.column-right {
+    display: none;
+}
+
+/* Toggle Controls */
+.toggles {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.toggle {
+    background: #a0a0ff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.toggle:hover {
+    background: #8080ff;
+}
+
+/* Charts */
+.minichart,
+.returnchart,
+.yieldchart {
+    background-color: #fefefe;
+    position: absolute;
+    right: 2.5vw;
+    width: 28vw;
+    height: 25vh;
+    margin: 0 0 1rem 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
+
+div.minichart {
+    top: 11vw;
+}
+
+div.returnchart {
+    top: calc(11vw + 27vh);
+}
+
+div.yieldchart {
+    top: calc(11vw + 54vh);
+}
+
+/* Add chart title styling */
+canvas {
+    font-size: 0.85rem !important;
+}
+
+/* Status Tables */
+table.status2 {
+    background: #171717;
+    width: 20vw;
+    position: absolute;
+    left: 1vw;
+    top: 11vw;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+table.status2 td {
+    background: #2e2e2e;
+    font-family: "LCD", monospace;
+    color: #c9c9fe;
+    font-size: 0.9vw;
+    border-top: 3px solid #171717;
+    padding: 0.4rem 0.7rem;
+    line-height: 1.1;
+}
+
+table.status2 td:first-child {
+    color: #8888ff;
+    width: 40%;
+}
+
+table.status2 td:last-child {
+    text-align: right;
+    width: 60%;
+}
+
+/* Small Nav Table */
+table.smallnav {
+    background: #3f3f3f;
+    width: 20vw;
+    position: absolute;
+    left: 1vw;
+    top: calc(11vw + 22rem);
+    border-radius: 4px;
+    overflow: hidden;
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
+.smallnav td {
+    padding: 2px;
+    text-align: center;
+}
+
+/* Transactions Table */
+table.transactions {
+    position: absolute;
+    top: 13vw;
+    left: 23vw;
+    width: 44vw;
+    background: #151515;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.transactions th {
+    background: #2a2a2a;
+    padding: 0.6rem;
+    text-align: left;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.transactions td {
+    padding-top: 0.2rem;
+    text-align: right;
+    border-bottom: 1px solid #222;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+}
+
+.transactions td a {
+    color: #8888ff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.transactions td a:visited {
+    color: #7777dd;
+}
+
+.transactions td a:hover {
+    color: #aaaaff;
+}
+
+.transactions td:first-child,
+.transactions td:nth-child(2),
+.transactions td:nth-child(3) {
+    text-align: left;
+}
+
+.transactions td.cntr {
+    text-align: center;
+}
+
+.transactions tr.Buy td:nth-child(4) {
+    background: #11cc11;
+    color: #000000;
+    font-weight: bold;
+}
+
+.transactions tr.Sell td:nth-child(4) {
+    background: #dd3333;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.transactions tr.Div td:nth-child(4) {
+    background: #eefb0b;
+    color: #000000;
+    font-weight: bold;
+}
+
+/* Button Styles */
+a.buttonsmall {
+    background-color: #0c0cbb;
+    padding: 3px 2px;
+    border-radius: 3px;
+    border: 1px solid #323299;
+    color: white;
+    display: inline-block;
+    width: 4.5vw;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.8rem;
+}
+
+a.buttonsmall:hover {
+    background-color: #eeee00;
+    border: 1px solid #3232bb;
+    color: #000000;
 }

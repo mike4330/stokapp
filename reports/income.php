@@ -1,5 +1,5 @@
 <?php
-
+include ("../nav.php"); 
 require_once 'vendor/autoload.php';
 
 // Database connection details
@@ -57,13 +57,15 @@ $dbh = null;
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" type="text/css" href="../main.css">
+<link rel="stylesheet" type="text/css" href="../nav.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Income Chart</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-  <canvas id="myChart"></canvas>
+<div style="background-color: #080808;position: absolute;width: 95%;top: 5vh;">
+  <canvas id="myChart"></canvas></div>
 
   <script>
     const ctx = document.getElementById('myChart').getContext('2d');
@@ -75,14 +77,14 @@ $dbh = null;
           {
             label: 'Rlzd Gain',
             data: <?php echo json_encode($gainData); ?>,
-            backgroundColor: 'rgba(0, 92, 32, 0.8)',
+            backgroundColor: 'rgba(32, 128, 32, 0.8)',
             borderColor: 'rgb(255, 99, 132)',
             fill: false,
           },
           {
             label: 'Dividend',
             data: <?php echo json_encode($dividendData); ?>,
-            backgroundColor: 'rgba(0, 184, 184, 0.8)',
+            backgroundColor: 'rgba(64, 64, 200, 0.8)',
             borderColor: 'rgba(54, 162, 235, 1)',
             fill: false,
           },
@@ -105,10 +107,25 @@ $dbh = null;
         },
         scales: {
             x: {
-                stacked: true
+                stacked: true,
+                ticks: {
+                    color: "green", // change color of tickmarks to green
+                    font: {
+                        family: 'monospace' // switch to monospace font for tick labels
+                    }
+                }
             },
             y: {
-                stacked: true
+                stacked: true,
+                grid: {
+                        color: "rgba(0, 255, 0, 0.2)" // change color of gridlines to brighter green
+                    },
+                ticks: {
+                    color: "green", // change color of tickmarks to green
+                    font: {
+                        family: 'monospace' // switch to monospace font for tick labels
+                    }
+                }
             }
         }
       }

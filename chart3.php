@@ -45,18 +45,15 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="BRKB"></canvas></div>
             <td>
-            <td>
-                <div class="chart-container4"><canvas id="BRT"></canvas></div>
-            <td>
+            <td> <div class="chart-container4"><canvas id="BNDX"></canvas></div><td>
+            <td> <div class="chart-container4"><canvas id="BRT"></canvas></div><td>
             <td>
                 <div class="chart-container4"><canvas id="CARR"></canvas></div>
             <td>
 
         </tr>
         <tr>
-            <td>
-                <div class="chart-container4"><canvas id="D"></canvas></div>
-            <td>
+            <td>  <div class="chart-container4"><canvas id="D"></canvas></div><td>
             <td>
                 <div class="chart-container4"><canvas id="DBB"></canvas></div>
             <td>
@@ -94,12 +91,12 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="FTS"></canvas></div>
             <td>
+            <td>
+                <div class="chart-container4"><canvas id="GAMB"></canvas></div>
+            <td>
         </tr>
         <tr>
 
-            <td>
-                <div class="chart-container4"><canvas id="GAMB"></canvas></div>
-            <td></td>
             <td>
                 <div class="chart-container4"><canvas id="HUN"></canvas></div>
             <td>
@@ -109,14 +106,10 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="IPAR"></canvas></div>
             <td>
-           
-          
 
+        <td>    <div class="chart-container4"><canvas id="IRMD"></canvas></div>     <td>
         </tr>
         <tr>
-        <td>
-                <div class="chart-container4"><canvas id="IRMD"></canvas></div>
-            <td>
             <td>
                 <div class="chart-container4"><canvas id="JPIB"></canvas></div>
             <td>
@@ -127,12 +120,9 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
                 <div class="chart-container4"><canvas id="LKOR"></canvas></div>
             <td>
          
-
+        <td> <div class="chart-container4"><canvas id="LYB"></canvas></div><td>
         </tr>
         <tr>
-        <td>
-                <div class="chart-container4"><canvas id="LYB"></canvas></div>
-            <td>
         
             <td>
                 <div class="chart-container4"><canvas id="MPW"></canvas></div>
@@ -140,9 +130,8 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="NHC"></canvas></div>
             <td>
-            <td>
-                <div class="chart-container4"><canvas id="NICE"></canvas></div>
-            <td>
+            <td><div class="chart-container4"><canvas id="NICE"></canvas></div>  <td>
+            <td><div class="chart-container4"><canvas id="NVDA"></canvas></div>  <td>
         </tr>
         <tr>
 
@@ -176,6 +165,9 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
         </tr>
         <tr>
             <td>
+                <div class="chart-container4"><canvas id="RMD"></canvas></div>
+            <td>
+            <td>
                 <div class="chart-container4"><canvas id="SCI"></canvas></div>
             <td>
             <td>
@@ -184,15 +176,21 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="SIVR"></canvas></div>
             <td>
-            <td>
-                <div class="chart-container4"><canvas id="SJNK"></canvas></div>
-            <td>
         </tr>
         <tr>
 
             <td>
-                <div class="chart-container4"><canvas id="SSNC"></canvas></div>
+                <div class="chart-container4"><canvas id="SJNK"></canvas></div>
             <td>
+            <td>
+                <div class="chart-container4"><canvas id="SMCI"></canvas></div>
+            <td>
+            <td>
+                <div class="chart-container4"><canvas id="SKY"></canvas></div>
+            <td>
+
+        </tr>
+        <tr>
             <td>
                 <div class="chart-container4"><canvas id="TAIT"></canvas></div>
             <td>
@@ -202,12 +200,12 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="TGS"></canvas></div>
             <td>
-
-        </tr>
-        <tr>
             <td>
                 <div class="chart-container4"><canvas id="TSLA"></canvas></div>
             <td>
+        </tr>
+        <tr>
+        
             <td>
                 <div class="chart-container4"><canvas id="TXNM"></canvas></div>
             <td>
@@ -217,17 +215,14 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
             <td>
                 <div class="chart-container4"><canvas id="VCSH"></canvas></div>
             <td>
-        </tr>
-        <tr>
-        
-            
             <td>
                 <div class="chart-container4"><canvas id="VMC"></canvas></div>
             <td>
+        </tr>
+<tr>
             <td>
                 <div class="chart-container4"><canvas id="WDFC"></canvas></div>
-            </td>
-        </tr>
+            </td></tr>
     </table>
 
     <script>
@@ -238,11 +233,11 @@ SPDX-License-Identifier: GPL-3.0-or-later -->
         Chart.defaults.datasets.line.pointRadius = 0;
         Chart.overrides.line.tension = 0.1;
 
-        const array = ["AMX", "ASML", "ANGL", "AVGO", "BRKB", "BRT",
+        const array = ["AMX", "ASML", "ANGL", "AVGO", "BNDX","BRKB", "BRT",
              "CARR", "D", "DBB", "DGX", "EMB", "EVC", "EWJ", "FAF", "FAGIX",
             "FDGFX", "FNBGX", "FPE", "FTS", "GAMB", "HUN", "INGR", "IPAR","IRMD" ,"JPIB", "KMB", "LKOR",
-            "LYB", "MLN", "MPW", "NHC", "NICE", "NVS", "NXST", "PANW", "PBR", "PDBC", "PGHY", "PLD",
-            "TXNM", "REM", "SCI", "SGOL", "SIVR", "SJNK", "SSNC", "TAIT", "TDTF",
+            "LYB",  "MPW", "NHC", "NICE", "NVDA","NVS", "NXST", "PANW", "PBR", "PDBC", "PGHY", "PLD",
+            "TXNM", "REM", "RMD","SCI", "SGOL", "SIVR", "SJNK", "SKY","SMCI", "TAIT", "TDTF",
             "TGS", "TSLA", "ULTA", "VALE", "VCSH", "VMC", "WDFC"
         ];
 

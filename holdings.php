@@ -282,6 +282,33 @@ foreach ($dbh->query($query) as $row) {
     $costBasis = round(($netCost / $netUnits), 2);
     $returnPercent = round(($dollarReturn / $netCost) * 100, 2);
 
+    // Color coding logic for return percentage
+    if ($returnPercent < -5) {
+        $color2 = $darkRedBg;
+        $tcolor2 = "black";
+    } elseif ($returnPercent > -5 && $returnPercent < 0) {
+        $color2 = $lightRedBg;
+        $tcolor2 = "";
+    } elseif ($returnPercent > 0 && $returnPercent < 5) {
+        $color2 = $lightGreenBg;
+        $tcolor2 = "black";
+    } elseif ($returnPercent > 5 && $returnPercent < 10) {
+        $color2 = $mediumGreenBg;
+        $tcolor2 = "";
+    } elseif ($returnPercent > 10 && $returnPercent < 15) {
+        $color2 = $darkGreenBg1;
+        $tcolor2 = "";
+    } elseif ($returnPercent > 15 && $returnPercent < 20) {
+        $color2 = $darkGreenBg2;
+        $tcolor2 = "";
+    } elseif ($returnPercent > 20) {
+        $color2 = $darkGreenBg3;
+        $tcolor2 = "";
+    } else {
+        $color2 = "";
+        $tcolor2 = "";
+    }
+
     // Color coding logic
     if ($returnPercent > 0) {
         $profitablePositionsValue += $positionValue;
@@ -325,6 +352,15 @@ foreach ($dbh->query($query) as $row) {
     
     $targetValue = ($totalPortfolioValue * ($allocationTarget / 100));
     $targetDiff = round(($positionValue - $targetValue), 2);
+    
+    // Initialize target difference color variables
+    if ($targetDiff < 0) {
+        $tcellcolor = "#2222ee";
+        $targetcolor = "black";
+    } else {
+        $tcellcolor = "";
+        $targetcolor = "";
+    }
     
     // Get previous close and calculate changes
     $prevCloseQuery = "SELECT close from security_values where symbol = '$symbol' order by timestamp desc limit 1";
@@ -381,7 +417,7 @@ foreach ($dbh->query($query) as $row) {
         <td class=\"cntr\">$allocationTarget</td>
         <td class=\"cntr\">\$$netCost</td>
         <td class=\"cntr\">$costBasis</td>
-        <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$dollarReturn</td>
+        <td class=\"cntr\">$dollarReturn</td>
         <td class=\"cntr\" style=\"background: $color2;color: $tcolor2;\">$returnPercent%</td>
         <td>$gain</td>
         <td class=\"cntr\">$total_dividends</td>

@@ -43,7 +43,7 @@ if ($_GET['q'] == "valuetrend") {
 
 if ($_GET['q'] == "averages") {
     $query = "select date,WMA8,WMA24,WMA28,WMA36,WMA48,WMA41,
-    WMA64,WMA72,WMA88,WMA110,WMA135,YMA3,YMA2,YMA1,return as rtn 
+    WMA64,WMA72,WMA88,WMA110,WMA135,YMA4,YMA3,YMA2,YMA1,return as rtn 
     from historical where date > date('now','-180 days')";
 }
 

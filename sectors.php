@@ -228,8 +228,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     type: 'line',
                     borderColor: 'rgb(255, 16, 16)',
                     borderWidth: 1.75,
-                    yMin: 4.33,
-                    yMax: 4.33
+                    yMin: 4.38,
+                    yMax: 4.38
                   }
                 }
               }
@@ -281,8 +281,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderDash: [6, 2],
                     borderWidth: 2,
-                    yMin: 7.75,
-                    yMax: 7.75
+                    yMin: 6.74,
+                    yMax: 6.74
                   }
                 }
               }
@@ -335,8 +335,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderWidth: 2,
                     borderDash: [6, 2],
-                    yMin: 4.88,
-                    yMax: 4.88
+                    yMin: 4.94,
+                    yMax: 4.94
                   }
                 }
               }
@@ -827,8 +827,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderWidth: 2,
                     borderDash: [6, 2],
-                    yMin: 30,
-                    yMax: 30
+                    yMin: 32.5,
+                    yMax: 32.5
                   }
                 }
               }
@@ -881,8 +881,8 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
                     borderColor: dashcolor,
                     borderWidth: 2,
                     borderDash: [6, 2],
-                    yMin: 5.57,
-                    yMax: 5.57
+                    yMin: 5.34,
+                    yMax: 5.34
                   }
                 }
               }

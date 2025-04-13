@@ -99,7 +99,7 @@ if ($_GET['q'] == "posvalues") {
     if ($isym == "BRKB") {
         $isym = "BRK.B";
     }
-    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-720  days') order by timestamp";
+    $query = "select timestamp,(close*shares) as pval from security_values where symbol = '$isym' AND  timestamp > date('now','-1080 days') order by timestamp";
     //     echo $query;
     foreach ($dbh->query($query) as $row) {
         //         echo "$row[pval]\n";
@@ -187,8 +187,8 @@ if ($_GET['q'] == "gl") {
 if (!empty($_GET['symquery'])) {
     $symbol = $_GET['symquery'];
 
-    $symbolsToCheck = ['ANGL', 'ASML','FPE','GILD','LKOR','MLN', 'REM','VMC'];
-    $period = in_array($symbol, $symbolsToCheck) ? 30 : 24;
+    $symbolsToCheck = ['ANGL', 'ASML','FPE','GILD','KMB','LKOR','MLN', 'REM','VMC'];
+    $period = in_array($symbol, $symbolsToCheck) ? 36 : 24;
 
     $query = "select substr(date_new,0,8) as month,symbol,sum(price*units) as cost 
     from transactions 
