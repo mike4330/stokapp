@@ -17,47 +17,47 @@ $table = "<table style='position: relative; top: 40px;height: 50vh;'>";
 $tickers = array(
     'AMX',
     'ANGL',
-    'ASML',
     'AVGO',
-    'BAH',
+#    'ASML',
+    #    'BAH',
+        'BNDX',
     'BRT',
     'CARR',
-    'D',
+#    'D',
     'DGX',
     'EMB',
     'EVC',
-    'EWJ',
     'FAF',
     'FAGIX',
     'FDGFX',
     'FNBGX',
-    'FPE',
     'FTS',
     'HPK',
     'HUN',
-    'INGR',
+    'IMKTA',
     'IPAR',
+    #'IRMD',
     'JPIB',
-    'KMB',
+#    'KMB',
     'LKOR',
-    'LYB',
-    'MLN',
-    'MPW',
-    'NHC',
+#    'LYB',
+#    'MPW',
+#    'NHC',
     'NXST',
     'PBR',
-    'PGHY',
     'PLD',
-    'REM',
-    'SCI',
-    'SSNC',
+    'PGHY',
+#    'REM',
+#    'SCI',
     'SJNK',
-    'TAIT',
+#    'TAIT',
     'TDTF',
     'TXNM',
+    'USLM',
     'VALE',
-    'VMC',
-    'VCSH'
+    'VCSH',
+#    'VMC',
+    #'WDFC'
 );
 
 $count = 0;
@@ -66,7 +66,7 @@ foreach ($tickers as $ticker) {
         $table .= "<tr>"; // start new row
     }
 
-    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX', 'MLN', 'PGHY', 'SJNK', 'VCSH'];
+    $monthlies = ['ANGL', 'EMB', 'FPE', 'JPIB', 'LKOR', 'FAGIX', 'FNBGX',  'PGHY', 'SJNK', 'VCSH'];
     if (in_array($ticker, $monthlies)) {
         $table .= "<td><div style='padding: .5vw;'>" . monthpredict($ticker) . "</div></td>";
         $count++;
@@ -297,20 +297,20 @@ function monthpredict($symbol)
 
 function getbgstring($cost)
 {
-    if ($cost >80) {
-        $bgstring = '#007700';
-    } else if ($cost > 70) {
-        $bgstring = '#00bb00';
-    } else if ($cost > 60) {
-        $bgstring = '#21ff21';
-    } else if ($cost > 50) {
-        $bgstring = '#42ff42';
-    } else if ($cost > 30) {
-        $bgstring = '#84ff84';
-    } else if ($cost > 20) {
-        $bgstring = '#a4ffa4';
+    if ($cost >113.5) {
+        $bgstring = '#28ae80';
+    } else if ($cost > 75.7) {
+        $bgstring = '#3fbc73';
+    } else if ($cost > 50.5) {
+        $bgstring = '#5ec962';
+    } else if ($cost > 33.7) {
+        $bgstring = '#84d44b';
+    } else if ($cost > 22.5) {
+        $bgstring = '#addc30';
+    } else if ($cost > 15) {
+        $bgstring = '#d8e219';
     } else if ($cost > 10) {
-        $bgstring = '#cdffcd';
+        $bgstring = '#fde725';
     } else if ($cost == 0) {
         $bgstring = '#1c1c1c';
     } else {
