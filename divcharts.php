@@ -1,4 +1,4 @@
-<!--Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
+<!--Copyright (C) 2022,2024,2025 Mike Roetto <mike@roetto.org>
 SPDX-License-Identifier: GPL-3.0-or-later-->
 <!DOCTYPE html>
 <html>
@@ -43,6 +43,7 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     'ASML',
     'AVGO',
     'BAH',
+    'BNDX',
     'BRT',
     'CARR',
     'D',
@@ -56,13 +57,11 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     'FTS',
     'HPK',
     'HUN',
-    'INGR',
     'IPAR',
     'JPIB',
     'KMB',
     'LKOR',
     'LYB',
-    'MLN',
     'MPW',
     'NHC',
     'NXST',
@@ -73,12 +72,12 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
     'REM',
     'SCI',
     'SJNK',
-    'SSNC',
     'TAIT',
     'TDTF',
     'VALE',
     'VCSH',
-    'VMC'
+    'VMC',
+    'WDFC'
   ];
   ?>
 
@@ -102,9 +101,9 @@ SPDX-License-Identifier: GPL-3.0-or-later-->
 
     c1 = 'rgb(224, 224, 32)'
 
-    const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH', 'BRT', 'CARR', 'C', 'D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF',
+    const chartDataList = ['AMX', 'ANGL', 'ASML', 'AVGO', 'BAH', 'BNDX','BRT', 'CARR', 'C', 'D', 'DGX', 'EMB', 'EVC', 'EWJ', 'F', 'FAF',
       'FAGIX', 'FDGFX', 'FNBGX', 'FPE', 'FTS', 'GILD', 'HPK', 'HTLD', 'HUN', 'INGR', 'IPAR', 'JPIB', 'KMB', 'LKOR', 'LYB', 'MLN', 'MPW',
-      'NHC', 'NXST', 'PBR', 'PGHY', 'PLD', 'TXNM', 'REM', 'SCI', 'SJNK', 'SSNC', 'VCSH', 'VMC', 'TAIT', 'TDTF','VALE'
+      'NHC', 'NXST', 'PBR', 'PGHY', 'PLD', 'TXNM', 'REM', 'SCI', 'SJNK',  'VCSH', 'VMC', 'TAIT', 'TDTF','VALE','WDFC'
     ];
 
     $.ajaxSetup({
