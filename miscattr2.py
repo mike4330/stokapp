@@ -8,12 +8,9 @@ from random import randint
 import requests_cache
 import pandas as pd
 
-stocks = ["AMX","ASML","AVGO", "BAH","BRK-B","BRT","C",
-          "CARR","D","DFIN","DGX", "EVC","FAF","FTS","GAMB",
-          "GILD","HPK","HUN","IESC","IMKTA","INGR",
-          "IPAR","IRMD","KMB","LYB","NHC","NXST","NVS","OTIS",
-          "PANW","PBR","PLD","PNM","SCI",
-          "TAIT","TGS","TSLA","USLM","VALE","VMC", "WDFC"]
+
+with open("tickers.txt", "r") as f:
+    stocks  = [line.strip() for line in f if not line.startswith("#")]
 
 random.shuffle(stocks)
 
@@ -23,6 +20,8 @@ con = sqlite3.connect("/var/www/html/portfolio/portfolio.sqlite")
 cur = con.cursor()
 
 for stock in stocks:
+    if stock in ['ANGL','BNDX','DBB','EMB','EWJ','FAGIX','FDGFX','FNBGX','FPE','LKOR','JPIB','MLN','PDBC','PGHY','REM','SGOL','SIVR','SJNK','TDTF','VCSH']:
+     continue
    
     info = yf.Ticker(stock,session=session).info
     print("updating ", stock)
@@ -33,7 +32,7 @@ for stock in stocks:
     row = cashflow.loc['Net Income From Continuing Operations']
     mean_ni = row.mean()
 
-    fcf_ni_r=(mean_fcf/mean_ni)
+    fcf_ni_r=round((mean_fcf/mean_ni),4)
     
     try:
         industry = info["industry"]
@@ -80,6 +79,11 @@ for stock in stocks:
     except KeyError:
         pe = 0 
     
+    try:
+        z=info["earningsQuarterlyGrowth"]
+        print(z)
+    except KeyError:
+        continue
     
 
     print("%s %s beta=%s recm=%s %s pe=%s mean_fcf=%s mean_ni=%s fcf_ni_r= %s" % (stock,industry,beta,recm,caplabel,pe,mean_fcf,mean_ni,fcf_ni_r))
@@ -89,5 +93,8 @@ for stock in stocks:
         (pe,marketcap,caplabel,recm,industry,fcf_ni_r,stock),
     )
     con.commit()
-    sleep(2)
+    i=randint(1,2500)
+    int=i/1000
+    print("sleep for ",i," ms")
+    sleep(int)
 

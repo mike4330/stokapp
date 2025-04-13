@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Copyright (C) 2022 Mike Roetto <mike@roetto.org>
+# Copyright (C) 2022,2024 Mike Roetto <mike@roetto.org>
 # SPDX-License-Identifier: GPL-3.0-or-later
 import sqlite3
 import syslog
@@ -9,6 +9,8 @@ import time
 import requests_cache
 from random import randint
 from time import sleep
+from random import shuffle
+import random
 
 session = requests_cache.CachedSession("yfinance.cache", expire_after=45)
 now = datetime.datetime.now()
@@ -17,79 +19,23 @@ print(now.year, now.month, now.day, now.hour, now.minute, now.second)
 
 elapsed = 0
 
-if now.hour > 17:
+if now.hour > 16:
     print("outside of time window current time is ", now.hour, now.minute)
     exit()
 
 con = sqlite3.connect("/var/www/html/portfolio/portfolio.sqlite")
 cur = con.cursor()
 
-tickers = [
-    "ANGL",
-    "AVGO",
-    "AMX",
-    "BRK-B",
-    "ASML",
-    "BG",
-    "BRT",
-    "BSIG",
-    "C",
-    "CARR",
-    "BAH",
-    "D",
-    "DBB",
-    "DGX",
-    "EMB",
-    "EVC",
-    "EWJ",
-    "F",
-    "FAF",
-    "FAGIX",
-    "FNBGX",
-    "FDGFX",
-    "FPE",
-    "FTS",
-    "GILD",
-    "HTLD",
-    "HUN",
-    "INGR",
-    "IPAR",
-    "JPIB",
-    "KMB",
-    "HPK",
-    "LKOR",
-    "LYB",
-    "MLN",
-    "MPW",
-    "NHC",
-    "NICE",
-    "NVS",
-    "NXST",
-    "OTIS",
-    "PGHY",
-    "PANW",
-    "PBR",
-    "PDBC",
-    "PLD",
-    "PNM",
-    "REM",
-    "SCI",
-    "SGOL",
-    "SIVR",
-    "SJNK",
-    "SSNC",
-    "TAIT",
-    "TSLA",
-    "ULTA",
-    "TGS",
-    "VALE",
-    "VCSH",
-    "VMC",
-    "WDFC",
-]
+
+with open("/var/www/html/portfolio/tickersloop.txt", "r") as f:
+    tickers = [line.strip() for line in f if not line.startswith("#")]
+
+#tickers=random.shuffle(tickers)
+random.shuffle(tickers)
+
 
 hour = now.hour
-while hour < 17:
+while hour < 16:
     starttime = time.time()
 
     msg = "[stockprice] starting cycle"
@@ -98,9 +44,12 @@ while hour < 17:
 
     for ticker in tickers:
         stock = yf.Ticker(ticker, session=session)
+        if now.hour > 10 and ticker in ['FNBGX','FAGIX','FDGFX']:
+            continue
 
         try:
             price = stock.fast_info["last_price"]
+            price = round(price,8)
         except:
             print("data download fail for ", ticker)
             continue
@@ -128,7 +77,8 @@ while hour < 17:
             print("temp fail")
 
         elapsed = round((ts - starttime), 1)
-        sleep(randint(2, 9))
+        waitint=(randint(1,6500)/1000)
+        sleep(waitint)
 
     print("elapsed cycle time ", elapsed)
 
@@ -136,13 +86,9 @@ while hour < 17:
 
     syslog.syslog(msg)
 
-    time.sleep(89)
+    cyclewait=randint(15,45)
+    time.sleep(cyclewait)
     now = datetime.datetime.now()
     hour = now.hour
 
 
-# while minute < 46 :
-# print "test"
-# time.sleep(5)
-# now = datetime.datetime.now()
-# minute = now.minute

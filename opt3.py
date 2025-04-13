@@ -6,11 +6,13 @@ from functools import reduce
 from datetime import date
 
 import yfinance as yf
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from pypfopt import objective_functions
-from pypfopt import CLA, plotting
+#from pypfopt import CLA, plotting
+
+
 
 # yf.enable_debug_mode()
 
@@ -20,48 +22,51 @@ with open("tickers.txt", "r") as f:
 with open("sectormap.txt", "r") as f:
     sector_mapper = dict(line.strip().split(",") for line in f)
 
-bonds_total = 0.3
+bonds_total = 0.325
 dbonds_lower = bonds_total * 0.695
 fbonds_lower = bonds_total * 0.305
 
 dbonds_upper = dbonds_lower + 0.01
 fbonds_upper = fbonds_lower + 0.01
 
+print("dbondslower,",dbonds_lower)
+print("fbondslower,",fbonds_lower)
+
 sector_lower = {
     "DBonds": dbonds_lower,
     "FBonds": fbonds_lower,
-    "Commodities": 0.025,
-    "Misc": 0.0125,
-    "Communication Services": 0.0527,
-    "Consumer Discretionary": 0.0557,
-    "Consumer Staples": 0.0557,
-    "Energy": 0.0433,
-    "Financials": 0.0557,
-    "Healthcare": 0.0557,
-    "Industrials": 0.0557,
-    "Materials": 0.0557,
-    "Tech": 0.0775,
-    "Real Estate": 0.0557,
-    "Precious Metals": 0.05,
-    "Utilities": 0.0491,
+"Commodities":0.025,
+"Misc":0.0125,
+"Communication Services":0.0531,
+"Consumer Discretionary":0.0534,
+"Consumer Staples":0.0534,
+"Energy":0.0438,
+"Financials":0.0534,
+"Healthcare":0.0534,
+"Industrials":0.0534,
+"Materials":0.0534,
+"Tech":0.0674,
+"Real Estate":0.0534,
+"Precious Metals":0.05,
+"Utilities":0.0494,
 }
 
 sector_upper = {
     "DBonds": dbonds_upper,
     "FBonds": fbonds_upper,
-    "Commodities": 0.061,
-    "Communication Services": 0.061818,
-    "Consumer Discretionary": 0.061818,
-    "Consumer Staples": 0.061818,
-    "Energy": 0.061818,
-    "Financials": 0.061818,
-    "Healthcare": 0.081818,
-    "Industrials": 0.061818,
-    "Materials": 0.061818,
+    "Commodities": 0.063,
+    "Communication Services": 0.063,
+    "Consumer Discretionary": 0.063,
+    "Consumer Staples": 0.063,
+    "Energy": 0.063,
+    "Financials": 0.063,
+    "Healthcare": 0.08,
+    "Industrials": 0.063,
+    "Materials": 0.063,
     # "Precious Metals": .061,
-    "Real Estate": 0.061818,
-    "Tech": 1,
-    "Utilities": 0.061818,
+    "Real Estate": 0.063,
+    "Tech": .20,
+    "Utilities": 0.063,
 }
 import requests_cache
 
@@ -75,8 +80,9 @@ now = datetime.now()
 # Calculate date 10 years ago from today
 ten_years_ago = today - timedelta(days=365 * 10)
 
-ohlc = yf.download(tickers, start=ten_years_ago,end=today,session=session)
-prices = ohlc["Adj Close"].dropna(how="all")
+ohlc = yf.download(tickers, start=ten_years_ago, end=today, session=session)
+#prices = ohlc["Adj Close"].dropna(how="all")
+prices = ohlc["Close"].dropna(how="all")
 prices.to_csv("pricedataset.csv", index=True)
 
 import sys
@@ -114,14 +120,8 @@ mu = mean_historical_return(prices)
 S = CovarianceShrinkage(prices).ledoit_wolf()
 ef = EfficientFrontier(mu, S, weight_bounds=(lb, ub), verbose=False)
 
-# print(mu)
-
 ef.add_sector_constraints(sector_mapper, sector_lower, sector_upper)
 ef.add_objective(objective_functions.L2_reg, gamma=gammainput)
-
-# weights = ef.max_sharpe()
-# weights=ef.min_volatility()
-# weights=ef.efficient_return(target_return=rgoal, market_neutral=False)
 weights = ef.efficient_risk(rgoal)
 
 print("------------------------------")
@@ -163,8 +163,8 @@ with open("weights.log", "a") as f:
 
 # model perfm log
 expected_return, volatility, sharpe_ratio, *_ = ef.portfolio_performance(verbose=False)
-expected_return = round(expected_return,6)
-sharpe_ratio = round(sharpe_ratio,6)
+expected_return = round(expected_return, 6)
+sharpe_ratio = round(sharpe_ratio, 6)
 
 with open("modelrun.log", "a") as w:
     w.write(
@@ -172,17 +172,27 @@ with open("modelrun.log", "a") as w:
     )
     w.write("%s,%s,%s\n" % (expected_return, volatility, sharpe_ratio))
 
-import sqlite3
 
-conn = sqlite3.connect('portfolio.sqlite')
-cursor = conn.cursor()
 
-for key, value in weights.items():
-    if (key == 'BRK-B') :
-        key = 'BRK.B'
+#updates historical weights table
+def insertweights():
+    import sqlite3
 
-    cursor.execute("INSERT INTO weights (timestamp, symbol, weight) VALUES (?, ?, ?)",
-                   (today, key, value))
+    conn = sqlite3.connect("portfolio.sqlite")
+    cursor = conn.cursor()
 
-conn.commit()
-conn.close()
+    for key, value in weights.items():
+        if key == "BRK-B":
+            key = "BRK.B"
+
+        cursor.execute(
+            "INSERT INTO weights (timestamp, symbol, weight) VALUES (?, ?, ?)",
+            (today, key, value),
+        )
+
+    conn.commit()
+    conn.close()
+
+insertweights()
+
+

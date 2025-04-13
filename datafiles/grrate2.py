@@ -5,10 +5,11 @@ import json
 import sys
 import sqlite3
 
+
 def average_growth_rate(data):
     growth_rates = []
     for i in range(1, len(data)):
-        dividend_previous = data[i-1][1]
+        dividend_previous = data[i - 1][1]
         dividend_current = data[i][1]
         if dividend_previous != 0:
             growth_rate = (dividend_current - dividend_previous) / dividend_previous
@@ -23,33 +24,37 @@ def average_growth_rate(data):
 ticker = sys.argv[1]
 
 # Connect to the SQLite database
-conn = sqlite3.connect('../portfolio.sqlite')
+conn = sqlite3.connect("../portfolio.sqlite")
 c = conn.cursor()
 
 # Query the dividend amounts and dates for the stock
 import datetime
 
 # Specify today's date and subtract 5 years
-two_years_ago_date = datetime.date.today() - datetime.timedelta(days=5*365)
+two_years_ago_date = datetime.date.today() - datetime.timedelta(days=5 * 365)
 
 # Convert the date to string format (YYYY-MM-DD)
 two_years_ago_str = two_years_ago_date.strftime("%Y-%m-%d")
 
-c.execute(f"SELECT declare_date, amount FROM dividends WHERE symbol = '{ticker}' AND declare_date >= '{two_years_ago_str}' ORDER BY declare_date")
+c.execute(
+    f"SELECT declare_date, amount FROM dividends WHERE symbol = '{ticker}' AND declare_date >= '{two_years_ago_str}' ORDER BY declare_date"
+)
 
 dividend_data = c.fetchall()
 
-print("5 yrs dividend data:\n",dividend_data)
+print("5 yrs dividend data:\n", dividend_data)
 
-avg_growth_rate = average_growth_rate(dividend_data)
+avg_growth_rate = round(average_growth_rate(dividend_data),4)
 
 # Update the div_growth_rate column for the stock
-c.execute(f"UPDATE MPT SET div_growth_rate = {avg_growth_rate} WHERE symbol = '{ticker}'")
+c.execute(
+    f"UPDATE MPT SET div_growth_rate = {avg_growth_rate} WHERE symbol = '{ticker}'"
+)
 
 # Commit the changes and close the connection
 conn.commit()
 conn.close()
 
-gr_disp = round((avg_growth_rate*100),4)
+gr_disp = round((avg_growth_rate * 100), 4)
 
-print (ticker, gr_disp, "%")
+print("div growth rate: ", ticker, gr_disp, "%")
