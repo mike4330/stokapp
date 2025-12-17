@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# Check if required arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <direction> <id1,id2,id3,...>"
+    echo "direction: 'archive' to move to transactions_ark, 'restore' to move back"
+    echo "ids: single ID or comma-delimited list of IDs"
+    exit 1
+fi
+
+DIRECTION=$1
+IDS=$2
+DB_FILE="../portfolio.sqlite"
+
+# Validate database file exists
+if [ ! -f "$DB_FILE" ]; then
+    echo "Error: Database file $DB_FILE not found"
+    exit 1
+fi
+
+# Validate direction
+if [ "$DIRECTION" != "archive" ] && [ "$DIRECTION" != "restore" ]; then
+    echo "Error: Invalid direction. Use 'archive' or 'restore'"
+    exit 1
+fi
+
+# Function to execute SQLite commands
+execute_sqlite() {
+    sqlite3 "$DB_FILE" "$1"
+}
+
+# Check if ID exists in source table
+check_exists() {
+    local table=$1
+    local id=$2
+    local count=$(execute_sqlite "SELECT COUNT(*) FROM $table WHERE id = $id;")
+    echo "$count"
+}
+
+# Process single ID
+process_id() {
+    local id=$1
+
+    if [ "$DIRECTION" = "archive" ]; then
+        if [ "$(check_exists "transactions" "$id")" -eq 0 ]; then
+            echo "Error: No record with ID $id in transactions table"
+            return 1
+        fi
+
+        execute_sqlite "BEGIN TRANSACTION;
+            INSERT INTO transactions_ark SELECT * FROM transactions WHERE id = $id;
+            DELETE FROM transactions WHERE id = $id;
+            COMMIT;"
+        echo "Record `tput setf 6`$id`tput sgr0` archived to transactions_ark"
+        return 0
+
+    elif [ "$DIRECTION" = "restore" ]; then
+        if [ "$(check_exists "transactions_ark" "$id")" -eq 0 ]; then
+            echo "Error: No record with ID $id in transactions_ark table"
+            return 1
+        fi
+
+        execute_sqlite "BEGIN TRANSACTION;
+            INSERT INTO transactions SELECT * FROM transactions_ark WHERE id = $id;
+            DELETE FROM transactions_ark WHERE id = $id;
+            COMMIT;"
+        echo "Record `tput setf 6`$id`tput sgr0` restored to transactions"
+        return 0
+    fi
+}
+
+# Split comma-delimited IDs and process each
+IFS=',' read -ra ID_ARRAY <<< "$IDS"
+SUCCESS_COUNT=0
+FAILURE_COUNT=0
+FAILED_IDS=""
+
+for ID in "${ID_ARRAY[@]}"; do
+    # Trim whitespace
+    ID=$(echo "$ID" | xargs)
+
+    if process_id "$ID"; then
+        ((SUCCESS_COUNT++))
+    else
+        ((FAILURE_COUNT++))
+        FAILED_IDS="$FAILED_IDS$ID "
+    fi
+done
+
+# Print summary if multiple IDs were processed
+if [ ${#ID_ARRAY[@]} -gt 1 ]; then
+    echo ""
+    echo "Summary: $SUCCESS_COUNT succeeded, $FAILURE_COUNT failed"
+    if [ $FAILURE_COUNT -gt 0 ]; then
+        echo "Failed IDs: $FAILED_IDS"
+    fi
+fi
+
+# Exit with error if any failures occurred
+if [ $FAILURE_COUNT -gt 0 ]; then
+    exit 1
+fi

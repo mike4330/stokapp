@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp ef.png ef$(date +%s).png
+
+./opt2.py 2.8 .16 .0560

@@ -20,9 +20,14 @@ import random
 import sqlite3
 from time import sleep
 from random import randint
+
+from curl_cffi import requests
+
 import requests_cache
 import pandas as pd
 import logging
+
+#yf.set_config(proxy="http://34.215.12.199:8888")
 
 # Set up logging
 logging.basicConfig(
@@ -45,13 +50,13 @@ EXCLUDED_TICKERS = [
 
 def get_market_cap_label(market_cap):
     """Determine market cap category label based on value in dollars."""
-    if market_cap < 3e8:
+    if market_cap < 3.13e8:
         return "Micro"
-    elif market_cap < 2e9:
+    elif market_cap < 12e9:
         return "Small"
-    elif market_cap < 10e9:
+    elif market_cap < 75e9:
         return "Medium"
-    elif market_cap < 2e11:
+    elif market_cap < 423e9:
         return "Large"
     else:
         return "Mega"
@@ -84,7 +89,7 @@ def calculate_fcf_ni_ratio(ticker_obj):
 
 def random_delay():
     """Generate a random delay between API calls to avoid rate limiting."""
-    ms_delay = randint(1, 2500)
+    ms_delay = randint(1, 4500)
     sec_delay = ms_delay / 1000
     logger.info(f"Sleeping for {ms_delay} ms ({sec_delay:.3f} s)")
     sleep(sec_delay)
@@ -109,6 +114,7 @@ def main():
     
     # Set up cached session for API requests
     session = requests_cache.CachedSession(CACHE_NAME, expire_after=CACHE_EXPIRE)
+    session = requests.Session(impersonate="chrome")
     
     # Connect to SQLite database
     try:
@@ -162,9 +168,9 @@ def main():
             
             # Update database
             cur.execute(
-                "UPDATE MPT SET pe = ?, market_cap_val = ?, market_cap = ?, "
+                "UPDATE MPT SET beta = ?,pe = ?, market_cap_val = ?, market_cap = ?, "
                 "recm = ?, industry = ?, fcf_ni_ratio = ? WHERE symbol = ?",
-                (pe, market_cap, cap_label, recm, industry, fcf_ni_ratio, stock)
+                (beta,pe, market_cap, cap_label, recm, industry, fcf_ni_ratio, stock)
             )
             con.commit()
             processed_count += 1
