@@ -1,5 +1,4 @@
-#!/home/mike/.pyenv/shims/python3
-
+#!/usr/bin/python3
 import sqlite3
 import json
 import sys
