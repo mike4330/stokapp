@@ -1,0 +1,101 @@
+#!/bin/bash
+# Safe parallel optimizer launcher with file locking support
+#
+# Usage: ./loop_safe [iterations_per_worker] [num_workers]
+#   iterations_per_worker: Number of iterations each worker runs (default: 10)
+#   num_workers: Number of parallel workers (default: 9)
+#
+# Example: ./loop_safe 50 4    # Run 4 workers, each doing 50 iterations
+
+set -e  # Exit on error
+
+ITERATIONS=${1:-10}
+NUM_WORKERS=${2:-9}
+RESULTS_FILE="optimization_results.json"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="backups"
+
+# Create backup directory if it doesn't exist
+mkdir -p "$BACKUP_DIR"
+
+# Backup existing results file with timestamp
+if [ -f "$RESULTS_FILE" ]; then
+    echo "Backing up existing results file..."
+    cp "$RESULTS_FILE" "$BACKUP_DIR/${RESULTS_FILE}.${TIMESTAMP}.bak"
+    echo "✓ Backup saved to: $BACKUP_DIR/${RESULTS_FILE}.${TIMESTAMP}.bak"
+else
+    echo "No existing results file - starting fresh"
+fi
+
+echo ""
+echo "=========================================="
+echo "Parallel Optimizer Launch"
+echo "=========================================="
+echo "Workers:              $NUM_WORKERS"
+echo "Iterations/worker:    $ITERATIONS"
+echo "Total iterations:     $((NUM_WORKERS * ITERATIONS))"
+echo "Results file:         $RESULTS_FILE"
+echo "=========================================="
+echo ""
+
+# Array to store PIDs
+declare -a PIDS
+
+# Launch workers
+echo "Launching $NUM_WORKERS workers..."
+for i in $(seq 1 $NUM_WORKERS); do
+    ./optimizer.py -n $ITERATIONS &
+    PID=$!
+    PIDS+=($PID)
+    echo "  Worker $i launched (PID: $PID)"
+
+    # Stagger launches to reduce initial contention
+    if [ $i -lt $NUM_WORKERS ]; then
+        sleep 1.8
+    fi
+done
+
+echo ""
+echo "All workers launched. Waiting for completion..."
+echo ""
+
+# Wait for all workers to complete and track status
+FAILED=0
+COMPLETED=0
+
+for i in "${!PIDS[@]}"; do
+    PID=${PIDS[$i]}
+    WORKER_NUM=$((i + 1))
+
+    if wait $PID; then
+        echo "✓ Worker $WORKER_NUM (PID: $PID) completed successfully"
+        ((COMPLETED++))
+    else
+        EXIT_CODE=$?
+        echo "✗ Worker $WORKER_NUM (PID: $PID) failed with exit code: $EXIT_CODE"
+        ((FAILED++))
+    fi
+done
+
+echo ""
+echo "=========================================="
+echo "Parallel Optimization Complete"
+echo "=========================================="
+echo "Workers completed:    $COMPLETED"
+echo "Workers failed:       $FAILED"
+
+# Count results in file
+if [ -f "$RESULTS_FILE" ]; then
+    RESULT_COUNT=$(python3 -c "import json; print(len(json.load(open('$RESULTS_FILE'))))")
+    echo "Results in file:      $RESULT_COUNT"
+fi
+
+echo "=========================================="
+
+if [ $FAILED -gt 0 ]; then
+    echo "⚠ Warning: Some workers failed. Check logs above."
+    exit 1
+else
+    echo "✓ All workers completed successfully"
+    exit 0
+fi

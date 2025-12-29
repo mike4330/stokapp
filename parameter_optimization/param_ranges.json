@@ -1,0 +1,22 @@
+{
+  "gamma": {
+    "min": 0.2,
+    "max": 4.27,
+    "description": "Regularization parameter for L2_with_weight_smoothing"
+  },
+  "rgoal": {
+    "min": 0.111,
+    "max": 0.1373,
+    "description": "Target volatility/risk goal for efficient_risk optimization"
+  },
+  "lb": {
+    "min": 0.00135,
+    "max": 0.0019,
+    "description": "Lower bound for individual asset weights"
+  },
+  "ub": {
+    "min": 0.0213,
+    "max": 0.0499,
+    "description": "Upper bound for individual asset weights"
+  }
+}

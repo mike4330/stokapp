@@ -1,0 +1,7 @@
+#!/bin/bash
+q=`echo $(($RANDOM % 10))`
+cp optimization_results.json optimization_results.json.bak.$q 
+
+for f in {1..3} ; do ./optimizer.py -b -n $1 & sleep 1.8 ; done
+
+echo "loop complete"

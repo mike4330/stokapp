@@ -1,0 +1,15 @@
+#!/bin/bash
+
+q=`echo $(($RANDOM % 10))`
+cp optimization_results.json optimization_results.json.bak.$q
+
+
+
+jq --argjson min_score "$1" \
+   'map(select(.score >= $min_score))' \
+   optimization_results.json > tmp.json
+
+cp tmp.json optimization_results.json
+
+./optimizer.py -r
+
